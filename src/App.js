@@ -1,18 +1,21 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./mvp.css";
+import "./appleseed.scss";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App container">
       <header>
-        <h1>Project Appleseed</h1>
+        <h1 className="title">Project Appleseed</h1>
       </header>
-      <section>
-        <h2>Enter room code:</h2>
-        <label for="roomcode">Code:</label>
-        <input type="text" id="roomcode" />
-      </section>
+      <div class="field has-addons">
+        <div class="control">
+          <input class="input" type="text" placeholder="Room code" />
+        </div>
+        <div class="control">
+          <button class="button is-info">Join</button>
+        </div>
+      </div>
     </div>
   );
 }
