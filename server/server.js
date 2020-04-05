@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http");
-const socketIo = require("socket.io");
 const axios = require("axios");
+const io = require("./socket/socket"); // configuration for socket.io
 
 const port = process.env.PORT || 4001;
 
@@ -13,5 +13,3 @@ app.use(index);
 app.use("/api", api);
 
 const server = http.createServer(app);
-
-const io = socketIo(server);
