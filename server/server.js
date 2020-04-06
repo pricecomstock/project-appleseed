@@ -16,6 +16,17 @@ const io = socketIo(server);
 // pass to function that attaches room manager and manipulates it through API
 const api = createRouter(io);
 
+// Very open CORS rules
+// TODO figure out production version of this
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  next();
+});
+
 app.use(index);
 app.use("/api", api);
 
