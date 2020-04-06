@@ -3,7 +3,7 @@ const http = require("http");
 const axios = require("axios");
 const socketIo = require("socket.io");
 
-const initializeSocketIO = require("./socket/socket"); // configuration for socket.io
+const initializeSocketIO = require("./game/socket"); // configuration for socket.io
 
 const port = process.env.PORT || 4001;
 
