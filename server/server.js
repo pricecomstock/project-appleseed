@@ -2,20 +2,21 @@ const express = require("express");
 const http = require("http");
 const axios = require("axios");
 const socketIo = require("socket.io");
-
-const initializeSocketIO = require("./game/socket"); // configuration for socket.io
+const createRouter = require("./routes/router.js");
 
 const port = process.env.PORT || 4001;
 
+// index page to serve react bundle
 const index = require("./routes/index");
-const api = require("./routes/api");
 
+// set up socketio
 const app = express();
-app.use(index);
-app.use("/api", api);
-
 const server = http.createServer(app);
 const io = socketIo(server);
-initializeSocketIO(io);
+// pass to function that attaches room manager and manipulates it through API
+const api = createRouter(io);
+
+app.use(index);
+app.use("/api", api);
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
