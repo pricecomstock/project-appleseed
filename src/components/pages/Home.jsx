@@ -5,6 +5,7 @@ export default class Home extends Component {
   createGame = () => {
     axios.post("/createroom").then((res) => {
       console.log(res);
+      this.props.history.push(`/host/${res.data.code}`);
     });
     // .catch((err) => {
     //   console.error(err);

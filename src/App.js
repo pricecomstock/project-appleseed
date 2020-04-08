@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./mvp.css";
 import "./appleseed.scss";
 
@@ -12,10 +12,12 @@ function App() {
     <Router>
       <div className="App section">
         {/* notice "exact" */}
-        <Route exact path="/" component={Home}></Route>
+        <Switch>
+          <Route exact path="/" component={Home}></Route>
 
-        <Route exact path="/watch" component={HostView}></Route>
-        <Route exact path="/play" component={PlayerView}></Route>
+          <Route exact path="/host/:code" component={HostView}></Route>
+          <Route exact path="/play/:code" component={PlayerView}></Route>
+        </Switch>
       </div>
     </Router>
   );
