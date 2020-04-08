@@ -1,3 +1,5 @@
+const Game = require("./game");
+
 class Room {
   constructor(code, adminKey, data) {
     //TODO: Add game options
@@ -5,12 +7,10 @@ class Room {
 
     // TODO: Maybe hash this but it definitely does not matter for first demo
     this._adminKey = adminKey;
+    this._players = [];
 
     // Room state
-    // TODO move gamestate to its own file
-    this._choices = ["Yes", "No"];
-    this._players = [];
-    this._locked = false;
+    this._game = new Game();
   }
 
   get code() {
@@ -37,36 +37,15 @@ class Room {
     return this._players;
   }
 
-  addPlayerVote(playerId, choiceIndex) {
-    console.log(playerId, "voted for", choiceIndex, this._choices[choiceIndex]);
-    this.getPlayerWithId(playerId).choiceIndex = choiceIndex;
+  get gameState() {
+    return this._game.state;
   }
 
   summary() {
-    // TODO: Match this to new summary format instead of just being an array
-    console.table(this._players);
     let state = {
-      choices: this.choices,
       players: this.players,
-      locked: this._locked,
     };
     return state;
-  }
-
-  newVote(newChoicesList) {
-    this._choices = newChoicesList;
-    this.resetVotes();
-  }
-
-  resetVotes() {
-    this._players.forEach((player) => {
-      player.choiceIndex = -1;
-    });
-    // TODO maybe auto unlock votes
-  }
-
-  setLock(locked) {
-    this._locked = locked;
   }
 }
 
