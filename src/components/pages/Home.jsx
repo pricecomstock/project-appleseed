@@ -2,15 +2,21 @@ import React, { Component } from "react";
 import axios from "../../axios-backend";
 
 export default class Home extends Component {
+  state = { enteredCode: "" };
+
   createGame = () => {
-    axios.post("/createroom").then((res) => {
-      console.log(res);
-      this.props.history.push(`/host/${res.data.code}`);
-    });
-    // .catch((err) => {
-    //   console.error(err);
-    // });
+    axios
+      .post("/createroom")
+      .then((res) => {
+        console.log(res);
+        this.props.history.push(`/host/${res.data.code}`);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
+
+  joinGame = () => {};
 
   render() {
     return (
@@ -27,7 +33,12 @@ export default class Home extends Component {
             />
           </div>
           <div className="control">
-            <button className="button is-large is-primary">Join</button>
+            <button
+              className="button is-large is-primary"
+              onClick={this.joinGame}
+            >
+              Join
+            </button>
           </div>
         </div>
         <hr />
