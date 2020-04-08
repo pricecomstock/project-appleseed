@@ -16,8 +16,9 @@ export default class HostView extends Component {
   componentDidMount() {
     const socket = createSocketClient();
     socket.on("connection", () => console.log("Connected!"));
-    socket.on("state", (roomState) => {
+    socket.on("state", (gameState) => {
       console.log("Room state updated");
+      this.setState({ gameState: gameState });
       // this.state.log = this.setState({ log: [...this.state.log, ] });
     });
     this.setState({ socket: socket });

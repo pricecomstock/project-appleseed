@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
+import PlayerInfoSet from "../PlayerInfoSet";
 
 import createSocketClient from "../../createSocketClient";
 
@@ -13,8 +14,9 @@ export default class PlayerView extends Component {
   componentDidMount() {
     const socket = createSocketClient();
     socket.on("connection", () => console.log("Connected!"));
-    socket.on("state", (roomState) => {
+    socket.on("state", (gameState) => {
       console.log("Room state updated");
+      this.setState({ gameState: gameState });
       // this.state.log = this.setState({ log: [...this.state.log, ] });
     });
     this.setState({ socket: socket });
@@ -29,6 +31,10 @@ export default class PlayerView extends Component {
             <li key={index}>{logline}</li>
           ))}
         </ul>
+        {true && (
+          // {this.state.gameState.state == "preGame" && (
+          <PlayerInfoSet socket={this.state.socket}></PlayerInfoSet>
+        )}
       </div>
     );
   }
