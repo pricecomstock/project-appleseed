@@ -16,7 +16,25 @@ export default class Home extends Component {
       });
   };
 
-  joinGame = () => {};
+  joinGame = () => {
+    axios
+      .post("/checkroom", { code: this.state.enteredCode })
+      .then((res) => {
+        console.log(res);
+        if (res.data.success) {
+          this.props.history.push(`/play/${res.data.code}`);
+        } else {
+          console.log("Room does not exist!");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  handleCodeChange = (event) => {
+    this.setState({ enteredCode: event.target.value });
+  };
 
   render() {
     return (
@@ -30,6 +48,8 @@ export default class Home extends Component {
               className="input is-large is-uppercase"
               type="text"
               placeholder="Room code"
+              value={this.state.enteredCode}
+              onChange={this.handleCodeChange}
             />
           </div>
           <div className="control">
