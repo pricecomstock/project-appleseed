@@ -79,37 +79,37 @@ class RoomManager {
             let existingPlayer = joinedRoom.getPlayerWithId(requestedId);
             if (existingPlayer) {
               console.log("Player exists!", existingPlayer);
-              socket.player = existingPlayer;
-              socket.player.connected = true;
+              socket.playerData = existingPlayer;
+              socket.playerData.connected = true;
             } else {
               console.log("Player does not exist, creating a new one.");
-              socket.player = new Player();
-              joinedRoom.addPlayer(socket.player);
+              socket.playerData = new Player();
+              joinedRoom.addPlayer(socket.playerData);
             }
           } else {
             console.log("player not claiming to exist, adding as new player");
-            socket.player = new Player();
-            joinedRoom.addPlayer(socket.player);
+            socket.playerData = new Player();
+            joinedRoom.addPlayer(socket.playerData);
           }
 
-          socket.emit("playerIdAssigned", socket.player.playerId);
+          socket.emit("playerIdAssigned", socket.playerData.playerId);
           sendRoomUpdates(roomCode);
         }
       });
 
       socket.on("disconnect", (reason) => {
-        if (socket.player) {
+        if (socket.playerData) {
           console.log("disconnect", reason);
-          socket.player.connected = false;
+          socket.playerData.connected = false;
           // rooms are left automatically upon disconnection
           sendRoomUpdates(socket.roomCode);
         }
       });
 
       socket.on("playerreconnect", (reason) => {
-        if (socket.player) {
+        if (socket.playerData) {
           console.log("reconnect", reason);
-          socket.player.connected = true;
+          socket.playerData.connected = true;
           // rooms are left automatically upon disconnection
           sendRoomUpdates(socket.roomCode);
         }
@@ -165,8 +165,8 @@ class RoomManager {
 
       socket.on("updateplayerinfo", (info) => {
         if (this.checkRoomExists(socket.roomCode)) {
-          socket.player.nickname = info.nickname;
-          socket.player.emoji = info.emoji;
+          socket.playerData.nickname = info.nickname;
+          socket.playerData.emoji = info.emoji;
           sendRoomUpdates(socket.roomCode);
         }
       });
@@ -174,7 +174,7 @@ class RoomManager {
       socket.on("vote", (choiceIndex) => {
         if (this.checkRoomExists(socket.roomCode)) {
           let playerRoom = this.getRoomWithCode(socket.roomCode);
-          playerRoom.addPlayerVote(socket.player.playerId, choiceIndex);
+          playerRoom.addPlayerVote(socket.playerData.playerId, choiceIndex);
           sendRoomUpdates(socket.roomCode);
         }
         // TODO: Else send disconnect notice or something
@@ -186,9 +186,9 @@ class RoomManager {
     return this._rooms;
   }
 
-  createNewRoom(roomData) {
+  createNewRoom() {
     const adminKey = generatePlayerId(30);
-    let newRoom = new Room(this.randomAvailableRoomCode(), adminKey, roomData);
+    let newRoom = new Room(this.randomAvailableRoomCode(), adminKey);
     this._rooms.push(newRoom);
     console.log(this._rooms);
     return {
