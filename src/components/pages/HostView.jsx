@@ -28,11 +28,19 @@ export default class HostView extends Component {
     return (
       <div>
         <p>Room Code: {this.props.match.params.code}</p>
-        <ul>
-          {this.state.log.map((logline, index) => (
-            <li key={index}>{logline}</li>
-          ))}
-        </ul>
+        <div className="content">
+          <ul>
+            {this.state.log.map((logline, index) => (
+              <li key={index}>{logline}</li>
+            ))}
+          </ul>
+          <h3>Players:</h3>
+          <ul>
+            {this.state.gameState.global.players.map((player, index) => (
+              <li key={index}>{player}</li>
+            ))}
+          </ul>
+        </div>
       </div>
     );
   }
