@@ -28,9 +28,13 @@ class Room {
   }
 
   getPlayerDataWithId(playerId) {
-    return this._playerSockets.find((player) => {
+    let playerSocket = this._playerSockets.find((player) => {
       return player.playerData.playerId === playerId;
-    }).playerData;
+    });
+
+    if (playerSocket && playerSocket.playerData) {
+      return playerSocket.playerData;
+    }
   }
 
   // TODO: Add player object and use that to track player votes and states.

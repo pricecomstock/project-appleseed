@@ -114,12 +114,18 @@ class RoomManager {
           socket.roomCode = "";
         }
         // TODO Also check admin key
-        if (this.checkRoomExists(roomCode)) {
+        console.log("Admin Key: ", data.adminKey);
+        if (
+          this.checkRoomExists(roomCode) &&
+          data.adminKey === this.getRoomWithCode(roomCode).adminKey
+        ) {
           socket.join(roomCode);
           socket.roomCode = roomCode;
           socket.isRoomAdmin = true;
 
           sendRoomUpdates(roomCode);
+        } else {
+          socket.emit("adminkeyerror", {});
         }
       });
 

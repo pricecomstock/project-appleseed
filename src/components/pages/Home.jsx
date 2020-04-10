@@ -9,6 +9,7 @@ export default class Home extends Component {
       .post("/createroom")
       .then((res) => {
         console.log(res);
+        localStorage.setItem(`${res.data.code}_adminKey`, res.data.adminKey);
         this.props.history.push(`/host/${res.data.code}`);
       })
       .catch((err) => {

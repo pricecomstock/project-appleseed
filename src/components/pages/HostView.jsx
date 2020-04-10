@@ -7,26 +7,26 @@ import createSocketClient from "../../createSocketClient";
 
 export default class HostView extends Component {
   state = {
+    roomCode: this.props.match.params.code,
     log: ["hello!"],
     gameState: {
       global: {
         players: [],
       },
     },
+    adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
   };
 
-  joinRoom = (roomCode) => {
-    let existingPlayerIdForRoom = localStorage.getItem(roomCode);
-    console.log("existing ID: ", existingPlayerIdForRoom);
+  joinRoomAsAdmin = (roomCode, adminKey) => {
     this.state.socket.emit("joinroomasadmin", {
       roomCode: roomCode,
-      requestedId: existingPlayerIdForRoom,
+      adminKey: adminKey,
     });
   };
 
-  joinThisRoom = () => {
-    this.joinRoom(this.props.match.params.code);
+  joinThisRoomAsAdmin = () => {
+    this.joinRoomAsAdmin(this.state.roomCode, this.state.adminKey);
   };
 
   componentDidMount() {
@@ -36,15 +36,19 @@ export default class HostView extends Component {
       this.setState({ gameState: gameState });
       // this.state.log = this.setState({ log: [...this.state.log, ] });
     });
+    this.state.socket.on("adminkeyerror", (data) => {
+      console.log("Admin Key Error");
+    });
 
-    this.joinThisRoom();
+    this.joinThisRoomAsAdmin();
   }
 
   render() {
     return (
       <div>
-        <p>Room Code: {this.props.match.params.code}</p>
         <div className="content">
+          <h3>Room Code: {this.props.match.params.code}</h3>
+          <h3>Admin Key: {this.state.adminKey}</h3>
           <ul>
             {this.state.log.map((logline, index) => (
               <li key={index}>{logline}</li>
