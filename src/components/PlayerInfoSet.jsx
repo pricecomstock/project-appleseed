@@ -32,7 +32,7 @@ export default function PlayerInfoSet(props) {
         <div className="control">
           <input
             className="input"
-            type="emoji"
+            type="text"
             value={emoji}
             onChange={(event) => setEmoji(event.target.value)}
           />

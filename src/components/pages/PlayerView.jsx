@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
 import PlayerInfoSet from "../PlayerInfoSet";
+import Prompt from "../Prompt";
 
 import createSocketClient from "../../createSocketClient";
 
@@ -34,9 +35,9 @@ export default class PlayerView extends Component {
   componentDidMount() {
     console.log(this.state);
     this.state.socket.on("connection", () => console.log("Connected!"));
-    this.state.socket.on("state", (gameState) => {
+    this.state.socket.on("state", (roomState) => {
       console.log("Room state updated");
-      this.setState({ gameState: gameState });
+      this.setState({ roomState: roomState });
     });
     this.state.socket.on("playerIdAssigned", (assignedId) => {
       console.log("player ID assigned: ", assignedId);
@@ -54,6 +55,7 @@ export default class PlayerView extends Component {
           // {this.state.gameState.state == "preGame" && (
           <PlayerInfoSet socket={this.state.socket}></PlayerInfoSet>
         )}
+        <Prompt prompt={"Here's a test question"}></Prompt>
       </div>
     );
   }

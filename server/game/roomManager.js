@@ -22,7 +22,8 @@ class RoomManager {
   constructor(io) {
     this._rooms = [];
 
-    this._io = io.on("connection", (socket) => {
+    this._io = io;
+    this._io.on("connection", (socket) => {
       // io is the server
       // socket is the client connection
 
@@ -60,6 +61,10 @@ class RoomManager {
 
         if (this.checkRoomExists(roomCode)) {
           let joinedRoom = this.getRoomWithCode(roomCode);
+          if (!joinedRoom.allowedToJoin) {
+            socket.emit("error", { data: "can't join right now" });
+            return;
+          }
           console.log("Joined room", joinedRoom);
           socket.join(roomCode);
           socket.roomCode = roomCode;
@@ -87,6 +92,31 @@ class RoomManager {
         }
       });
 
+      socket.on("joinroomasadmin", (data) => {
+        let roomCode = data.roomCode;
+        if (socket.rooms) {
+          // socket already was in a room
+          socket.leaveAll();
+          socket.roomCode = "";
+        }
+        if (
+          this.checkRoomExists(roomCode) &&
+          data.adminKey === this.getRoomWithCode(roomCode).adminKey
+        ) {
+          // TODO Maybe also join admin room
+          socket.join(roomCode);
+          socket.roomCode = roomCode;
+          socket.isRoomAdmin = true;
+
+          let roomToJoin = this.getRoomWithCode(roomCode);
+          roomToJoin.addAdmin(socket);
+
+          sendRoomUpdates(roomCode);
+        } else {
+          socket.emit("adminkeyerror", {});
+        }
+      });
+
       socket.on("disconnect", (reason) => {
         if (socket.playerData) {
           console.log("disconnect", reason);
@@ -102,29 +132,6 @@ class RoomManager {
           socket.playerData.connected = true;
           // rooms are left automatically upon disconnection
           sendRoomUpdates(socket.roomCode);
-        }
-      });
-
-      socket.on("joinroomasadmin", (data) => {
-        let roomCode = data.roomCode;
-        if (socket.rooms) {
-          // socket already was in a room
-          socket.leaveAll();
-          socket.roomCode = "";
-        }
-        // TODO Also check admin key
-        console.log("Admin Key: ", data.adminKey);
-        if (
-          this.checkRoomExists(roomCode) &&
-          data.adminKey === this.getRoomWithCode(roomCode).adminKey
-        ) {
-          socket.join(roomCode);
-          socket.roomCode = roomCode;
-          socket.isRoomAdmin = true;
-
-          sendRoomUpdates(roomCode);
-        } else {
-          socket.emit("adminkeyerror", {});
         }
       });
 
@@ -152,7 +159,7 @@ class RoomManager {
   }
 
   createNewRoom() {
-    let newRoom = new Room(this.randomAvailableRoomCode());
+    let newRoom = new Room(this.randomAvailableRoomCode(), this._io);
     this._rooms.push(newRoom);
     console.log(this._rooms);
     return {

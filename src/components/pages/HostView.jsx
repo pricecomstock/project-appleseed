@@ -11,6 +11,7 @@ export default class HostView extends Component {
     gameState: {
       global: {
         players: [],
+        gameState: "lobby",
       },
     },
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
@@ -28,11 +29,23 @@ export default class HostView extends Component {
     this.joinRoomAsAdmin(this.state.roomCode, this.state.adminKey);
   };
 
+  startGame = () => {
+    this.state.socket.emit("startGame");
+  };
+
   componentDidMount() {
     this.state.socket.on("connection", () => console.log("Connected!"));
-    this.state.socket.on("state", (gameState) => {
+    this.state.socket.on("state", (roomState) => {
       console.log("Room state updated");
-      this.setState({ gameState: gameState });
+      this.setState({ roomState: roomState });
+    });
+
+    this.state.socket.on("gamestate", (gameState) => {
+      console.log("Game state updated");
+      let newGameState = { ...this.state.gameState };
+      newGameState.global.gameState = gameState;
+
+      this.setState({ gameState: newGameState });
     });
     this.state.socket.on("adminkeyerror", (data) => {
       console.log("Admin Key Error");
@@ -46,7 +59,8 @@ export default class HostView extends Component {
       <div>
         <div className="content">
           <h3>Room Code: {this.props.match.params.code}</h3>
-          <h3>Admin Key: {this.state.adminKey}</h3>
+          <p>Admin Key: {this.state.adminKey}</p>
+          <h3>GameState: {this.state.gameState.global.currentState}</h3>
           <h3>Players:</h3>
           <ul>
             {this.state.gameState.global.players.map((player, index) => (
@@ -56,6 +70,9 @@ export default class HostView extends Component {
             ))}
           </ul>
         </div>
+        <button className="button is-primary" onClick={this.startGame}>
+          Start Game
+        </button>
       </div>
     );
   }

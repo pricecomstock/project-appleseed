@@ -2,17 +2,23 @@ const Game = require("./game");
 const generateBase64Id = require("./util").generateBase64Id;
 
 class Room {
-  constructor(code) {
+  constructor(code, io) {
     //TODO: Add game options
     this._code = code;
     // this._manager = manager;
 
-    // TODO: Maybe hash this but it definitely does not matter for first demo
     this._adminKey = generateBase64Id(32);
+    this._allowedToJoin = true; // FIXME needs to be checked on reconnect
     this._playerSockets = [];
+    this._adminSockets = [];
 
     // Room state
-    this._game = new Game();
+    this._game = new Game(
+      this._code,
+      this._playerSockets,
+      this._adminSockets,
+      io
+    );
   }
 
   get adminKey() {
@@ -21,10 +27,6 @@ class Room {
 
   get code() {
     return this._code;
-  }
-
-  get choices() {
-    return this._choices;
   }
 
   getPlayerDataWithId(playerId) {
@@ -37,10 +39,14 @@ class Room {
     }
   }
 
+  get allowedToJoin() {
+    return this._allowedToJoin;
+  }
+
   // TODO: Add player object and use that to track player votes and states.
   // It would probably work ok across different games and stuff too.
-  addPlayer(player) {
-    this._playerSockets.push(player);
+  addPlayer(playerSocket) {
+    this._playerSockets.push(playerSocket);
   }
 
   get players() {
@@ -61,9 +67,20 @@ class Room {
     let state = {
       global: {
         players: this._playerSockets.map((socket) => socket.playerData),
+        currentState: this._game.state,
       },
     };
     return state;
+  }
+
+  addAdmin(adminSocket) {
+    adminSocket.on("startGame", (data) => {
+      if (this._game.can("startGame")) {
+        this._game.startGame();
+      }
+    });
+
+    this._adminSockets.push(adminSocket);
   }
 }
 
