@@ -8,7 +8,6 @@ import createSocketClient from "../../createSocketClient";
 export default class HostView extends Component {
   state = {
     roomCode: this.props.match.params.code,
-    log: ["hello!"],
     gameState: {
       global: {
         players: [],
@@ -34,7 +33,6 @@ export default class HostView extends Component {
     this.state.socket.on("state", (gameState) => {
       console.log("Room state updated");
       this.setState({ gameState: gameState });
-      // this.state.log = this.setState({ log: [...this.state.log, ] });
     });
     this.state.socket.on("adminkeyerror", (data) => {
       console.log("Admin Key Error");
@@ -49,11 +47,6 @@ export default class HostView extends Component {
         <div className="content">
           <h3>Room Code: {this.props.match.params.code}</h3>
           <h3>Admin Key: {this.state.adminKey}</h3>
-          <ul>
-            {this.state.log.map((logline, index) => (
-              <li key={index}>{logline}</li>
-            ))}
-          </ul>
           <h3>Players:</h3>
           <ul>
             {this.state.gameState.global.players.map((player, index) => (
