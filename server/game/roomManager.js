@@ -49,7 +49,6 @@ class RoomManager {
             this.nickname = "human-" + generateBase64Id(4);
             this.emoji = "😀";
             this.playerId = generateBase64Id(12);
-            this.choiceIndex = -1;
           }
         }
 
@@ -126,37 +125,6 @@ class RoomManager {
           sendRoomUpdates(roomCode);
         } else {
           socket.emit("adminkeyerror", {});
-        }
-      });
-
-      socket.on("newchoices", (newChoicesList) => {
-        // TODO Also check admin key
-        if (this.checkRoomExists(socket.roomCode)) {
-          let room = this.getRoomWithCode(socket.roomCode);
-          room.newVote(newChoicesList);
-
-          sendRoomUpdates(socket.roomCode);
-        }
-      });
-
-      socket.on("resetvotes", (_adminKey) => {
-        // TODO Also check admin key
-        if (this.checkRoomExists(socket.roomCode)) {
-          let room = this.getRoomWithCode(socket.roomCode);
-          room.resetVotes();
-
-          sendRoomUpdates(socket.roomCode);
-        }
-      });
-
-      socket.on("lockvotes", (locked) => {
-        // TODO Also check admin key
-        if (this.checkRoomExists(socket.roomCode)) {
-          let room = this.getRoomWithCode(socket.roomCode);
-          console.log("locking room");
-          room.setLock(locked);
-
-          sendRoomUpdates(socket.roomCode);
         }
       });
 

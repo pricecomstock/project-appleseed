@@ -50,7 +50,9 @@ export default class HostView extends Component {
           <h3>Players:</h3>
           <ul>
             {this.state.gameState.global.players.map((player, index) => (
-              <li key={index}>{player.nickname}</li>
+              <li key={index}>
+                {player.emoji} {player.nickname}
+              </li>
             ))}
           </ul>
         </div>

@@ -2,9 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-export default function PlayerInfoSet() {
+export default function PlayerInfoSet(props) {
   const [name, setName] = useState("");
   const [emoji, setEmoji] = useState("😀");
+
+  const sendUpdatedInfo = () => {
+    props.socket.emit("updateplayerinfo", {
+      nickname: name,
+      emoji: emoji,
+    });
+  };
 
   return (
     <div>
@@ -31,7 +38,9 @@ export default function PlayerInfoSet() {
           />
         </div>
       </div>
-      <button className="button is-primary">Update</button>
+      <button className="button is-primary" onClick={sendUpdatedInfo}>
+        Update
+      </button>
     </div>
   );
 }
