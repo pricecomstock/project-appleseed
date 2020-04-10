@@ -8,7 +8,7 @@ class Room {
     // this._manager = manager;
 
     // TODO: Maybe hash this but it definitely does not matter for first demo
-    this._adminKey = generateBase64Id(30);
+    this._adminKey = generateBase64Id(32);
     this._playerSockets = [];
 
     // Room state

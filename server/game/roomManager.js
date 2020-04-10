@@ -46,7 +46,7 @@ class RoomManager {
         class PlayerData {
           constructor() {
             this.connected = true;
-            this.nickname = "human-" + generateBase64Id(2);
+            this.nickname = "human-" + generateBase64Id(4);
             this.emoji = "😀";
             this.playerId = generateBase64Id(12);
             this.choiceIndex = -1;
