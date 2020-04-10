@@ -19,7 +19,7 @@ export default class HostView extends Component {
   joinRoom = (roomCode) => {
     let existingPlayerIdForRoom = localStorage.getItem(roomCode);
     console.log("existing ID: ", existingPlayerIdForRoom);
-    this.state.socket.emit("joinroom", {
+    this.state.socket.emit("joinroomasadmin", {
       roomCode: roomCode,
       requestedId: existingPlayerIdForRoom,
     });

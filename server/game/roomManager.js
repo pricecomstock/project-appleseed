@@ -106,7 +106,7 @@ class RoomManager {
         }
       });
 
-      socket.on("roomadminjoin", (data) => {
+      socket.on("joinroomasadmin", (data) => {
         let roomCode = data.roomCode;
         if (socket.rooms) {
           // socket already was in a room
