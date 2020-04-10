@@ -2,9 +2,10 @@ const Game = require("./game");
 const generateBase64Id = require("./util").generateBase64Id;
 
 class Room {
-  constructor(code, data) {
+  constructor(code) {
     //TODO: Add game options
     this._code = code;
+    // this._manager = manager;
 
     // TODO: Maybe hash this but it definitely does not matter for first demo
     this._adminKey = generateBase64Id(30);
@@ -26,10 +27,10 @@ class Room {
     return this._choices;
   }
 
-  getPlayerWithId(playerId) {
+  getPlayerDataWithId(playerId) {
     return this._playerSockets.find((player) => {
-      return player.playerId === playerId;
-    });
+      return player.playerData.playerId === playerId;
+    }).playerData;
   }
 
   // TODO: Add player object and use that to track player votes and states.
@@ -54,7 +55,9 @@ class Room {
 
   summary() {
     let state = {
-      players: this._players, // TODO probably map just the data
+      global: {
+        players: this._playerSockets.map((socket) => socket.playerData),
+      },
     };
     return state;
   }

@@ -8,24 +8,50 @@ import createSocketClient from "../../createSocketClient";
 
 export default class PlayerView extends Component {
   state = {
-    log: ["hello, player!"],
+    roomCode: this.props.match.params.code,
+    log: ["hello!"],
+    gameState: {
+      global: {
+        players: [],
+      },
+    },
+    socket: createSocketClient(),
+    playerId: "",
+  };
+
+  joinRoom = (roomCode) => {
+    let existingPlayerIdForRoom = localStorage.getItem(roomCode);
+    console.log("existing ID: ", existingPlayerIdForRoom);
+    this.state.socket.emit("joinroom", {
+      roomCode: roomCode,
+      requestedId: existingPlayerIdForRoom,
+    });
+  };
+
+  joinThisRoom = () => {
+    this.joinRoom(this.state.roomCode);
   };
 
   componentDidMount() {
-    const socket = createSocketClient();
-    socket.on("connection", () => console.log("Connected!"));
-    socket.on("state", (gameState) => {
+    console.log(this.state);
+    this.state.socket.on("connection", () => console.log("Connected!"));
+    this.state.socket.on("state", (gameState) => {
       console.log("Room state updated");
       this.setState({ gameState: gameState });
       // this.state.log = this.setState({ log: [...this.state.log, ] });
     });
-    this.setState({ socket: socket });
+    this.state.socket.on("playerIdAssigned", (assignedId) => {
+      console.log("player ID assigned: ", assignedId);
+      this.setState({ playerId: assignedId });
+      localStorage.setItem(this.state.roomCode, this.state.playerId);
+    });
+    this.joinThisRoom();
   }
 
   render() {
     return (
       <div>
-        <p>Room Code: {this.props.match.params.code}</p>
+        <p>Room Code: {this.state.roomCode}</p>
         <ul>
           {this.state.log.map((logline, index) => (
             <li key={index}>{logline}</li>

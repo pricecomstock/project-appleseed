@@ -29,7 +29,7 @@ class RoomManager {
       let sendRoomUpdates = (roomCode) => {
         let roomToUpdate = this.getRoomWithCode(roomCode);
         if (roomToUpdate) {
-          console.log("emitting room state to" + roomCode);
+          console.log("emitting room state to " + roomCode);
           io.in(roomCode).emit("state", roomToUpdate.summary());
         }
       };
@@ -37,14 +37,13 @@ class RoomManager {
       // Startup tasks
       // console.log(code, "a user connected");
 
-      // When client joins a room
-      socket.on("room", (data) => {
-        // client will use this to join a room
+      // client will use this to join a room
+      socket.on("joinroom", (data) => {
         const roomCode = data.roomCode;
         const requestedId = data.requestedId;
 
         // TODO move to a different file
-        class Player {
+        class PlayerData {
           constructor() {
             this.connected = true;
             this.nickname = "human-" + generateBase64Id(2);
@@ -68,20 +67,20 @@ class RoomManager {
 
           if (requestedId) {
             console.log("player reconnecting");
-            let existingPlayer = joinedRoom.getPlayerWithId(requestedId);
+            let existingPlayer = joinedRoom.getPlayerDataWithId(requestedId);
             if (existingPlayer) {
               console.log("Player exists!", existingPlayer);
               socket.playerData = existingPlayer;
               socket.playerData.connected = true;
             } else {
               console.log("Player does not exist, creating a new one.");
-              socket.playerData = new Player();
-              joinedRoom.addPlayer(socket.playerData);
+              socket.playerData = new PlayerData();
+              joinedRoom.addPlayer(socket);
             }
           } else {
             console.log("player not claiming to exist, adding as new player");
-            socket.playerData = new Player();
-            joinedRoom.addPlayer(socket.playerData);
+            socket.playerData = new PlayerData();
+            joinedRoom.addPlayer(socket);
           }
 
           socket.emit("playerIdAssigned", socket.playerData.playerId);
