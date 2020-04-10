@@ -1,16 +1,21 @@
 const Game = require("./game");
+const generateBase64Id = require("./util").generateBase64Id;
 
 class Room {
-  constructor(code, adminKey, data) {
+  constructor(code, data) {
     //TODO: Add game options
     this._code = code;
 
     // TODO: Maybe hash this but it definitely does not matter for first demo
-    this._adminKey = adminKey;
+    this._adminKey = generateBase64Id(30);
     this._playerSockets = [];
 
     // Room state
     this._game = new Game();
+  }
+
+  get adminKey() {
+    return this._adminKey;
   }
 
   get code() {

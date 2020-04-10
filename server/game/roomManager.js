@@ -1,15 +1,7 @@
 var Room = require("./room");
-const crypto = require("crypto");
+const generateBase64Id = require("./util").generateBase64Id;
 
 // TODO: implement namespace "garbage collection"
-
-function generatePlayerId(characters) {
-  // Synchronous
-  // 3 bytes = 4 base 64 characters
-  const num_bytes = Math.floor(characters * 0.75);
-  const buf = crypto.randomBytes(num_bytes);
-  return buf.toString("base64").replace(/\//g, "_").replace(/\+/g, "-");
-}
 
 function generateRoomCode() {
   const codeLength = 4;
@@ -55,9 +47,9 @@ class RoomManager {
         class Player {
           constructor() {
             this.connected = true;
-            this.nickname = "human-" + generatePlayerId(2);
+            this.nickname = "human-" + generateBase64Id(2);
             this.emoji = "😀";
-            this.playerId = generatePlayerId(12);
+            this.playerId = generateBase64Id(12);
             this.choiceIndex = -1;
           }
         }
@@ -187,13 +179,12 @@ class RoomManager {
   }
 
   createNewRoom() {
-    const adminKey = generatePlayerId(30);
-    let newRoom = new Room(this.randomAvailableRoomCode(), adminKey);
+    let newRoom = new Room(this.randomAvailableRoomCode());
     this._rooms.push(newRoom);
     console.log(this._rooms);
     return {
       roomCode: newRoom.code,
-      adminKey: adminKey,
+      adminKey: newRoom.adminKey,
     };
   }
 
