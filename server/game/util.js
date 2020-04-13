@@ -8,6 +8,21 @@ function generateBase64Id(numCharacters) {
   return buf.toString("base64").replace(/\//g, "_").replace(/\+/g, "-");
 }
 
+function adminRoom(roomCode) {
+  return `${roomCode}_admin`;
+}
+
+function playerRoom(roomCode) {
+  return `${roomCode}_player`;
+}
+
+function audienceRoom(roomCode) {
+  return `${roomCode}_audience`;
+}
+
 module.exports = {
   generateBase64Id,
+  adminRoom,
+  playerRoom,
+  audienceRoom,
 };
