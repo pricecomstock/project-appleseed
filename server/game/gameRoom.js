@@ -67,7 +67,6 @@ class GameRoom {
         currentState: this.state,
       },
     };
-    console.log("State Summary: ", state);
     return state;
   }
 }
@@ -88,7 +87,9 @@ StateMachine.factory(GameRoom, {
   ],
   methods: {
     sendStateToAll: function () {
-      this._io.in(this._roomCode).emit("gameState", { gameState: this.state });
+      console.log("emitting room state to " + this._code);
+      console.log("Updated State: ", this.stateSummary());
+      this._io.in(this._code).emit("state", this.stateSummary());
     },
     onEnterState: function () {
       this.sendStateToAll();

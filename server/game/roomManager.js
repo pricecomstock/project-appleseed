@@ -1,6 +1,6 @@
 // var Room = require("./room");
 var GameRoom = require("./gameRoom");
-const generateBase64Id = require("./util").generateBase64Id;
+const { generateBase64Id, adminRoom } = require("./util");
 const PlayerData = require("./playerData");
 
 // TODO: implement namespace "garbage collection"
@@ -32,8 +32,7 @@ class RoomManager {
       let sendRoomUpdates = (roomCode) => {
         let roomToUpdate = this.getRoomWithCode(roomCode);
         if (roomToUpdate) {
-          console.log("emitting room state to " + roomCode);
-          io.in(roomCode).emit("state", roomToUpdate.stateSummary());
+          roomToUpdate.sendStateToAll();
         }
       };
 
@@ -95,10 +94,10 @@ class RoomManager {
           this.checkRoomExists(roomCode) &&
           data.adminKey === this.getRoomWithCode(roomCode).adminKey
         ) {
-          // TODO Maybe also join admin room
           socket.join(roomCode);
+          socket.join(adminRoom(roomCode));
+
           socket.roomCode = roomCode;
-          socket.isRoomAdmin = true;
 
           let roomToJoin = this.getRoomWithCode(roomCode);
           roomToJoin.addAdmin(socket);
