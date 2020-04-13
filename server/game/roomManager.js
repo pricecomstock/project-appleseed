@@ -56,7 +56,7 @@ class RoomManager {
             socket.emit("error", { data: "can't join right now" });
             return;
           }
-          console.log("Joined room", joinedRoom);
+          // console.log("Joined room", joinedRoom);
           socket.join(roomCode);
           socket.roomCode = roomCode;
 
@@ -152,7 +152,7 @@ class RoomManager {
   createNewRoom() {
     let newRoom = new GameRoom(this.randomAvailableRoomCode(), this._io);
     this._rooms.push(newRoom);
-    console.log(this._rooms);
+    // console.log(this._rooms);
     return {
       roomCode: newRoom.code,
       adminKey: newRoom.adminKey,

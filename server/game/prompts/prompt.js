@@ -6,7 +6,9 @@ class PromptMatchup {
   constructor(text, players) {
     this._players = players;
     this._text = text;
-    this._id = generateBase64Id(12);
+
+    // TODO guarantee no duplicates
+    this._id = generateBase64Id(8);
   }
 
   get id() {
@@ -15,6 +17,13 @@ class PromptMatchup {
 
   get text() {
     return this._text;
+  }
+
+  get sendable() {
+    return {
+      id: this._id,
+      text: this._text,
+    };
   }
 }
 
@@ -26,18 +35,19 @@ class PromptSet {
 
     this._matchups = [];
     this._promptsByPlayer = new Map();
-    createPromptMatchups(playerIds);
+
+    this.createPromptMatchups(playerIds);
   }
 
   createPromptMatchups() {
-    playerLists = [];
+    let playerLists = [];
     // step 1, create random lists of players.
     // Players will be in lists n times to answer n prompts
     // There will be m lists, where each prompt is answered by m players
     for (let i = 0; i < this.PLAYERS_PER_PROMPT; i++) {
       let shuffledPlayers = [];
       for (let j = 0; j < this.PROMPTS_PER_PLAYER; j++) {
-        shuffledPlayers.push(getShuffledCopyOfArray(this._playerIds));
+        shuffledPlayers.concat(getShuffledCopyOfArray(this._playerIds));
       }
       playerLists.push(shuffledPlayers);
     }
@@ -63,8 +73,12 @@ class PromptSet {
       const promptMatchup = new PromptMatchup(getPrompt(), selectedPlayers);
       selectedPlayers.forEach((playerId) => {
         let currentPrompts = this._promptsByPlayer.get(playerId);
+        if (!currentPrompts) {
+          currentPrompts = [];
+          this._promptsByPlayer.set(playerId, currentPrompts);
+        }
         // FIXME i think since arrays are by reference this will work
-        currentPrompts.push(promptMatchup.text);
+        currentPrompts.push(promptMatchup.sendable);
       });
       this._matchups.push(promptMatchup);
     }
@@ -73,6 +87,10 @@ class PromptSet {
   getPromptsForPlayer(id) {
     return this._promptsByPlayer.get(id);
   }
+
+  get promptsByPlayer() {
+    return this._promptsByPlayer;
+  }
 }
 
-module.exports = { Prompt, PromptSet };
+module.exports = { PromptSet };

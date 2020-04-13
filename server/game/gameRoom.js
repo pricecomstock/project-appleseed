@@ -1,5 +1,6 @@
 const { generateBase64Id, adminRoom } = require("./util");
 const StateMachine = require("javascript-state-machine");
+const { PromptSet } = require("./prompts/prompt");
 
 class GameRoom {
   constructor(code, io) {
@@ -8,10 +9,13 @@ class GameRoom {
     this._io = io;
     // this._manager = manager;
 
+    // this._countdownWillEnd = 0;
     this._adminKey = generateBase64Id(32);
     this._allowedToJoin = true; // FIXME needs to be checked on reconnect
     this._playerSockets = [];
     this._adminSockets = [];
+
+    this._prompts = {};
 
     // Game state
     this._fsm();
@@ -26,13 +30,19 @@ class GameRoom {
   }
 
   getPlayerDataWithId(playerId) {
-    let playerSocket = this._playerSockets.find((player) => {
-      return player.playerData.playerId === playerId;
-    });
+    let playerSocket = this.getPlayerSocketWithId();
 
     if (playerSocket && playerSocket.playerData) {
       return playerSocket.playerData;
     }
+  }
+
+  getPlayerSocketWithId(playerId) {
+    return this._playerSockets.find((playerSocket) => {
+      console.log(playerId);
+      console.log(playerSocket.playerData);
+      return playerSocket.playerData.playerId === playerId;
+    });
   }
 
   get allowedToJoin() {
@@ -57,6 +67,17 @@ class GameRoom {
     return this._playerSockets.map((playerSocket) => {
       return playerSocket.playerData;
     });
+  }
+
+  sendPrompts() {
+    for (let [playerId, prompts] of this._prompts.promptsByPlayer) {
+      let socket = this.getPlayerSocketWithId(playerId);
+      console.log(`Sending player ${playerId} socket:`, socket);
+      console.log("Prompts:", prompts);
+      socket.emit("prompts", {
+        prompts,
+      });
+    }
   }
 
   // Relevant parts of state and data combined for sending to clients
@@ -107,6 +128,10 @@ StateMachine.factory(GameRoom, {
     },
     onPrompts: function () {
       console.log("Prompts!");
+
+      this._prompts = new PromptSet(this.playerData.map((pd) => pd.playerId));
+      this.sendPrompts();
+
       // Time Limits
       setTimeout(() => {
         this.closePrompts();
