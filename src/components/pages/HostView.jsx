@@ -36,7 +36,7 @@ export default class HostView extends Component {
   componentDidMount() {
     this.state.socket.on("connection", () => console.log("Connected!"));
     this.state.socket.on("state", (roomState) => {
-      console.log("Room state updated");
+      console.log("Room state updated", roomState);
       this.setState({ roomState: roomState });
     });
 
@@ -60,7 +60,7 @@ export default class HostView extends Component {
         <div className="content">
           <h3>Room Code: {this.props.match.params.code}</h3>
           <p>Admin Key: {this.state.adminKey}</p>
-          <h3>GameState: {this.state.gameState.global.currentState}</h3>
+          <h3>GameState: {this.state.gameState.global.gameState}</h3>
           <h3>Players:</h3>
           <ul>
             {this.state.gameState.global.players.map((player, index) => (

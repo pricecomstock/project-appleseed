@@ -1,19 +1,75 @@
-const StateMachine = require("javascript-state-machine");
+const generateBase64Id = require("./util").generateBase64Id;
 
-class Game {
-  constructor(roomCode, playerSockets, adminSockets, io) {
-    this._roomCode = roomCode;
+class GameRoom {
+  constructor(code, io) {
+    //TODO: Add game options
+    this._code = code;
+    // this._manager = manager;
 
-    this._io = io;
-    this._playerSockets = playerSockets;
-    this._adminSockets = adminSockets;
+    this._adminKey = generateBase64Id(32);
+    this._allowedToJoin = true; // FIXME needs to be checked on reconnect
+    this._playerSockets = [];
+    this._adminSockets = [];
 
-    // Initialize state machine
+    // Game state
     this._fsm();
+  }
+
+  get adminKey() {
+    return this._adminKey;
+  }
+
+  get code() {
+    return this._code;
+  }
+
+  getPlayerDataWithId(playerId) {
+    let playerSocket = this._playerSockets.find((player) => {
+      return player.playerData.playerId === playerId;
+    });
+
+    if (playerSocket && playerSocket.playerData) {
+      return playerSocket.playerData;
+    }
+  }
+
+  get allowedToJoin() {
+    return this._allowedToJoin;
+  }
+
+  addPlayer(playerSocket) {
+    this._playerSockets.push(playerSocket);
+  }
+
+  addAdmin(adminSocket) {
+    adminSocket.on("startGame", (data) => {
+      if (this._game.can("startGame")) {
+        this._game.startGame();
+      }
+    });
+
+    this._adminSockets.push(adminSocket);
+  }
+
+  get playerData() {
+    return this._playerSockets.map((playerSocket) => {
+      return playerSocket.playerData;
+    });
+  }
+
+  // Relevant parts of state and data combined for sending to clients
+  stateSummary() {
+    let state = {
+      global: {
+        players: this._playerSockets.map((socket) => socket.playerData),
+        currentState: this._game.state,
+      },
+    };
+    return state;
   }
 }
 
-StateMachine.factory(Game, {
+StateMachine.factory(GameRoom, {
   init: "lobby",
   transitions: [
     { name: "startGame", from: "lobby", to: "prompts" },
@@ -88,5 +144,3 @@ StateMachine.factory(Game, {
     },
   },
 });
-
-module.exports = Game;
