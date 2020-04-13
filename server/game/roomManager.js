@@ -1,5 +1,5 @@
 // var Room = require("./room");
-var GameRoom = require("./room");
+var GameRoom = require("./gameroom");
 const generateBase64Id = require("./util").generateBase64Id;
 
 // TODO: implement namespace "garbage collection"
@@ -32,7 +32,7 @@ class RoomManager {
         let roomToUpdate = this.getRoomWithCode(roomCode);
         if (roomToUpdate) {
           console.log("emitting room state to " + roomCode);
-          io.in(roomCode).emit("state", roomToUpdate.summary());
+          io.in(roomCode).emit("state", roomToUpdate.stateSummary());
         }
       };
 

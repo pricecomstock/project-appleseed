@@ -1,9 +1,11 @@
 const generateBase64Id = require("./util").generateBase64Id;
+const StateMachine = require("javascript-state-machine");
 
 class GameRoom {
   constructor(code, io) {
     //TODO: Add game options
     this._code = code;
+    this._io = io;
     // this._manager = manager;
 
     this._adminKey = generateBase64Id(32);
@@ -43,8 +45,8 @@ class GameRoom {
 
   addAdmin(adminSocket) {
     adminSocket.on("startGame", (data) => {
-      if (this._game.can("startGame")) {
-        this._game.startGame();
+      if (this.can("startGame")) {
+        this.startGame();
       }
     });
 
@@ -62,7 +64,7 @@ class GameRoom {
     let state = {
       global: {
         players: this._playerSockets.map((socket) => socket.playerData),
-        currentState: this._game.state,
+        currentState: this.state,
       },
     };
     return state;
@@ -144,3 +146,5 @@ StateMachine.factory(GameRoom, {
     },
   },
 });
+
+module.exports = GameRoom;
