@@ -1,4 +1,4 @@
-const generateBase64Id = require("./util").generateBase64Id;
+const { generateBase64Id, adminRoom } = require("./util");
 const StateMachine = require("javascript-state-machine");
 
 class GameRoom {
@@ -87,9 +87,12 @@ StateMachine.factory(GameRoom, {
   ],
   methods: {
     sendStateToAll: function () {
-      console.log("emitting room state to " + this._code);
-      console.log("Updated State: ", this.stateSummary());
+      // console.log("emitting room state to " + this._code);
+      // console.log("Updated State: ", this.stateSummary());
       this._io.in(this._code).emit("state", this.stateSummary());
+    },
+    sendStateToAdminsOnly: function (params) {
+      this._io.in(adminRoom(this._code)).emit("state", this.stateSummary());
     },
     onEnterState: function () {
       this.sendStateToAll();
