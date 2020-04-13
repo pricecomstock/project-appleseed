@@ -1,6 +1,7 @@
 // var Room = require("./room");
-var GameRoom = require("./gameroom");
+var GameRoom = require("./gameRoom");
 const generateBase64Id = require("./util").generateBase64Id;
+const PlayerData = require("./playerData");
 
 // TODO: implement namespace "garbage collection"
 
@@ -43,16 +44,6 @@ class RoomManager {
       socket.on("joinroom", (data) => {
         const roomCode = data.roomCode;
         const requestedId = data.requestedId;
-
-        // TODO move to a different file
-        class PlayerData {
-          constructor() {
-            this.connected = true;
-            this.nickname = "human-" + generateBase64Id(4);
-            this.emoji = "😀";
-            this.playerId = generateBase64Id(12);
-          }
-        }
 
         if (socket.rooms) {
           // socket already was in a room
