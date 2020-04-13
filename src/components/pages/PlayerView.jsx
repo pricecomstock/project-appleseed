@@ -13,6 +13,7 @@ export default class PlayerView extends Component {
     gameState: {
       global: {
         players: [],
+        currentState: "lobby",
       },
     },
     socket: createSocketClient(),
@@ -35,10 +36,12 @@ export default class PlayerView extends Component {
   componentDidMount() {
     console.log(this.state);
     this.state.socket.on("connection", () => console.log("Connected!"));
-    this.state.socket.on("state", (roomState) => {
-      console.log("Room state updated", roomState);
-      this.setState({ roomState: roomState });
+
+    this.state.socket.on("state", (newGameState) => {
+      console.log("Game state updated", newGameState);
+      this.setState({ gameState: newGameState });
     });
+
     this.state.socket.on("playerIdAssigned", (assignedId) => {
       console.log("player ID assigned: ", assignedId);
       this.setState({ playerId: assignedId });

@@ -67,6 +67,7 @@ class GameRoom {
         currentState: this.state,
       },
     };
+    console.log("State Summary: ", state);
     return state;
   }
 }
