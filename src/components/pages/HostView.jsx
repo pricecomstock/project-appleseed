@@ -58,6 +58,7 @@ export default class HostView extends Component {
     return (
       <div>
         <div className="content">
+          <span className="tag is-success is-large">Admin</span>
           <h3>Room Code: {this.props.match.params.code}</h3>
           <p>Admin Key: {this.state.adminKey}</p>
           <h3>GameState: {this.state.gameState.global.gameState}</h3>

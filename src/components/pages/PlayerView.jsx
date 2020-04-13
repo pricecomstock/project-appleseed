@@ -50,7 +50,10 @@ export default class PlayerView extends Component {
   render() {
     return (
       <div>
-        <p>Room Code: {this.state.roomCode}</p>
+        <div className="content">
+          <span className="tag is-light is-info is-large">Player</span>
+          <h3>Room Code: {this.state.roomCode}</h3>
+        </div>
         {true && (
           // {this.state.gameState.state == "preGame" && (
           <PlayerInfoSet socket={this.state.socket}></PlayerInfoSet>
