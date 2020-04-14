@@ -19,6 +19,10 @@ class PromptMatchup {
     return this._text;
   }
 
+  get players() {
+    return this._players;
+  }
+
   get sendable() {
     return {
       id: this._id,
@@ -36,7 +40,7 @@ class PromptSet {
     this._matchups = [];
     this._promptsByPlayer = new Map();
 
-    this.createPromptMatchups(playerIds);
+    this.createPromptMatchups();
   }
 
   createPromptMatchups() {
@@ -47,12 +51,15 @@ class PromptSet {
     for (let i = 0; i < this.PLAYERS_PER_PROMPT; i++) {
       let shuffledPlayers = [];
       for (let j = 0; j < this.PROMPTS_PER_PLAYER; j++) {
-        shuffledPlayers.concat(getShuffledCopyOfArray(this._playerIds));
+        shuffledPlayers = shuffledPlayers.concat(
+          getShuffledCopyOfArray(this._playerIds)
+        );
       }
       playerLists.push(shuffledPlayers);
     }
 
     // Step 2 pull items off each list
+    // console.log("Prompt shuffled player lists: ", playerLists);
     while (playerLists[0].length > 0) {
       let selectedPlayers = [];
 
@@ -71,6 +78,7 @@ class PromptSet {
       });
 
       const promptMatchup = new PromptMatchup(getPrompt(), selectedPlayers);
+      // console.log("Matchup: ", promptMatchup);
       selectedPlayers.forEach((playerId) => {
         let currentPrompts = this._promptsByPlayer.get(playerId);
         if (!currentPrompts) {

@@ -10,12 +10,9 @@ import createSocketClient from "../../createSocketClient";
 export default class PlayerView extends Component {
   state = {
     roomCode: this.props.match.params.code,
-    gameState: {
-      global: {
-        players: [],
-        currentState: "lobby",
-      },
-    },
+    // players: [],
+    currentState: "lobby",
+    prompts: [],
     socket: createSocketClient(),
     playerId: "",
   };
@@ -39,7 +36,7 @@ export default class PlayerView extends Component {
 
     this.state.socket.on("state", (newGameState) => {
       console.log("Game state updated", newGameState);
-      this.setState({ gameState: newGameState });
+      this.setState({ currentState: newGameState.currentState });
     });
 
     this.state.socket.on("playerIdAssigned", (assignedId) => {
@@ -47,6 +44,12 @@ export default class PlayerView extends Component {
       this.setState({ playerId: assignedId });
       localStorage.setItem(this.state.roomCode, this.state.playerId);
     });
+
+    this.state.socket.on("prompts", (data) => {
+      console.log("Received Prompts", data);
+      this.setState({ prompts: data.prompts });
+    });
+
     this.joinThisRoom();
   }
 
@@ -56,7 +59,14 @@ export default class PlayerView extends Component {
         <div className="content">
           <span className="tag is-light is-info is-large">Player</span>
           <h3>Room Code: {this.state.roomCode}</h3>
+          <h3>Prompts</h3>
+          <ul>
+            {this.state.prompts.map((prompt, index) => (
+              <li key={index}>{prompt.text}</li>
+            ))}
+          </ul>
         </div>
+        <hr />
         {true && (
           // {this.state.gameState.state == "preGame" && (
           <PlayerInfoSet socket={this.state.socket}></PlayerInfoSet>

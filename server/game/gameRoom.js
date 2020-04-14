@@ -70,10 +70,12 @@ class GameRoom {
   }
 
   sendPrompts() {
+    this._prompts = new PromptSet(this.playerData.map((pd) => pd.playerId));
+    // console.log("It's prompts time!", this._prompts);
     for (let [playerId, prompts] of this._prompts.promptsByPlayer) {
       let socket = this.getPlayerSocketWithId(playerId);
-      console.log(`Sending player ${playerId} socket:`, socket);
-      console.log("Prompts:", prompts);
+      // console.log(`Sending player ${playerId} socket:`, socket);
+      // console.log("Prompts:", prompts);
       socket.emit("prompts", {
         prompts,
       });
@@ -83,10 +85,8 @@ class GameRoom {
   // Relevant parts of state and data combined for sending to clients
   stateSummary() {
     let state = {
-      global: {
-        players: this._playerSockets.map((socket) => socket.playerData),
-        currentState: this.state,
-      },
+      players: this._playerSockets.map((socket) => socket.playerData),
+      currentState: this.state,
     };
     return state;
   }
@@ -129,15 +129,12 @@ StateMachine.factory(GameRoom, {
     onPrompts: function () {
       console.log("Prompts!");
 
-      this._prompts = new PromptSet(this.playerData.map((pd) => pd.playerId));
       this.sendPrompts();
 
       // Time Limits
       setTimeout(() => {
         this.closePrompts();
       }, 80000);
-
-      console.log(this._playerSockets);
     },
     onInitiateVoting: function () {
       // TODO Implement
