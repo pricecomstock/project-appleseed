@@ -30,7 +30,7 @@ class GameRoom {
   }
 
   getPlayerDataWithId(playerId) {
-    let playerSocket = this.getPlayerSocketWithId();
+    let playerSocket = this.getPlayerSocketWithId(playerId);
 
     if (playerSocket && playerSocket.playerData) {
       return playerSocket.playerData;

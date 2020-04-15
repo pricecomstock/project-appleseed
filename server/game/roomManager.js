@@ -68,7 +68,9 @@ class RoomManager {
               socket.playerData = existingPlayer;
               socket.playerData.connected = true;
             } else {
-              console.log("Player does not exist, creating a new one.");
+              console.log(
+                `Claimed ID ${requestedId} does not exist, creating a new one.`
+              );
               socket.playerData = new PlayerData();
               joinedRoom.addPlayer(socket);
             }
