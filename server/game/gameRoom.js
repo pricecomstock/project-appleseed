@@ -39,8 +39,6 @@ class GameRoom {
 
   getPlayerSocketWithId(playerId) {
     return this._playerSockets.find((playerSocket) => {
-      console.log(playerId);
-      console.log(playerSocket.playerData);
       return playerSocket.playerData.playerId === playerId;
     });
   }

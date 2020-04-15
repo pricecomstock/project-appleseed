@@ -43,7 +43,14 @@ export default class Home extends Component {
         <header>
           <h1 className="title">Project Appleseed</h1>
         </header>
-        <div className="field has-addons is-grouped-centered">
+        <div
+          className="field has-addons is-grouped-centered"
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              this.joinGame();
+            }
+          }}
+        >
           <div className="control">
             <input
               className="input is-large is-uppercase"

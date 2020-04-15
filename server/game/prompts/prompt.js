@@ -50,13 +50,15 @@ class PromptSet {
     // There will be m lists, where each prompt is answered by m players
     for (let i = 0; i < this.PLAYERS_PER_PROMPT; i++) {
       let shuffledPlayers = [];
-      for (let j = 0; j < this.PROMPTS_PER_PLAYER; j++) {
+      // Notice - 1 because everyone will be in 2 by default
+      for (let j = 0; j < this.PROMPTS_PER_PLAYER - 1; j++) {
         shuffledPlayers = shuffledPlayers.concat(
           getShuffledCopyOfArray(this._playerIds)
         );
       }
       playerLists.push(shuffledPlayers);
     }
+    console.log(playerLists);
 
     // Step 2 pull items off each list
     // console.log("Prompt shuffled player lists: ", playerLists);

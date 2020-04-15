@@ -59,6 +59,7 @@ export default class PlayerView extends Component {
         <div className="content">
           <span className="tag is-light is-info is-large">Player</span>
           <h3>Room Code: {this.state.roomCode}</h3>
+          <p>Player ID: {this.state.playerId}</p>
           <h3>Prompts</h3>
           <ul>
             {this.state.prompts.map((prompt, index) => (
