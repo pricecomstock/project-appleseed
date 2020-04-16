@@ -76,9 +76,15 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("endPrompts", (data) => {
+    adminSocket.on("closePrompts", (data) => {
       if (this.can("closePrompts")) {
         this.closePrompts();
+      }
+    });
+
+    adminSocket.on("closeVoting", (data) => {
+      if (this.can("closeVoting")) {
+        this.closeVoting();
       }
     });
 

@@ -31,8 +31,12 @@ export default class HostView extends Component {
     this.state.socket.emit("startGame");
   };
 
-  endPrompts = () => {
-    this.state.socket.emit("endPrompts");
+  closePrompts = () => {
+    this.state.socket.emit("closePrompts");
+  };
+
+  closeVoting = () => {
+    this.state.socket.emit("closeVoting");
   };
 
   componentDidMount() {
@@ -89,8 +93,13 @@ export default class HostView extends Component {
           </button>
         )}
         {this.state.currentState === "prompts" && (
-          <button className="button is-warning" onClick={this.endPrompts}>
-            End Prompts
+          <button className="button is-warning" onClick={this.closePrompts}>
+            Close Prompts
+          </button>
+        )}
+        {this.state.currentState === "voting" && (
+          <button className="button is-warning" onClick={this.closeVoting}>
+            Close Voting
           </button>
         )}
         <hr />
