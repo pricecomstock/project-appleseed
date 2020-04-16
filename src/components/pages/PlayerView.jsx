@@ -14,6 +14,7 @@ export default class PlayerView extends Component {
     // players: [],
     currentState: "lobby",
     prompts: [],
+    promptIndex: 0,
     socket: createSocketClient(),
     playerId: "",
     editingPlayerInfo: false,
@@ -37,6 +38,8 @@ export default class PlayerView extends Component {
       promptId,
       answer,
     });
+
+    this.setState({ promptIndex: this.state.promptIndex + 1 });
   };
 
   componentDidMount() {
@@ -88,12 +91,12 @@ export default class PlayerView extends Component {
           </div>
           <h3>Room Code: {this.state.roomCode}</h3>
           <p>Player ID: {this.state.playerId}</p>
-          <h3>Prompts</h3>
+          {/* <h3>Prompts</h3>
           <ul>
             {this.state.prompts.map((prompt, index) => (
               <li key={index}>{prompt.text}</li>
             ))}
-          </ul>
+          </ul> */}
         </div>
         <hr />
         {true && (
@@ -104,15 +107,12 @@ export default class PlayerView extends Component {
             hide={() => this.setState({ editingPlayerInfo: false })}
           ></PlayerInfoSet>
         )}
-        {this.state.prompts.map((prompt, index) => {
-          return (
-            <Prompt
-              prompt={prompt}
-              key={index}
-              submitAnswer={this.submitAnswer}
-            ></Prompt>
-          );
-        })}
+        {this.state.prompts.length > this.state.promptIndex && (
+          <Prompt
+            prompt={this.state.prompts[this.state.promptIndex]}
+            submitAnswer={this.submitAnswer}
+          ></Prompt>
+        )}
       </div>
     );
   }

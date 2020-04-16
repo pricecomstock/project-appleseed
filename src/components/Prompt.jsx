@@ -7,6 +7,7 @@ export default function Prompt(props) {
   return (
     <div>
       <p className="is-size-4">{props.prompt.text}</p>
+
       <div className="field">
         <label className="label">Answer</label>
         <div className="control">
@@ -22,6 +23,7 @@ export default function Prompt(props) {
         className="button is-primary"
         onClick={() => {
           props.submitAnswer(props.prompt.id, answer);
+          setAnswer("");
         }}
       >
         Submit
