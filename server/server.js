@@ -4,6 +4,7 @@ const cors = require("cors");
 const axios = require("axios");
 const socketIo = require("socket.io");
 const createRouter = require("./routes/router.js");
+console.log("ENV:", process.env.NODE_ENV);
 
 const port = process.env.PORT || 4001;
 
@@ -17,19 +18,14 @@ const io = socketIo(server);
 // pass to function that attaches room manager and manipulates it through API
 const api = createRouter(io);
 
-// Very open CORS rules
-// TODO figure out production version of this
-app.options("*", cors());
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//   );
-//   next();
-// });
+// CORS rules
+if (process.env.NODE_ENV === "development") {
+  app.options("*", cors());
+  app.use("/api", cors(), api);
+} else {
+  app.use("/api", api);
+}
 
 app.use(index);
-app.use("/api", cors(), api);
 
 server.listen(port, () => console.log(`Listening on port ${port}`));

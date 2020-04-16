@@ -60,7 +60,8 @@ class RoomManager {
           socket.join(roomCode);
           socket.roomCode = roomCode;
 
-          if (requestedId) {
+          // If we're in development, every instance should be new player
+          if (requestedId && process.env.NODE_ENV !== "development") {
             console.log("player reconnecting");
             let existingPlayer = joinedRoom.getPlayerDataWithId(requestedId);
             if (existingPlayer) {
