@@ -55,6 +55,10 @@ export default class PlayerView extends Component {
     this.joinThisRoom();
   }
 
+  componentWillUnmount() {
+    this.state.socket.removeAllListeners();
+  }
+
   render() {
     return (
       <div>
@@ -93,7 +97,9 @@ export default class PlayerView extends Component {
             hide={() => this.setState({ editingPlayerInfo: false })}
           ></PlayerInfoSet>
         )}
-        <Prompt prompt={"Here's a test question"}></Prompt>
+        {this.state.prompts.map((prompt, index) => {
+          return <Prompt prompt={prompt.text} key={index}></Prompt>;
+        })}
       </div>
     );
   }

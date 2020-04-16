@@ -44,6 +44,10 @@ export default class HostView extends Component {
     this.joinThisRoomAsAdmin();
   }
 
+  componentWillUnmount() {
+    this.state.socket.removeAllListeners();
+  }
+
   render() {
     return (
       <div>

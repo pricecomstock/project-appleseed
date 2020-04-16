@@ -48,7 +48,15 @@ class GameRoom {
   }
 
   addPlayer(playerSocket) {
+    // Add to Player Sockets list
     this._playerSockets.push(playerSocket);
+
+    // Update Player Info
+    playerSocket.on("updateplayerinfo", (info) => {
+      playerSocket.playerData.nickname = info.nickname;
+      playerSocket.playerData.emoji = info.emoji;
+      this.sendStateToAll();
+    });
   }
 
   addAdmin(adminSocket) {

@@ -129,14 +129,6 @@ class RoomManager {
         }
       });
 
-      socket.on("updateplayerinfo", (info) => {
-        if (this.checkRoomExists(socket.roomCode)) {
-          socket.playerData.nickname = info.nickname;
-          socket.playerData.emoji = info.emoji;
-          sendRoomUpdates(socket.roomCode);
-        }
-      });
-
       socket.on("vote", (choiceIndex) => {
         if (this.checkRoomExists(socket.roomCode)) {
           let playerRoom = this.getRoomWithCode(socket.roomCode);
