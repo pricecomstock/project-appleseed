@@ -76,6 +76,12 @@ class GameRoom {
       }
     });
 
+    adminSocket.on("endPrompts", (data) => {
+      if (this.can("closePrompts")) {
+        this.closePrompts();
+      }
+    });
+
     this._adminSockets.push(adminSocket);
   }
 
@@ -100,6 +106,22 @@ class GameRoom {
     }
   }
 
+  sendStateToAll() {
+    this.emitToAll("state", this.stateSummary());
+  }
+
+  sendStateToAdminsOnly() {
+    this.emitToAdmins("state", this.stateSummary());
+  }
+
+  emitToAll(event, data) {
+    this._io.in(this._code).emit(event, data);
+  }
+
+  emitToAdmins(event, data) {
+    this._io.in(adminRoom(this._code)).emit(event, data);
+  }
+
   // Relevant parts of state and data combined for sending to clients
   stateSummary() {
     let state = {
@@ -107,6 +129,12 @@ class GameRoom {
       currentState: this.state,
     };
     return state;
+  }
+
+  sendFilledPromptsToAdmin() {
+    this.emitToAdmins("filledprompts", {
+      prompts: this._prompts.sendableMatchups,
+    });
   }
 }
 
@@ -125,14 +153,6 @@ StateMachine.factory(GameRoom, {
     { name: "newGameSamePlayers", from: "finalScores", to: "prompts" },
   ],
   methods: {
-    sendStateToAll: function () {
-      // console.log("emitting room state to " + this._code);
-      // console.log("Updated State: ", this.stateSummary());
-      this._io.in(this._code).emit("state", this.stateSummary());
-    },
-    sendStateToAdminsOnly: function (params) {
-      this._io.in(adminRoom(this._code)).emit("state", this.stateSummary());
-    },
     onEnterState: function () {
       this.sendStateToAll();
     },
@@ -141,7 +161,8 @@ StateMachine.factory(GameRoom, {
       console.log("Game Started");
     },
     onClosePrompts: function () {
-      // TODO Implement
+      this.sendFilledPromptsToAdmin();
+
       console.log("closePrompts");
     },
     onPrompts: function () {
@@ -151,13 +172,17 @@ StateMachine.factory(GameRoom, {
 
       // Time Limits
       setTimeout(() => {
-        this.closePrompts();
-      }, 80000);
+        if (this.can("closePrompts")) {
+          this.closePrompts();
+        }
+      }, 20000); // TODO improve timer
     },
     onInitiateVoting: function () {
       // TODO Implement
       setTimeout(() => {
-        this.closeVoting();
+        if (this.can("closeVoting")) {
+          this.closeVoting();
+        }
       }, 20000);
       console.log("initiateVoting");
     },

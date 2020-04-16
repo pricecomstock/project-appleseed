@@ -111,6 +111,12 @@ class PromptSet {
   get promptsByPlayer() {
     return this._promptsByPlayer;
   }
+
+  get sendableMatchups() {
+    return [...this._matchups.values()].map((matchup) => {
+      return matchup.sendable;
+    });
+  }
 }
 
 module.exports = { PromptSet };

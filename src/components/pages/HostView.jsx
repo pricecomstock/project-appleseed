@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
+import ReadingDisplay from "../ReadingDisplay";
 
 import createSocketClient from "../../createSocketClient";
 
@@ -12,6 +13,7 @@ export default class HostView extends Component {
     currentState: "lobby",
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
+    filledPrompts: [],
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -29,6 +31,10 @@ export default class HostView extends Component {
     this.state.socket.emit("startGame");
   };
 
+  endPrompts = () => {
+    this.state.socket.emit("endPrompts");
+  };
+
   componentDidMount() {
     this.state.socket.on("connection", () => console.log("Connected!"));
 
@@ -39,6 +45,11 @@ export default class HostView extends Component {
     });
     this.state.socket.on("adminkeyerror", (data) => {
       console.log("Admin Key Error");
+    });
+
+    this.state.socket.on("filledprompts", (data) => {
+      console.log("Filled Prompts:", data);
+      this.setState({ filledPrompts: data.prompts });
     });
 
     this.joinThisRoomAsAdmin();
@@ -72,9 +83,23 @@ export default class HostView extends Component {
             ))}
           </ul>
         </div>
-        <button className="button is-primary" onClick={this.startGame}>
-          Start Game
-        </button>
+        {this.state.currentState === "lobby" && (
+          <button className="button is-primary" onClick={this.startGame}>
+            Start Game
+          </button>
+        )}
+        {this.state.currentState === "prompts" && (
+          <button className="button is-warning" onClick={this.endPrompts}>
+            End Prompts
+          </button>
+        )}
+        <hr />
+        {(this.state.currentState === "reading" ||
+          this.state.currentState === "voting" ||
+          this.state.currentState === "scoring") &&
+          this.state.filledPrompts && (
+            <ReadingDisplay prompts={this.state.filledPrompts}></ReadingDisplay>
+          )}
       </div>
     );
   }
