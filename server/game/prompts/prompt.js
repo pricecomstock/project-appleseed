@@ -6,9 +6,15 @@ class PromptMatchup {
   constructor(text, players) {
     this._players = players;
     this._text = text;
+    this._answers = new Map();
 
     // TODO guarantee no duplicates
     this._id = generateBase64Id(8);
+  }
+
+  answer(playerId, answer) {
+    console.log(`${this._text}: ${playerId} submits "${answer}"`);
+    this._answers.set(playerId, answer);
   }
 
   get id() {
@@ -27,6 +33,7 @@ class PromptMatchup {
     return {
       id: this._id,
       text: this._text,
+      answers: [...this._answers],
     };
   }
 }
@@ -37,10 +44,14 @@ class PromptSet {
     this.PLAYERS_PER_PROMPT = 2;
     this._playerIds = playerIds;
 
-    this._matchups = [];
+    this._matchups = new Map();
     this._promptsByPlayer = new Map();
 
     this.createPromptMatchups();
+  }
+
+  answer(playerId, promptId, answer) {
+    this._matchups.get(promptId).answer(playerId, answer);
   }
 
   createPromptMatchups() {
@@ -87,10 +98,9 @@ class PromptSet {
           currentPrompts = [];
           this._promptsByPlayer.set(playerId, currentPrompts);
         }
-        // FIXME i think since arrays are by reference this will work
-        currentPrompts.push(promptMatchup.sendable);
+        currentPrompts.push(promptMatchup);
       });
-      this._matchups.push(promptMatchup);
+      this._matchups.set(promptMatchup.id, promptMatchup);
     }
   }
 

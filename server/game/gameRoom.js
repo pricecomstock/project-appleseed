@@ -57,6 +57,16 @@ class GameRoom {
       playerSocket.playerData.emoji = info.emoji;
       this.sendStateToAll();
     });
+
+    // Submit an answer to a prompt
+    playerSocket.on("answerprompt", (data) => {
+      // TODO input validation
+      this._prompts.answer(
+        playerSocket.playerData.playerId,
+        data.promptId,
+        data.answer
+      );
+    });
   }
 
   addAdmin(adminSocket) {
@@ -83,7 +93,9 @@ class GameRoom {
       // console.log(`Sending player ${playerId} socket:`, socket);
       // console.log("Prompts:", prompts);
       socket.emit("prompts", {
-        prompts,
+        prompts: prompts.map((p) => {
+          return p.sendable;
+        }),
       });
     }
   }

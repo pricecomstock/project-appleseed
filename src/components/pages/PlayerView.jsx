@@ -32,6 +32,13 @@ export default class PlayerView extends Component {
     this.joinRoom(this.state.roomCode);
   };
 
+  submitAnswer = (promptId, answer) => {
+    this.state.socket.emit("answerprompt", {
+      promptId,
+      answer,
+    });
+  };
+
   componentDidMount() {
     console.log(this.state);
     this.state.socket.on("connection", () => console.log("Connected!"));
@@ -98,7 +105,13 @@ export default class PlayerView extends Component {
           ></PlayerInfoSet>
         )}
         {this.state.prompts.map((prompt, index) => {
-          return <Prompt prompt={prompt.text} key={index}></Prompt>;
+          return (
+            <Prompt
+              prompt={prompt}
+              key={index}
+              submitAnswer={this.submitAnswer}
+            ></Prompt>
+          );
         })}
       </div>
     );
