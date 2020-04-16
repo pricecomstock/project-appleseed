@@ -55,6 +55,13 @@ export default class HostView extends Component {
           <span className="tag is-success is-large">Admin</span>
           <h3>Room Code: {this.props.match.params.code}</h3>
           <p>Admin Key: {this.state.adminKey}</p>
+          <a
+            href={`/play/${this.state.roomCode}`}
+            className="button"
+            target="_blank"
+          >
+            Join as Player
+          </a>
           <h3>GameState: {this.state.currentState}</h3>
           <h3>Players:</h3>
           <ul>
