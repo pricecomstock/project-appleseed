@@ -1,46 +1,71 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useState } from "react";
+import React, { Component } from "react";
+import classNames from "classnames";
 
-export default function PlayerInfoSet(props) {
-  const [name, setName] = useState("");
-  const [emoji, setEmoji] = useState("😀");
-
-  const sendUpdatedInfo = () => {
-    props.socket.emit("updateplayerinfo", {
-      nickname: name,
-      emoji: emoji,
-    });
+export default class PlayerInfoSet extends Component {
+  state = {
+    name: "",
+    emoji: "😀",
   };
 
-  return (
-    <div>
-      <div className="field">
-        <label className="label">Name</label>
-        <div className="control">
-          <input
-            className="input"
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-          />
-        </div>
-      </div>
+  sendUpdatedInfo = () => {
+    this.props.socket.emit("updateplayerinfo", {
+      nickname: this.state.name,
+      emoji: this.state.emoji,
+    });
+    this.props.hide();
+  };
 
-      <div className="field">
-        <label className="label">emoji</label>
-        <div className="control">
-          <input
-            className="input"
-            type="text"
-            value={emoji}
-            onChange={(event) => setEmoji(event.target.value)}
-          />
+  render() {
+    return (
+      <div>
+        <div
+          className={classNames("modal", { "is-active": this.props.active })}
+        >
+          <div className="modal-background"></div>
+          <div className="modal-content">
+            <div className="box">
+              <div className="field">
+                <label className="label">Name</label>
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    value={this.state.name}
+                    onChange={(event) =>
+                      this.setState({ name: event.target.value })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="field">
+                <label className="label">emoji</label>
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    value={this.state.emoji}
+                    onChange={(event) =>
+                      this.setState({ emoji: event.target.value })
+                    }
+                  />
+                </div>
+              </div>
+              <button
+                className="button is-primary"
+                onClick={this.sendUpdatedInfo}
+              >
+                Update
+              </button>
+            </div>
+          </div>
+          <button
+            className="modal-close is-large"
+            aria-label="close"
+            onClick={() => this.props.hide()}
+          ></button>
         </div>
       </div>
-      <button className="button is-primary" onClick={sendUpdatedInfo}>
-        Update
-      </button>
-    </div>
-  );
+    );
+  }
 }

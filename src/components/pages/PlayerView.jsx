@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
 import PlayerInfoSet from "../PlayerInfoSet";
+import PlayerInfoView from "../PlayerInfoView";
 import Prompt from "../Prompt";
 
 import createSocketClient from "../../createSocketClient";
@@ -15,6 +16,7 @@ export default class PlayerView extends Component {
     prompts: [],
     socket: createSocketClient(),
     playerId: "",
+    editingPlayerInfo: false,
   };
 
   joinRoom = (roomCode) => {
@@ -57,7 +59,22 @@ export default class PlayerView extends Component {
     return (
       <div>
         <div className="content">
-          <span className="tag is-light is-info is-large">Player</span>
+          <div className="level is-mobile">
+            <div className="level-left">
+              <div className="level-item">
+                <span className="tag is-light is-info is-large">Player</span>
+              </div>
+            </div>
+            <div className="level-right">
+              <div className="level-item">
+                <PlayerInfoView
+                  emoji="😷"
+                  name="Test Player"
+                  onEdit={() => this.setState({ editingPlayerInfo: true })}
+                ></PlayerInfoView>
+              </div>
+            </div>
+          </div>
           <h3>Room Code: {this.state.roomCode}</h3>
           <p>Player ID: {this.state.playerId}</p>
           <h3>Prompts</h3>
@@ -70,7 +87,11 @@ export default class PlayerView extends Component {
         <hr />
         {true && (
           // {this.state.gameState.state == "preGame" && (
-          <PlayerInfoSet socket={this.state.socket}></PlayerInfoSet>
+          <PlayerInfoSet
+            socket={this.state.socket}
+            active={this.state.editingPlayerInfo}
+            hide={() => this.setState({ editingPlayerInfo: false })}
+          ></PlayerInfoSet>
         )}
         <Prompt prompt={"Here's a test question"}></Prompt>
       </div>
