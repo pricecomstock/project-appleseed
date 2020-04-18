@@ -40,10 +40,20 @@ function getShuffledCopyOfArray(originalArray) {
   return array;
 }
 
+function mapToObject(map) {
+  let obj = Array.from(map).reduce((obj, [key, value]) => {
+    obj[key] = value;
+    return obj;
+  }, {});
+
+  return obj;
+}
+
 module.exports = {
   generateBase64Id,
   adminRoom,
   playerRoom,
   audienceRoom,
   getShuffledCopyOfArray,
+  mapToObject,
 };

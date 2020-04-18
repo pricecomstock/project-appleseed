@@ -16,6 +16,7 @@ class GameRoom {
     this._adminSockets = [];
 
     this._prompts = {};
+    this._finalizedMatchupsToSend = [];
 
     // Game state
     this._fsm();
@@ -137,9 +138,14 @@ class GameRoom {
     return state;
   }
 
-  sendFilledPromptsToAdmin() {
-    this.emitToAdmins("filledprompts", {
-      prompts: this._prompts.sendableMatchups,
+  prepareMatchupsToSend() {
+    this._finalizedMatchupsToSend = this._prompts.finalizeMatchups();
+    console.log("Finalized Matchups:", this._finalizedMatchupsToSend);
+  }
+
+  sendNextFilledPromptToAdmin() {
+    this.emitToAdmins("nextfilledprompt", {
+      prompt: this._finalizedMatchupsToSend.pop(),
     });
   }
 }
@@ -167,8 +173,6 @@ StateMachine.factory(GameRoom, {
       console.log("Game Started");
     },
     onClosePrompts: function () {
-      this.sendFilledPromptsToAdmin();
-
       console.log("closePrompts");
     },
     onPrompts: function () {
@@ -182,6 +186,11 @@ StateMachine.factory(GameRoom, {
           this.closePrompts();
         }
       }, 20000); // TODO improve timer
+    },
+    onReading: function () {
+      console.log("Entering reading!");
+      this.prepareMatchupsToSend();
+      this.sendNextFilledPromptToAdmin();
     },
     onInitiateVoting: function () {
       // TODO Implement

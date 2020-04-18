@@ -46,6 +46,7 @@ class PromptSet {
 
     this._matchups = new Map();
     this._promptsByPlayer = new Map();
+    this._finalizedMatchups = [];
 
     this.createPromptMatchups();
   }
@@ -116,6 +117,11 @@ class PromptSet {
     return [...this._matchups.values()].map((matchup) => {
       return matchup.sendable;
     });
+  }
+
+  finalizeMatchups() {
+    this._finalizedMatchups = getShuffledCopyOfArray(this.sendableMatchups);
+    return this._finalizedMatchups;
   }
 }
 

@@ -13,7 +13,7 @@ export default class HostView extends Component {
     currentState: "lobby",
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
-    filledPrompts: [],
+    filledPrompt: {},
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -51,9 +51,9 @@ export default class HostView extends Component {
       console.log("Admin Key Error");
     });
 
-    this.state.socket.on("filledprompts", (data) => {
-      console.log("Filled Prompts:", data);
-      this.setState({ filledPrompts: data.prompts });
+    this.state.socket.on("nextfilledprompt", (data) => {
+      console.log("Filled Prompt:", data);
+      this.setState({ filledPrompt: data.prompt });
     });
 
     this.joinThisRoomAsAdmin();
@@ -106,8 +106,8 @@ export default class HostView extends Component {
         {(this.state.currentState === "reading" ||
           this.state.currentState === "voting" ||
           this.state.currentState === "scoring") &&
-          this.state.filledPrompts && (
-            <ReadingDisplay prompts={this.state.filledPrompts}></ReadingDisplay>
+          this.state.filledPrompt && (
+            <ReadingDisplay prompt={this.state.filledPrompt}></ReadingDisplay>
           )}
       </div>
     );
