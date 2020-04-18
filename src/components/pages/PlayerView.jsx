@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
-import PlayerInfoSet from "../PlayerInfoSet";
-import PlayerInfoView from "../PlayerInfoView";
-import Prompt from "../Prompt";
+import PlayerInfoSet from "../player/PlayerInfoSet";
+import PlayerInfoView from "../player/PlayerInfoView";
+import Prompt from "../player/Prompt";
 
 import createSocketClient from "../../createSocketClient";
 

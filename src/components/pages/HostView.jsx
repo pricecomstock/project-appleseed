@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
-import ReadingDisplay from "../ReadingDisplay";
+import ReadingDisplay from "../host/ReadingDisplay";
 
 import createSocketClient from "../../createSocketClient";
 
