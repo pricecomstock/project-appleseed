@@ -18,6 +18,9 @@ class GameRoom {
     this._prompts = {};
     this._finalizedMatchupsToSend = [];
 
+    this._promptTimeout = null;
+    this._votingTimeout = null;
+
     // Game state
     this._fsm();
   }
@@ -154,10 +157,9 @@ StateMachine.factory(GameRoom, {
   init: "lobby",
   transitions: [
     { name: "startGame", from: "lobby", to: "prompts" },
-    { name: "closePrompts", from: "prompts", to: "reading" },
-    { name: "initiateVoting", from: "reading", to: "voting" },
+    { name: "closePrompts", from: "prompts", to: "voting" },
     { name: "closeVoting", from: "voting", to: "scoring" },
-    { name: "nextSet", from: "scoring", to: "reading" },
+    { name: "nextSet", from: "scoring", to: "voting" },
     { name: "endRound", from: "scoring", to: "endOfRound" },
     { name: "nextRound", from: "endOfRound", to: "prompts" },
     { name: "endGame", from: "endOfRound", to: "finalScores" },
@@ -181,20 +183,16 @@ StateMachine.factory(GameRoom, {
       this.sendPrompts();
 
       // Time Limits
-      setTimeout(() => {
+      this._promptTimeout = setTimeout(() => {
         if (this.can("closePrompts")) {
           this.closePrompts();
         }
       }, 20000); // TODO improve timer
     },
-    onReading: function () {
-      console.log("Entering reading!");
+    onVoting: function () {
       this.prepareMatchupsToSend();
       this.sendNextFilledPromptToAdmin();
-    },
-    onInitiateVoting: function () {
-      // TODO Implement
-      setTimeout(() => {
+      this._votingTimeout = setTimeout(() => {
         if (this.can("closeVoting")) {
           this.closeVoting();
         }
