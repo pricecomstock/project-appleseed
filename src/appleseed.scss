@@ -7,3 +7,8 @@
 $family-sans-serif: "Nunito", sans-serif;
 
 @import "../node_modules/bulma/bulma.sass";
+
+// Fix for last child of box elements looking different
+.prompt-box:not(:last-child) {
+  margin-bottom: 0;
+}
