@@ -20,6 +20,7 @@ export default class PlayerView extends Component {
     playerId: "",
     editingPlayerInfo: false,
     currentVotingMatchup: {},
+    voteSubmitted: false,
   };
 
   joinRoom = (roomCode) => {
@@ -49,6 +50,7 @@ export default class PlayerView extends Component {
       index: index,
       id: this.state.playerId,
     });
+    this.setState({ voteSubmitted: true });
   };
 
   componentDidMount() {
@@ -72,7 +74,10 @@ export default class PlayerView extends Component {
     });
 
     this.state.socket.on("votingoptions", (data) => {
-      this.setState({ currentVotingMatchup: data.currentVotingMatchup });
+      this.setState({
+        currentVotingMatchup: data.currentVotingMatchup,
+        voteSubmitted: false,
+      });
     });
 
     this.joinThisRoom();
@@ -126,12 +131,13 @@ export default class PlayerView extends Component {
             submitAnswer={this.submitAnswer}
           ></Prompt>
         )}
-        {this.state.currentState === "voting" && (
-          <PlayerVote
-            submitVote={this.submitVote}
-            currentVotingMatchup={this.state.currentVotingMatchup}
-          ></PlayerVote>
-        )}
+        {this.state.currentState === "voting" &&
+          this.state.voteSubmitted === false && (
+            <PlayerVote
+              submitVote={this.submitVote}
+              currentVotingMatchup={this.state.currentVotingMatchup}
+            ></PlayerVote>
+          )}
       </div>
     );
   }

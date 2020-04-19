@@ -2,8 +2,8 @@ import React, { Component } from "react";
 
 export default class ReadingDisplay extends Component {
   state = {
-    pointsPerPrompt: 800,
-    pointsForShutout: 200,
+    pointsPerPrompt: 900,
+    pointsForShutout: 100,
     pointsArray: [],
     // TODO shutout index
   };
