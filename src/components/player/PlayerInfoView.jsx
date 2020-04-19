@@ -5,16 +5,18 @@ export default class PlayerInfoView extends Component {
     return (
       <div className="tags has-addons are-medium">
         <span className="tag is-info">
-          {this.props.emoji}&nbsp;
-          {this.props.name}
+          {this.props.playerInfo.emoji}&nbsp;
+          {this.props.playerInfo.nickname}
         </span>
-        <span
-          className="tag is-light is-info"
-          onClick={this.props.onEdit}
-          style={{ cursor: "pointer" }}
-        >
-          Edit
-        </span>
+        {this.props.canEdit && (
+          <span
+            className="tag is-light is-info"
+            onClick={this.props.onEdit}
+            style={{ cursor: "pointer" }}
+          >
+            Edit
+          </span>
+        )}
       </div>
     );
   }

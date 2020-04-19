@@ -18,6 +18,7 @@ export default class PlayerView extends Component {
     promptIndex: 0,
     socket: createSocketClient(),
     playerId: "",
+    playerInfo: { emoji: "😀", nickname: "player" },
     editingPlayerInfo: false,
     currentVotingMatchup: {},
     voteSubmitted: false,
@@ -59,7 +60,12 @@ export default class PlayerView extends Component {
 
     this.state.socket.on("state", (newGameState) => {
       console.log("Game state updated", newGameState);
-      this.setState({ currentState: newGameState.currentState });
+      this.setState({
+        currentState: newGameState.currentState,
+        playerInfo: newGameState.players.find((player) => {
+          return player.playerId === this.state.playerId;
+        }),
+      });
     });
 
     this.state.socket.on("playerIdAssigned", (assignedId) => {
@@ -100,8 +106,12 @@ export default class PlayerView extends Component {
             <div className="level-right">
               <div className="level-item">
                 <PlayerInfoView
-                  emoji="😷"
-                  name="Test Player"
+                  playerInfo={this.state.playerInfo}
+                  // TODO this should probably just be decided server side
+                  canEdit={
+                    this.state.currentState === "lobby" ||
+                    this.state.currentState === "finalScores"
+                  }
                   onEdit={() => this.setState({ editingPlayerInfo: true })}
                 ></PlayerInfoView>
               </div>
