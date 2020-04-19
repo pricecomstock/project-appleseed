@@ -25,6 +25,13 @@ class GameRoom {
     this._votingTimeout = null;
     this._scoringTimeout = null;
 
+    this._options = {
+      pointsPerPrompt: 1200,
+      pointsForShutout: 200,
+    };
+
+    this._pointsMap = new Map();
+
     // Game state
     this._fsm();
   }
@@ -58,6 +65,7 @@ class GameRoom {
   addPlayer(playerSocket) {
     // Add to Player Sockets list
     this._playerSockets.push(playerSocket);
+    this._pointsMap.set(playerSocket.playerData.playerId, 0);
 
     // Update Player Info
     playerSocket.on("updateplayerinfo", (info) => {
@@ -171,13 +179,23 @@ class GameRoom {
     });
   }
 
+  processVotingPoints() {
+    this._currentVotingResults;
+    // TODO
+  }
+
   calculateScoreboardData() {
-    return [
+    const testData = [
       { emoji: "🤲", nickname: "test", score: 1000 },
-      { emoji: "💩", nickname: "sfsfx", score: 500 },
-      { emoji: "👽", nickname: "sdkjfcxv", score: 350 },
-      { emoji: "🦷", nickname: "hello", score: 200 },
+      { emoji: "💩", nickname: "Andrew", score: 500 },
+      { emoji: "👽", nickname: "Jason", score: 350 },
+      { emoji: "🌿", nickname: "Ty", score: 200 },
+      { emoji: "🧙", nickname: "Patrick", score: 200 },
+      { emoji: "🙆‍♀️", nickname: "Sarah", score: 200 },
+      { emoji: "🍞", nickname: "Mark", score: 200 },
+      { emoji: "🌯", nickname: "Price", score: 0 },
     ];
+    return testData;
   }
 }
 
@@ -235,6 +253,7 @@ StateMachine.factory(GameRoom, {
     },
     onScoring: function () {
       console.log("Scoring!");
+      this.processVotingPoints();
       this.emitToAdmins("votingresults", {
         votingResults: this._currentVotingResults,
       });
