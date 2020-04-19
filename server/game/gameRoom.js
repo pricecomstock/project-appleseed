@@ -23,6 +23,7 @@ class GameRoom {
 
     this._promptTimeout = null;
     this._votingTimeout = null;
+    this._scoringTimeout = null;
 
     // Game state
     this._fsm();
@@ -192,7 +193,8 @@ StateMachine.factory(GameRoom, {
       // TODO Implement
       console.log("Game Started");
     },
-    onClosePrompts: function () {
+    onBeforeClosePrompts: function () {
+      this.prepareMatchupsToSend();
       console.log("closePrompts");
     },
     onPrompts: function () {
@@ -209,7 +211,6 @@ StateMachine.factory(GameRoom, {
     },
     onVoting: function () {
       this._currentVotingResults = {};
-      this.prepareMatchupsToSend();
       this.sendNextFilledPromptToAdmin();
       this.sendVotingOptionsToPlayers();
       this._votingTimeout = setTimeout(() => {
@@ -228,6 +229,19 @@ StateMachine.factory(GameRoom, {
       this.emitToAdmins("votingresults", {
         votingResults: this._currentVotingResults,
       });
+      if (this._finalizedMatchupsToSend.length > 0) {
+        this._scoringTimeout = setTimeout(() => {
+          if (this.can("nextSet")) {
+            this.nextSet();
+          }
+        }, 5000);
+      } else {
+        this._scoringTimeout = setTimeout(() => {
+          if (this.can("endRound")) {
+            this.endRound();
+          }
+        }, 5000);
+      }
     },
     onNextSet: function () {
       // TODO Implement
