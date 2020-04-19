@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
 import ReadingDisplay from "../host/ReadingDisplay";
+import Scoreboard from "../host/Scoreboard";
 
 import createSocketClient from "../../createSocketClient";
 
@@ -16,6 +17,7 @@ export default class HostView extends Component {
     filledPrompt: {},
     currentVotingResults: {},
     votingIsComplete: false,
+    scoreboardData: [],
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -73,6 +75,10 @@ export default class HostView extends Component {
         currentVotingResults: data.votingResults,
         votingIsComplete: true,
       });
+    });
+
+    this.state.socket.on("scoreboarddata", (data) => {
+      this.setState({ scoreboardData: data.scoreboardData });
     });
 
     this.joinThisRoomAsAdmin();
@@ -133,6 +139,10 @@ export default class HostView extends Component {
               getPlayerInfoById={this.getPlayerInfoById}
             ></ReadingDisplay>
           )}
+        {(this.state.currentState === "endOfRound" ||
+          this.state.currentState === "finalScores") && (
+          <Scoreboard data={this.state.scoreboardData}></Scoreboard>
+        )}
       </div>
     );
   }

@@ -170,6 +170,15 @@ class GameRoom {
       currentVotingMatchup: this._currentVotingMatchup,
     });
   }
+
+  calculateScoreboardData() {
+    return [
+      { emoji: "🤲", nickname: "test", score: 1000 },
+      { emoji: "💩", nickname: "sfsfx", score: 500 },
+      { emoji: "👽", nickname: "sdkjfcxv", score: 350 },
+      { emoji: "🦷", nickname: "hello", score: 200 },
+    ];
+  }
 }
 
 StateMachine.factory(GameRoom, {
@@ -248,7 +257,9 @@ StateMachine.factory(GameRoom, {
       console.log("nextSet");
     },
     onEndRound: function () {
-      // TODO Implement
+      this.emitToAdmins("scoreboarddata", {
+        scoreboardData: this.calculateScoreboardData(),
+      });
       console.log("endRound");
     },
     onNextRound: function () {
