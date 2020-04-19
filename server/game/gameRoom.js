@@ -18,6 +18,9 @@ class GameRoom {
     this._prompts = {};
     this._finalizedMatchupsToSend = [];
 
+    this._currentVotingMatchup = {};
+    this._currentVotingResults = {};
+
     this._promptTimeout = null;
     this._votingTimeout = null;
 
@@ -70,6 +73,11 @@ class GameRoom {
         data.promptId,
         data.answer
       );
+    });
+
+    playerSocket.on("vote", (data) => {
+      console.log(`received vote from ${data.id} for ${data.index}`);
+      this._currentVotingResults[data.id] = data.index;
     });
   }
 
@@ -147,8 +155,18 @@ class GameRoom {
   }
 
   sendNextFilledPromptToAdmin() {
+    if (this._finalizedMatchupsToSend.length === 0) {
+      throw Error("no prompts left!");
+    }
+    this._currentVotingMatchup = this._finalizedMatchupsToSend.pop();
     this.emitToAdmins("nextfilledprompt", {
-      prompt: this._finalizedMatchupsToSend.pop(),
+      prompt: this._currentVotingMatchup,
+    });
+  }
+
+  sendVotingOptionsToPlayers() {
+    this.emitToAll("votingoptions", {
+      currentVotingMatchup: this._currentVotingMatchup,
     });
   }
 }
@@ -190,18 +208,26 @@ StateMachine.factory(GameRoom, {
       }, 20000); // TODO improve timer
     },
     onVoting: function () {
+      this._currentVotingResults = {};
       this.prepareMatchupsToSend();
       this.sendNextFilledPromptToAdmin();
+      this.sendVotingOptionsToPlayers();
       this._votingTimeout = setTimeout(() => {
         if (this.can("closeVoting")) {
           this.closeVoting();
         }
-      }, 20000);
+      }, 200000); // FIXME lower to 20 after testing, then fix timing someday
       console.log("initiateVoting");
     },
     onCloseVoting: function () {
       // TODO Implement
       console.log("closeVoting");
+    },
+    onScoring: function () {
+      console.log("Scoring!");
+      this.emitToAdmins("votingresults", {
+        votingResults: this._currentVotingResults,
+      });
     },
     onNextSet: function () {
       // TODO Implement

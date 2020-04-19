@@ -128,15 +128,6 @@ class RoomManager {
           sendRoomUpdates(socket.roomCode);
         }
       });
-
-      socket.on("vote", (choiceIndex) => {
-        if (this.checkRoomExists(socket.roomCode)) {
-          let playerRoom = this.getRoomWithCode(socket.roomCode);
-          playerRoom.addPlayerVote(socket.playerData.playerId, choiceIndex);
-          sendRoomUpdates(socket.roomCode);
-        }
-        // TODO: Else send disconnect notice or something
-      });
     });
   }
 

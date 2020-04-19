@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import PropTypes from "prop-types";
 import PlayerInfoSet from "../player/PlayerInfoSet";
 import PlayerInfoView from "../player/PlayerInfoView";
+import PlayerVote from "../player/PlayerVote";
 import Prompt from "../player/Prompt";
 
 import createSocketClient from "../../createSocketClient";
@@ -18,6 +19,7 @@ export default class PlayerView extends Component {
     socket: createSocketClient(),
     playerId: "",
     editingPlayerInfo: false,
+    currentVotingMatchup: {},
   };
 
   joinRoom = (roomCode) => {
@@ -42,6 +44,13 @@ export default class PlayerView extends Component {
     this.setState({ promptIndex: this.state.promptIndex + 1 });
   };
 
+  submitVote = (index) => {
+    this.state.socket.emit("vote", {
+      index: index,
+      id: this.state.playerId,
+    });
+  };
+
   componentDidMount() {
     console.log(this.state);
     this.state.socket.on("connection", () => console.log("Connected!"));
@@ -60,6 +69,10 @@ export default class PlayerView extends Component {
     this.state.socket.on("prompts", (data) => {
       console.log("Received Prompts", data);
       this.setState({ prompts: data.prompts });
+    });
+
+    this.state.socket.on("votingoptions", (data) => {
+      this.setState({ currentVotingMatchup: data.currentVotingMatchup });
     });
 
     this.joinThisRoom();
@@ -112,6 +125,12 @@ export default class PlayerView extends Component {
             prompt={this.state.prompts[this.state.promptIndex]}
             submitAnswer={this.submitAnswer}
           ></Prompt>
+        )}
+        {this.state.currentState === "voting" && (
+          <PlayerVote
+            submitVote={this.submitVote}
+            currentVotingMatchup={this.state.currentVotingMatchup}
+          ></PlayerVote>
         )}
       </div>
     );

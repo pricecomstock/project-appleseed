@@ -14,6 +14,8 @@ export default class HostView extends Component {
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
     filledPrompt: {},
+    currentVotingResults: {},
+    votingIsComplete: false,
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -25,6 +27,12 @@ export default class HostView extends Component {
 
   joinThisRoomAsAdmin = () => {
     this.joinRoomAsAdmin(this.state.roomCode, this.state.adminKey);
+  };
+
+  getPlayerInfoById = (playerId) => {
+    return this.state.players.find((player) => {
+      return player.playerId === playerId;
+    });
   };
 
   startGame = () => {
@@ -53,7 +61,18 @@ export default class HostView extends Component {
 
     this.state.socket.on("nextfilledprompt", (data) => {
       console.log("Filled Prompt:", data);
-      this.setState({ filledPrompt: data.prompt });
+      this.setState({
+        votingIsComplete: false,
+        filledPrompt: data.prompt,
+        currentVotingResults: {},
+      });
+    });
+
+    this.state.socket.on("votingresults", (data) => {
+      this.setState({
+        currentVotingResults: data.votingResults,
+        votingIsComplete: true,
+      });
     });
 
     this.joinThisRoomAsAdmin();
@@ -107,7 +126,12 @@ export default class HostView extends Component {
           this.state.currentState === "voting" ||
           this.state.currentState === "scoring") &&
           this.state.filledPrompt && (
-            <ReadingDisplay prompt={this.state.filledPrompt}></ReadingDisplay>
+            <ReadingDisplay
+              prompt={this.state.filledPrompt}
+              votingResults={this.state.currentVotingResults}
+              votingIsComplete={this.state.votingIsComplete}
+              getPlayerInfoById={this.getPlayerInfoById}
+            ></ReadingDisplay>
           )}
       </div>
     );
