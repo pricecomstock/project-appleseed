@@ -1,6 +1,7 @@
 const { generateBase64Id, adminRoom } = require("./util");
 const StateMachine = require("javascript-state-machine");
 const { PromptSet } = require("./prompts/prompt");
+const PointTracker = require("./pointTracker");
 
 class GameRoom {
   constructor(code, io) {
@@ -34,7 +35,7 @@ class GameRoom {
 
     this._numberOfRoundsPlayed = 0;
 
-    this._pointsMap = new Map();
+    this._pointTracker = new PointTracker(this.playerData, this._options);
 
     // Game state
     this._fsm();
