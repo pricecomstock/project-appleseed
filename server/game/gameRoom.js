@@ -24,11 +24,15 @@ class GameRoom {
     this._promptTimeout = null;
     this._votingTimeout = null;
     this._scoringTimeout = null;
+    this._endOfRoundTimeout = null;
 
     this._options = {
+      numberOfRounds: 2,
       pointsPerPrompt: 1200,
       pointsForShutout: 200,
     };
+
+    this._numberOfRoundsPlayed = 0;
 
     this._pointsMap = new Map();
 
@@ -120,11 +124,11 @@ class GameRoom {
 
   sendPrompts() {
     this._prompts = new PromptSet(this.playerData.map((pd) => pd.playerId));
-    // console.log("It's prompts time!", this._prompts);
+    // console.log("Prompts:", this._prompts);
     for (let [playerId, prompts] of this._prompts.promptsByPlayer) {
       let socket = this.getPlayerSocketWithId(playerId);
       // console.log(`Sending player ${playerId} socket:`, socket);
-      // console.log("Prompts:", prompts);
+      console.log("Sending player prompts:", prompts);
       socket.emit("prompts", {
         prompts: prompts.map((p) => {
           return p.sendable;
@@ -207,8 +211,8 @@ StateMachine.factory(GameRoom, {
     { name: "closeVoting", from: "voting", to: "scoring" },
     { name: "nextSet", from: "scoring", to: "voting" },
     { name: "endRound", from: "scoring", to: "endOfRound" },
+    { name: "endGame", from: "scoring", to: "finalScores" },
     { name: "nextRound", from: "endOfRound", to: "prompts" },
-    { name: "endGame", from: "endOfRound", to: "finalScores" },
     { name: "newGameNewPlayers", from: "finalScores", to: "lobby" },
     { name: "newGameSamePlayers", from: "finalScores", to: "prompts" },
   ],
@@ -226,7 +230,7 @@ StateMachine.factory(GameRoom, {
     },
     onPrompts: function () {
       console.log("Prompts!");
-
+      this._numberOfRoundsPlayed++;
       this.sendPrompts();
 
       // Time Limits
@@ -257,13 +261,25 @@ StateMachine.factory(GameRoom, {
       this.emitToAdmins("votingresults", {
         votingResults: this._currentVotingResults,
       });
+
+      let nextTransition;
+
       if (this._finalizedMatchupsToSend.length > 0) {
+        // More answers to read
         this._scoringTimeout = setTimeout(() => {
           if (this.can("nextSet")) {
             this.nextSet();
           }
         }, 5000);
+      } else if (this._numberOfRoundsPlayed >= this._options.numberOfRounds) {
+        // No more answers, no more rounds
+        this._scoringTimeout = setTimeout(() => {
+          if (this.can("endGame")) {
+            this.endGame();
+          }
+        }, 5000);
       } else {
+        // No more answers, but anther round
         this._scoringTimeout = setTimeout(() => {
           if (this.can("endRound")) {
             this.endRound();
@@ -275,18 +291,25 @@ StateMachine.factory(GameRoom, {
       // TODO Implement
       console.log("nextSet");
     },
-    onEndRound: function () {
+    onEndOfRound: function () {
+      // on enter the state
+      this._endOfRoundTimeout = setTimeout(() => {
+        if (this.can("nextRound")) {
+          this.nextRound();
+        }
+      }, 5000);
       this.emitToAdmins("scoreboarddata", {
         scoreboardData: this.calculateScoreboardData(),
       });
-      console.log("endRound");
     },
     onNextRound: function () {
       // TODO Implement
       console.log("nextRound");
     },
     onEndGame: function () {
-      // TODO Implement
+      this.emitToAdmins("scoreboarddata", {
+        scoreboardData: this.calculateScoreboardData(),
+      });
       console.log("endGame");
     },
     onNewGameNewPlayers: function () {

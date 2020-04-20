@@ -76,7 +76,7 @@ export default class PlayerView extends Component {
 
     this.state.socket.on("prompts", (data) => {
       console.log("Received Prompts", data);
-      this.setState({ prompts: data.prompts });
+      this.setState({ prompts: data.prompts, promptIndex: 0 });
     });
 
     this.state.socket.on("votingoptions", (data) => {
