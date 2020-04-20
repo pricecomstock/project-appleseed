@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import PropTypes from "prop-types";
 import ReadingDisplay from "../host/ReadingDisplay";
 import Scoreboard from "../host/Scoreboard";
+import ControlButtons from "../host/ControlButtons";
 
 import createSocketClient from "../../createSocketClient";
 
@@ -35,18 +36,6 @@ export default class HostView extends Component {
     return this.state.players.find((player) => {
       return player.playerId === playerId;
     });
-  };
-
-  startGame = () => {
-    this.state.socket.emit("startGame");
-  };
-
-  closePrompts = () => {
-    this.state.socket.emit("closePrompts");
-  };
-
-  closeVoting = () => {
-    this.state.socket.emit("closeVoting");
   };
 
   componentDidMount() {
@@ -102,7 +91,6 @@ export default class HostView extends Component {
           >
             Join as Player
           </a>
-          <h3>GameState: {this.state.currentState}</h3>
           <h3>Players:</h3>
           <ul>
             {this.state.players.map((player, index) => (
@@ -111,22 +99,12 @@ export default class HostView extends Component {
               </li>
             ))}
           </ul>
+          <h3>GameState: {this.state.currentState}</h3>
         </div>
-        {this.state.currentState === "lobby" && (
-          <button className="button is-primary" onClick={this.startGame}>
-            Start Game
-          </button>
-        )}
-        {this.state.currentState === "prompts" && (
-          <button className="button is-warning" onClick={this.closePrompts}>
-            Close Prompts
-          </button>
-        )}
-        {this.state.currentState === "voting" && (
-          <button className="button is-warning" onClick={this.closeVoting}>
-            Close Voting
-          </button>
-        )}
+        <ControlButtons
+          currentState={this.state.currentState}
+          socket={this.state.socket}
+        ></ControlButtons>
         <hr />
         {(this.state.currentState === "reading" ||
           this.state.currentState === "voting" ||

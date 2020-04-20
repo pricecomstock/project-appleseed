@@ -113,6 +113,42 @@ class GameRoom {
       }
     });
 
+    adminSocket.on("nextSet", (data) => {
+      if (this.can("nextSet") && this._finalizedMatchupsToSend.length > 0) {
+        this.nextSet();
+      }
+    });
+
+    adminSocket.on("endRound", (data) => {
+      if (this.can("endRound")) {
+        this.endRound();
+      }
+    });
+
+    adminSocket.on("endGame", (data) => {
+      if (this.can("endGame")) {
+        this.endGame();
+      }
+    });
+
+    adminSocket.on("nextRound", (data) => {
+      if (this.can("nextRound")) {
+        this.nextRound();
+      }
+    });
+
+    adminSocket.on("newGameNewPlayers", (data) => {
+      if (this.can("newGameNewPlayers")) {
+        this.newGameNewPlayers();
+      }
+    });
+
+    adminSocket.on("newGameSamePlayers", (data) => {
+      if (this.can("newGameSamePlayers")) {
+        this.newGameSamePlayers();
+      }
+    });
+
     this._adminSockets.push(adminSocket);
   }
 
