@@ -21,6 +21,7 @@ class GameRoom {
 
     this._currentVotingMatchup = {};
     this._currentVotingResults = {};
+    this._currentScoringDetails = {};
 
     this._promptTimeout = null;
     this._votingTimeout = null;
@@ -35,10 +36,14 @@ class GameRoom {
 
     this._numberOfRoundsPlayed = 0;
 
-    this._pointTracker = new PointTracker(this.playerData, this._options);
+    this._pointTracker = null;
 
     // Game state
     this._fsm();
+  }
+
+  initializePointTracker() {
+    this._pointTracker = new PointTracker(this.playerData, this._options);
   }
 
   get adminKey() {
@@ -70,7 +75,6 @@ class GameRoom {
   addPlayer(playerSocket) {
     // Add to Player Sockets list
     this._playerSockets.push(playerSocket);
-    this._pointsMap.set(playerSocket.playerData.playerId, 0);
 
     // Update Player Info
     playerSocket.on("updateplayerinfo", (info) => {
@@ -90,8 +94,8 @@ class GameRoom {
     });
 
     playerSocket.on("vote", (data) => {
-      console.log(`received vote from ${data.id} for ${data.index}`);
-      this._currentVotingResults[data.id] = data.index;
+      console.log(`received vote from ${data.playerId} for ${data.index}`);
+      this._currentVotingResults[data.playerId] = data.index;
     });
   }
 
@@ -221,22 +225,35 @@ class GameRoom {
   }
 
   processVotingPoints() {
-    this._currentVotingResults;
-    // TODO
+    this._currentScoringDetails = this._pointTracker.distributePoints(
+      this._currentVotingResults,
+      this._currentVotingMatchup
+    );
   }
 
   calculateScoreboardData() {
-    const testData = [
-      { emoji: "🤲", nickname: "test", score: 1000 },
-      { emoji: "💩", nickname: "Andrew", score: 500 },
-      { emoji: "👽", nickname: "Jason", score: 350 },
-      { emoji: "🌿", nickname: "Ty", score: 200 },
-      { emoji: "🧙", nickname: "Patrick", score: 200 },
-      { emoji: "🙆‍♀️", nickname: "Sarah", score: 200 },
-      { emoji: "🍞", nickname: "Mark", score: 200 },
-      { emoji: "🌯", nickname: "Price", score: 0 },
-    ];
-    return testData;
+    // const testData = [
+    //   { emoji: "🤲", nickname: "test", score: 1000 },
+    //   { emoji: "💩", nickname: "Andrew", score: 500 },
+    //   { emoji: "👽", nickname: "Jason", score: 350 },
+    //   { emoji: "🌿", nickname: "Ty", score: 200 },
+    //   { emoji: "🧙", nickname: "Patrick", score: 200 },
+    //   { emoji: "🙆‍♀️", nickname: "Sarah", score: 200 },
+    //   { emoji: "🍞", nickname: "Mark", score: 200 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
+    // ];
+    // return testData;
+    let scoreboardData = this._pointTracker.sortedPointPairs().map((pair) => {
+      let playerId = pair[0];
+      let score = pair[1];
+      let playerData = this.getPlayerDataWithId(playerId); // ew
+      return {
+        emoji: playerData.emoji,
+        nickname: playerData.nickname,
+        score: score,
+      };
+    });
+    return scoreboardData;
   }
 }
 
@@ -258,7 +275,7 @@ StateMachine.factory(GameRoom, {
       this.sendStateToAll();
     },
     onStartGame: function () {
-      // TODO Implement
+      this.initializePointTracker();
       console.log("Game Started");
     },
     onBeforeClosePrompts: function () {
@@ -297,9 +314,8 @@ StateMachine.factory(GameRoom, {
       this.processVotingPoints();
       this.emitToAdmins("votingresults", {
         votingResults: this._currentVotingResults,
+        scoringDetails: this._currentScoringDetails,
       });
-
-      let nextTransition;
 
       if (this._finalizedMatchupsToSend.length > 0) {
         // More answers to read

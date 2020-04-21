@@ -18,7 +18,8 @@ export default class HostView extends Component {
     filledPrompt: {},
     currentVotingResults: {},
     votingIsComplete: false,
-    scoreboardData: [],
+    scoringDetails: {}, // For each vote
+    scoreboardData: [], // For end of round/game
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -60,9 +61,11 @@ export default class HostView extends Component {
     });
 
     this.state.socket.on("votingresults", (data) => {
+      console.log("Voting Results", data);
       this.setState({
         currentVotingResults: data.votingResults,
         votingIsComplete: true,
+        scoringDetails: data.scoringDetails,
       });
     });
 
@@ -113,6 +116,7 @@ export default class HostView extends Component {
             <ReadingDisplay
               prompt={this.state.filledPrompt}
               votingResults={this.state.currentVotingResults}
+              scoringDetails={this.state.scoringDetails}
               votingIsComplete={this.state.votingIsComplete}
               getPlayerInfoById={this.getPlayerInfoById}
             ></ReadingDisplay>

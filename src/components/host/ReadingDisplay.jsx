@@ -1,71 +1,6 @@
 import React, { Component } from "react";
 
 export default class ReadingDisplay extends Component {
-  state = {
-    pointsPerPrompt: 900,
-    pointsForShutout: 100,
-    pointsArray: [],
-    // TODO shutout index
-  };
-
-  componentDidMount() {
-    this.calculatePoints(); // this needs to be done more!
-  }
-
-  calculatePoints() {
-    let votePairs = Object.entries(this.props.votingResults);
-    let pointsPerVote = this.state.pointsPerPrompt / votePairs.length;
-    let pointsArray = [];
-    votePairs.map((entry) => {
-      let voteIndex = entry[1];
-      if (!pointsArray[voteIndex]) {
-        pointsArray[voteIndex] = 0;
-      }
-      pointsArray[voteIndex] += pointsPerVote;
-    });
-
-    if (
-      pointsArray.filter((points) => {
-        return points && points > 0;
-      }).length == 1
-    ) {
-      let shutoutIndex = pointsArray.findIndex((points) => {
-        return points && points > 0;
-      });
-
-      pointsArray[shutoutIndex] += this.pointsForShutout;
-    }
-
-    this.setState({ pointsArray: pointsArray });
-  }
-
-  calculatePointsPoorly() {
-    let votePairs = Object.entries(this.props.votingResults);
-    let pointsPerVote = this.state.pointsPerPrompt / votePairs.length;
-    let pointsArray = [];
-    votePairs.map((entry) => {
-      let voteIndex = entry[1];
-      if (!pointsArray[voteIndex]) {
-        pointsArray[voteIndex] = 0;
-      }
-      pointsArray[voteIndex] += pointsPerVote;
-    });
-
-    if (
-      pointsArray.filter((points) => {
-        return points && points > 0;
-      }).length == 1
-    ) {
-      let shutoutIndex = pointsArray.findIndex((points) => {
-        return points && points > 0;
-      });
-
-      pointsArray[shutoutIndex] += this.pointsForShutout;
-    }
-
-    return pointsArray;
-  }
-
   render() {
     return (
       <div>
@@ -82,10 +17,19 @@ export default class ReadingDisplay extends Component {
                   </div>
                   {this.props.votingIsComplete && (
                     <div>
-                      <span className="tag is-success is-large">
+                      <span className="tag is-success is-light is-large">
                         +{" "}
-                        {Math.round(this.calculatePointsPoorly()[answerIndex])}
+                        {this.props.scoringDetails &&
+                          this.props.scoringDetails.pointsArray[answerIndex]}
                       </span>
+                      {this.props.scoringDetails.isShutout &&
+                        this.props.scoringDetails.shutoutIndex ===
+                          answerIndex && (
+                          <span className="tag is-success is-large">
+                            + {this.props.scoringDetails.shutoutPoints} for
+                            shutout!
+                          </span>
+                        )}
                       <div className="tags">
                         {Object.entries(this.props.votingResults).map(
                           (entry) => {

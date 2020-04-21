@@ -49,7 +49,7 @@ export default class PlayerView extends Component {
   submitVote = (index) => {
     this.state.socket.emit("vote", {
       index: index,
-      id: this.state.playerId,
+      playerId: this.state.playerId,
     });
     this.setState({ voteSubmitted: true });
   };
