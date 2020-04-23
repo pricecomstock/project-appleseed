@@ -2,6 +2,7 @@ const { generateBase64Id, adminRoom } = require("./util");
 const StateMachine = require("javascript-state-machine");
 const { PromptSet } = require("./prompts/prompt");
 const PointTracker = require("./pointTracker");
+const Timer = require("./timer");
 
 class GameRoom {
   constructor(code, io) {
@@ -27,6 +28,8 @@ class GameRoom {
     this._votingTimeout = null;
     this._scoringTimeout = null;
     this._endOfRoundTimeout = null;
+
+    this._timer = null;
 
     this._options = {
       numberOfRounds: 2,
@@ -288,21 +291,21 @@ StateMachine.factory(GameRoom, {
       this.sendPrompts();
 
       // Time Limits
-      this._promptTimeout = setTimeout(() => {
+      this._timer = new Timer(80, () => {
         if (this.can("closePrompts")) {
           this.closePrompts();
         }
-      }, 20000); // TODO improve timer
+      });
     },
     onVoting: function () {
       this._currentVotingResults = {};
       this.sendNextFilledPromptToAdmin();
       this.sendVotingOptionsToPlayers();
-      this._votingTimeout = setTimeout(() => {
+      this._timer = new Timer(18, () => {
         if (this.can("closeVoting")) {
           this.closeVoting();
         }
-      }, 200000); // FIXME lower to 20 after testing, then fix timing someday
+      });
       console.log("initiateVoting");
     },
     onCloseVoting: function () {
@@ -319,25 +322,25 @@ StateMachine.factory(GameRoom, {
 
       if (this._finalizedMatchupsToSend.length > 0) {
         // More answers to read
-        this._scoringTimeout = setTimeout(() => {
+        this._timer = new Timer(5, () => {
           if (this.can("nextSet")) {
             this.nextSet();
           }
-        }, 5000);
+        });
       } else if (this._numberOfRoundsPlayed >= this._options.numberOfRounds) {
         // No more answers, no more rounds
-        this._scoringTimeout = setTimeout(() => {
+        this._timer = new Timer(5, () => {
           if (this.can("endGame")) {
             this.endGame();
           }
-        }, 5000);
+        });
       } else {
         // No more answers, but anther round
-        this._scoringTimeout = setTimeout(() => {
+        this._timer = new Timer(5, () => {
           if (this.can("endRound")) {
             this.endRound();
           }
-        }, 5000);
+        });
       }
     },
     onNextSet: function () {
@@ -346,11 +349,11 @@ StateMachine.factory(GameRoom, {
     },
     onEndOfRound: function () {
       // on enter the state
-      this._endOfRoundTimeout = setTimeout(() => {
+      this._timer = new Timer(5, () => {
         if (this.can("nextRound")) {
           this.nextRound();
         }
-      }, 5000);
+      });
       this.emitToAdmins("scoreboarddata", {
         scoreboardData: this.calculateScoreboardData(),
       });
