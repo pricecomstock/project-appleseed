@@ -43,40 +43,45 @@ export default class Home extends Component {
         <header>
           <h1 className="title">Project Appleseed</h1>
         </header>
-        <div
-          className="field has-addons is-grouped-centered"
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              this.joinGame();
-            }
-          }}
-        >
-          <div className="control">
-            <input
-              className="input is-large is-uppercase"
-              type="text"
-              placeholder="Room code"
-              value={this.state.enteredCode}
-              onChange={this.handleCodeChange}
-            />
-          </div>
-          <div className="control">
-            <button
-              className="button is-large is-primary"
-              onClick={this.joinGame}
+        <div className="columns is-centered">
+          <div className="column is-one-third-tablet">
+            <h2 className="subtitle">Enter a room code to join!</h2>
+            <div
+              className="field has-addons is-grouped-centered"
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  this.joinGame();
+                }
+              }}
             >
-              Join
+              <div className="control is-expanded">
+                <input
+                  className="input is-large is-uppercase"
+                  type="text"
+                  placeholder="CODE"
+                  value={this.state.enteredCode}
+                  onChange={this.handleCodeChange}
+                />
+              </div>
+              <div className="control">
+                <button
+                  className="button is-large is-primary"
+                  onClick={this.joinGame}
+                >
+                  Join
+                </button>
+              </div>
+            </div>
+            <hr />
+            <p>Or create a new one!</p>
+            <button
+              onClick={this.createGame}
+              className="button is-primary is-outlined is-large"
+            >
+              Create Game
             </button>
           </div>
         </div>
-        <hr />
-        <p>Or create a new one!</p>
-        <button
-          onClick={this.createGame}
-          className="button is-primary is-outlined is-large"
-        >
-          Create Game
-        </button>
       </div>
     );
   }
