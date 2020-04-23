@@ -227,6 +227,14 @@ class GameRoom {
     });
   }
 
+  createAndSendTimer(seconds, onCompleteFunction) {
+    this._timer = Timer.createWithSeconds(seconds, onCompleteFunction);
+    this.emitToAdmins("timer", {
+      length: seconds,
+      endMs: this._timer.endTime,
+    });
+  }
+
   processVotingPoints() {
     this._currentScoringDetails = this._pointTracker.distributePoints(
       this._currentVotingResults,
@@ -291,7 +299,7 @@ StateMachine.factory(GameRoom, {
       this.sendPrompts();
 
       // Time Limits
-      this._timer = new Timer(80, () => {
+      this.createAndSendTimer(80, () => {
         if (this.can("closePrompts")) {
           this.closePrompts();
         }
@@ -301,7 +309,7 @@ StateMachine.factory(GameRoom, {
       this._currentVotingResults = {};
       this.sendNextFilledPromptToAdmin();
       this.sendVotingOptionsToPlayers();
-      this._timer = new Timer(18, () => {
+      this.createAndSendTimer(18, () => {
         if (this.can("closeVoting")) {
           this.closeVoting();
         }
@@ -322,21 +330,21 @@ StateMachine.factory(GameRoom, {
 
       if (this._finalizedMatchupsToSend.length > 0) {
         // More answers to read
-        this._timer = new Timer(5, () => {
+        this.createAndSendTimer(5, () => {
           if (this.can("nextSet")) {
             this.nextSet();
           }
         });
       } else if (this._numberOfRoundsPlayed >= this._options.numberOfRounds) {
         // No more answers, no more rounds
-        this._timer = new Timer(5, () => {
+        this.createAndSendTimer(5, () => {
           if (this.can("endGame")) {
             this.endGame();
           }
         });
       } else {
         // No more answers, but anther round
-        this._timer = new Timer(5, () => {
+        this.createAndSendTimer(5, () => {
           if (this.can("endRound")) {
             this.endRound();
           }
@@ -349,7 +357,7 @@ StateMachine.factory(GameRoom, {
     },
     onEndOfRound: function () {
       // on enter the state
-      this._timer = new Timer(5, () => {
+      this.createAndSendTimer(5, () => {
         if (this.can("nextRound")) {
           this.nextRound();
         }

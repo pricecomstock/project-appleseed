@@ -73,6 +73,10 @@ export default class HostView extends Component {
       this.setState({ scoreboardData: data.scoreboardData });
     });
 
+    this.state.socket.on("timer", (data) => {
+      console.log("Timer", data); // TODO NEXT Make timer progress display on frontend
+    });
+
     this.joinThisRoomAsAdmin();
   }
 

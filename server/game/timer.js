@@ -5,8 +5,8 @@ const EARLY_CHECKING_OFFSET_MS = 1000;
 const RECHECK_INTERVAL = 1000;
 
 class Timer {
-  constructor(seconds, onCompleteFunction) {
-    this.ms = seconds * 1000;
+  constructor(ms, onCompleteFunction) {
+    this.ms = ms;
     this.startTime = Date.now();
     this.endTime = this.startTime + this.ms;
 
@@ -17,7 +17,16 @@ class Timer {
     this.setCheckTimeout(this.ms - EARLY_CHECKING_OFFSET_MS);
   }
 
+  static createToEndAt(endTimeMs, onCompleteFunction) {
+    return new Timer(endTimeMs - Date.now(), onCompleteFunction);
+  }
+
+  static createWithSeconds(seconds, onCompleteFunction) {
+    return new Timer(seconds * 1000, onCompleteFunction);
+  }
+
   setCheckTimeout(ms) {
+    console.log("Setting timer check in", ms);
     this._checkTimeoutId = setTimeout(() => {
       this.checkTimer();
     }, ms);
@@ -41,7 +50,7 @@ class Timer {
 }
 
 test = () => {
-  let timer = new Timer(5, () => console.log("Test Done!"));
+  let timer = new Timer(5000, () => console.log("Test Done!"));
 };
 // test();
 
