@@ -10,7 +10,7 @@ import createSocketClient from "../../createSocketClient";
 // https://www.valentinog.com/blog/socket-react/
 
 const TIMER_COUNTDOWN_INTERVAL = 30;
-const TIMER_SAFETY_BUFFER = 1500;
+const TIMER_SAFETY_BUFFER = 1000;
 
 export default class HostView extends Component {
   state = {
@@ -53,7 +53,8 @@ export default class HostView extends Component {
 
   startTimer(msTotal, msRemaining) {
     this.setState({
-      clientTimerCalculatedEndTime: Date.now() + msRemaining,
+      clientTimerCalculatedEndTime:
+        Date.now() + msRemaining - TIMER_SAFETY_BUFFER,
       msTotal: msTotal,
       // Safety buffer to err on giving players extra time
       msRemaining: msRemaining - TIMER_SAFETY_BUFFER,
