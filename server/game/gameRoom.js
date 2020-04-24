@@ -30,6 +30,10 @@ class GameRoom {
       numberOfRounds: 2,
       pointsPerPrompt: 1200,
       pointsForShutout: 200,
+
+      promptTimeLimit: 90,
+      votingTimeLimit: 22,
+      roundDelay: 7,
     };
 
     this._numberOfRoundsPlayed = 0;
@@ -232,7 +236,7 @@ class GameRoom {
 
   createAndSendTimer(seconds, onCompleteFunction) {
     this._timer = Timer.createWithSeconds(seconds, onCompleteFunction);
-    this.emitToAdmins("timer", this._timer.summary());
+    this.emitToAll("timer", this._timer.summary());
   }
 
   processVotingPoints() {
@@ -299,7 +303,7 @@ StateMachine.factory(GameRoom, {
       this.sendPrompts();
 
       // Time Limits
-      this.createAndSendTimer(80, () => {
+      this.createAndSendTimer(this._options.promptTimeLimit, () => {
         if (this.can("closePrompts")) {
           this.closePrompts();
         }
@@ -309,7 +313,7 @@ StateMachine.factory(GameRoom, {
       this._currentVotingResults = {};
       this.sendNextFilledPromptToAdmin();
       this.sendVotingOptionsToPlayers();
-      this.createAndSendTimer(18, () => {
+      this.createAndSendTimer(this._options.votingTimeLimit, () => {
         if (this.can("closeVoting")) {
           this.closeVoting();
         }
@@ -330,21 +334,21 @@ StateMachine.factory(GameRoom, {
 
       if (this._finalizedMatchupsToSend.length > 0) {
         // More answers to read
-        this.createAndSendTimer(5, () => {
+        this.createAndSendTimer(this._options.roundDelay, () => {
           if (this.can("nextSet")) {
             this.nextSet();
           }
         });
       } else if (this._numberOfRoundsPlayed >= this._options.numberOfRounds) {
         // No more answers, no more rounds
-        this.createAndSendTimer(5, () => {
+        this.createAndSendTimer(this._options.roundDelay, () => {
           if (this.can("endGame")) {
             this.endGame();
           }
         });
       } else {
         // No more answers, but anther round
-        this.createAndSendTimer(5, () => {
+        this.createAndSendTimer(this._options.roundDelay, () => {
           if (this.can("endRound")) {
             this.endRound();
           }
@@ -357,7 +361,7 @@ StateMachine.factory(GameRoom, {
     },
     onEndOfRound: function () {
       // on enter the state
-      this.createAndSendTimer(5, () => {
+      this.createAndSendTimer(this._options.roundDelay, () => {
         if (this.can("nextRound")) {
           this.nextRound();
         }

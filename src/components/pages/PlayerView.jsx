@@ -5,9 +5,13 @@ import PlayerInfoView from "../player/PlayerInfoView";
 import PlayerVote from "../player/PlayerVote";
 import Prompt from "../player/Prompt";
 
+import Timer from "../Timer";
+
 import createSocketClient from "../../createSocketClient";
 
 // https://www.valentinog.com/blog/socket-react/
+
+import C from "../../constants";
 
 export default class PlayerView extends Component {
   state = {
@@ -22,6 +26,12 @@ export default class PlayerView extends Component {
     editingPlayerInfo: false,
     currentVotingMatchup: {},
     voteSubmitted: false,
+
+    clientTimerCalculatedEndTime: 0,
+    msRemaining: 0,
+    msTotal: 1000,
+    timerIsVisible: false,
+    timerIntervalId: null,
   };
 
   joinRoom = (roomCode) => {
@@ -53,6 +63,25 @@ export default class PlayerView extends Component {
     });
     this.setState({ voteSubmitted: true });
   };
+
+  startTimer(msTotal, msRemaining) {
+    this.setState({
+      clientTimerCalculatedEndTime:
+        Date.now() + msRemaining - C.TIMER_SAFETY_BUFFER,
+      msTotal: msTotal,
+      // Safety buffer to err on giving players extra time
+      msRemaining: msRemaining - C.TIMER_SAFETY_BUFFER,
+      timerIsVisible:
+        this.state.currentState == "voting" ||
+        this.state.currentState == "prompts",
+    });
+
+    this.state.timerIntervalId = setInterval(() => {
+      this.setState({
+        msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
+      });
+    }, C.TIMER_COUNTDOWN_INTERVAL);
+  }
 
   componentDidMount() {
     console.log(this.state);
@@ -86,6 +115,12 @@ export default class PlayerView extends Component {
       });
     });
 
+    this.state.socket.on("timer", (data) => {
+      console.log("Date.now()", Date.now());
+      console.log("Timer", data); // TODO NEXT Make timer progress display on frontend
+      this.startTimer(data.msTotal, data.msRemaining);
+    });
+
     this.joinThisRoom();
   }
 
@@ -96,6 +131,13 @@ export default class PlayerView extends Component {
   render() {
     return (
       <div>
+        {this.state.timerIsVisible && (
+          <Timer
+            msRemaining={this.state.msRemaining}
+            msTotal={this.state.msTotal}
+            label={this.state.currentState}
+          ></Timer>
+        )}
         <div className="content">
           <div className="level is-mobile">
             <div className="level-left">

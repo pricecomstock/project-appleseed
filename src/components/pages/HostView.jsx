@@ -3,14 +3,13 @@ import React, { Component } from "react";
 import ReadingDisplay from "../host/ReadingDisplay";
 import Scoreboard from "../host/Scoreboard";
 import ControlButtons from "../host/ControlButtons";
-import Timer from "../host/Timer";
+import Timer from "../Timer";
 
 import createSocketClient from "../../createSocketClient";
 
 // https://www.valentinog.com/blog/socket-react/
 
-const TIMER_COUNTDOWN_INTERVAL = 30;
-const TIMER_SAFETY_BUFFER = 1000;
+import C from "../../constants";
 
 export default class HostView extends Component {
   state = {
@@ -54,10 +53,10 @@ export default class HostView extends Component {
   startTimer(msTotal, msRemaining) {
     this.setState({
       clientTimerCalculatedEndTime:
-        Date.now() + msRemaining - TIMER_SAFETY_BUFFER,
+        Date.now() + msRemaining - C.TIMER_SAFETY_BUFFER,
       msTotal: msTotal,
       // Safety buffer to err on giving players extra time
-      msRemaining: msRemaining - TIMER_SAFETY_BUFFER,
+      msRemaining: msRemaining - C.TIMER_SAFETY_BUFFER,
       timerIsVisible:
         this.state.currentState == "voting" ||
         this.state.currentState == "prompts",
@@ -67,7 +66,7 @@ export default class HostView extends Component {
       this.setState({
         msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
       });
-    }, TIMER_COUNTDOWN_INTERVAL);
+    }, C.TIMER_COUNTDOWN_INTERVAL);
   }
 
   componentDidMount() {
