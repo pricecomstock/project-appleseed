@@ -9,6 +9,7 @@ class Timer {
     this.ms = ms;
     this.startTime = Date.now();
     this.endTime = this.startTime + this.ms;
+    this.pausedAt = null;
 
     this._onComplete = onCompleteFunction;
 
@@ -55,6 +56,11 @@ class Timer {
 
   cancel() {
     clearTimeout(this._checkTimeoutId);
+  }
+
+  pause() {
+    clearTimeout(this._checkTimeoutId);
+    this.pausedAt = Date.now();
   }
 }
 

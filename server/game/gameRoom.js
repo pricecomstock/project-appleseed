@@ -24,11 +24,6 @@ class GameRoom {
     this._currentVotingResults = {};
     this._currentScoringDetails = {};
 
-    this._promptTimeout = null;
-    this._votingTimeout = null;
-    this._scoringTimeout = null;
-    this._endOfRoundTimeout = null;
-
     this._timer = null;
 
     this._options = {
@@ -111,48 +106,56 @@ class GameRoom {
 
     adminSocket.on("closePrompts", (data) => {
       if (this.can("closePrompts")) {
+        this._timer.cancel();
         this.closePrompts();
       }
     });
 
     adminSocket.on("closeVoting", (data) => {
       if (this.can("closeVoting")) {
+        this._timer.cancel();
         this.closeVoting();
       }
     });
 
     adminSocket.on("nextSet", (data) => {
       if (this.can("nextSet") && this._finalizedMatchupsToSend.length > 0) {
+        this._timer.cancel();
         this.nextSet();
       }
     });
 
     adminSocket.on("endRound", (data) => {
       if (this.can("endRound")) {
+        this._timer.cancel();
         this.endRound();
       }
     });
 
     adminSocket.on("endGame", (data) => {
       if (this.can("endGame")) {
+        this._timer.cancel();
         this.endGame();
       }
     });
 
     adminSocket.on("nextRound", (data) => {
       if (this.can("nextRound")) {
+        this._timer.cancel();
         this.nextRound();
       }
     });
 
     adminSocket.on("newGameNewPlayers", (data) => {
       if (this.can("newGameNewPlayers")) {
+        this._timer.cancel();
         this.newGameNewPlayers();
       }
     });
 
     adminSocket.on("newGameSamePlayers", (data) => {
       if (this.can("newGameSamePlayers")) {
+        this._timer.cancel();
         this.newGameSamePlayers();
       }
     });
