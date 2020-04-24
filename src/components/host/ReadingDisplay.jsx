@@ -10,7 +10,7 @@ export default class ReadingDisplay extends Component {
           {this.props.prompt.answers &&
             this.props.prompt.answers.map((answer, answerIndex) => {
               return (
-                <div className="column is-one-third">
+                <div className="column is-one-third" key={answerIndex}>
                   <div className="box">
                     <h1 className="title">{answer[1]}</h1>
                     {/* <span className="tag is-light is-small">{answer[0]}</span> */}
