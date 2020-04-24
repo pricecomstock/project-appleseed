@@ -1,4 +1,4 @@
-const getPrompt = require("./testPrompts");
+const getPrompt = require("./sheetyPrompts");
 const { getShuffledCopyOfArray, generateBase64Id } = require("../util");
 // stackoverflow.com/questions/21295162/javascript-randomly-pair-items-from-array-without-repeats
 

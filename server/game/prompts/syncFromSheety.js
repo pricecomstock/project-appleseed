@@ -9,8 +9,10 @@ function sync() {
   axios
     .get(sheetyUrl)
     .then((res) => {
-      let prompts = res.data.map;
-      fs.writeFileSync(fileName, JSON.stringify(prompts));
+      let prompts = res.data.prompts.map((prompt) => {
+        return prompt["yourPrompt:"];
+      });
+      fs.writeFileSync(fileName, JSON.stringify({ prompts }));
     })
     .catch((e) => {
       console.error("Error:", e);
