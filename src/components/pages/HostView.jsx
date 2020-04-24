@@ -3,10 +3,14 @@ import React, { Component } from "react";
 import ReadingDisplay from "../host/ReadingDisplay";
 import Scoreboard from "../host/Scoreboard";
 import ControlButtons from "../host/ControlButtons";
+import Timer from "../host/Timer";
 
 import createSocketClient from "../../createSocketClient";
 
 // https://www.valentinog.com/blog/socket-react/
+
+const TIMER_COUNTDOWN_INTERVAL = 30;
+const TIMER_SAFETY_BUFFER = 1500;
 
 export default class HostView extends Component {
   state = {
@@ -15,11 +19,19 @@ export default class HostView extends Component {
     currentState: "lobby",
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
+
     filledPrompt: {},
     currentVotingResults: {},
     votingIsComplete: false,
+
     scoringDetails: {}, // For each vote
     scoreboardData: [], // For end of round/game
+
+    clientTimerCalculatedEndTime: 0,
+    msRemaining: 0,
+    msTotal: 1000,
+    timerIsVisible: false,
+    timerIntervalId: null,
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -38,6 +50,24 @@ export default class HostView extends Component {
       return player.playerId === playerId;
     });
   };
+
+  startTimer(msTotal, msRemaining) {
+    this.setState({
+      clientTimerCalculatedEndTime: Date.now() + msRemaining,
+      msTotal: msTotal,
+      // Safety buffer to err on giving players extra time
+      msRemaining: msRemaining - TIMER_SAFETY_BUFFER,
+      timerIsVisible:
+        this.state.currentState == "voting" ||
+        this.state.currentState == "prompts",
+    });
+
+    this.state.timerIntervalId = setInterval(() => {
+      this.setState({
+        msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
+      });
+    }, TIMER_COUNTDOWN_INTERVAL);
+  }
 
   componentDidMount() {
     this.state.socket.on("connection", () => console.log("Connected!"));
@@ -74,7 +104,9 @@ export default class HostView extends Component {
     });
 
     this.state.socket.on("timer", (data) => {
+      console.log("Date.now()", Date.now());
       console.log("Timer", data); // TODO NEXT Make timer progress display on frontend
+      this.startTimer(data.msTotal, data.msRemaining);
     });
 
     this.joinThisRoomAsAdmin();
@@ -87,6 +119,13 @@ export default class HostView extends Component {
   render() {
     return (
       <div>
+        {this.state.timerIsVisible && (
+          <Timer
+            msRemaining={this.state.msRemaining}
+            msTotal={this.state.msTotal}
+            label={this.state.currentState}
+          ></Timer>
+        )}
         <div className="content">
           <span className="tag is-success is-large">Admin</span>
           <h3>Room Code: {this.props.match.params.code}</h3>

@@ -229,10 +229,7 @@ class GameRoom {
 
   createAndSendTimer(seconds, onCompleteFunction) {
     this._timer = Timer.createWithSeconds(seconds, onCompleteFunction);
-    this.emitToAdmins("timer", {
-      length: seconds,
-      endMs: this._timer.endTime,
-    });
+    this.emitToAdmins("timer", this._timer.summary());
   }
 
   processVotingPoints() {
