@@ -58,15 +58,17 @@ export default class HostView extends Component {
       // Safety buffer to err on giving players extra time
       msRemaining: msRemaining - C.TIMER_SAFETY_BUFFER,
       timerIsVisible:
-        this.state.currentState == "voting" ||
-        this.state.currentState == "prompts",
+        this.state.currentState === "voting" ||
+        this.state.currentState === "prompts",
     });
 
-    this.state.timerIntervalId = setInterval(() => {
-      this.setState({
-        msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
-      });
-    }, C.TIMER_COUNTDOWN_INTERVAL);
+    this.setState({
+      timerIntervalId: setInterval(() => {
+        this.setState({
+          msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
+        });
+      }, C.TIMER_COUNTDOWN_INTERVAL),
+    });
   }
 
   componentDidMount() {
