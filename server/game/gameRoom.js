@@ -265,6 +265,13 @@ class GameRoom {
     //   { emoji: "🙆‍♀️", nickname: "Sarah", score: 200 },
     //   { emoji: "🍞", nickname: "Mark", score: 200 },
     //   { emoji: "🌯", nickname: "Price", score: 0 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
+    //   { emoji: "🌯", nickname: "Price", score: 0 },
     // ];
     // return testData;
     let scoreboardData = this._pointTracker.sortedPointPairs().map((pair) => {

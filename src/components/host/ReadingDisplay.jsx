@@ -48,13 +48,16 @@ export default class ReadingDisplay extends Component {
                         </div>
                         <div className="tags">
                           {Object.entries(this.props.votingResults).map(
-                            (entry) => {
+                            (entry, voterIndex) => {
                               let playerId = entry[0];
                               let voteIndex = entry[1];
 
                               if (voteIndex === answerIndex) {
                                 return (
-                                  <span className="tag is-medium is-light">
+                                  <span
+                                    className="tag is-medium is-light"
+                                    key={voterIndex}
+                                  >
                                     {/* FIXME this is probably very bad performance */}
                                     {
                                       this.props.getPlayerInfoById(playerId)
