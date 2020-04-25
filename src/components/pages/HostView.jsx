@@ -139,7 +139,7 @@ export default class HostView extends Component {
           >
             Join as Player
           </a>
-          <h3>Players:</h3>
+          <h3>({this.state.players.length}/16) Players:</h3>
           <ul>
             {this.state.players.map((player, index) => (
               <li key={index}>

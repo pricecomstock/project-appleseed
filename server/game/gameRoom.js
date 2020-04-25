@@ -27,6 +27,8 @@ class GameRoom {
     this._timer = null;
 
     this._options = {
+      maxPlayers: 16,
+
       numberOfRounds: 2,
       pointsPerPrompt: 1200,
       pointsForShutout: 200,
@@ -71,7 +73,14 @@ class GameRoom {
   }
 
   get allowedToJoin() {
-    return this.state === "lobby";
+    return (
+      this.state === "lobby" &&
+      this._playerSockets.length < this._options.maxPlayers
+    );
+  }
+
+  get canStart() {
+    return this._playerSockets.length >= 2;
   }
 
   addPlayer(playerSocket) {
