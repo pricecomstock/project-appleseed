@@ -114,6 +114,8 @@ export default class PlayerView extends Component {
       this.setState({
         currentVotingMatchup: data.currentVotingMatchup,
         voteSubmitted: false,
+        prompts: [],
+        promptIndex: 0,
       });
     });
 
