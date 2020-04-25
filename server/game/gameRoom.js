@@ -3,6 +3,7 @@ const StateMachine = require("javascript-state-machine");
 const { PromptSet } = require("./prompts/prompt");
 const PointTracker = require("./pointTracker");
 const Timer = require("./timer");
+const lodash = require("lodash");
 
 class GameRoom {
   constructor(code, io) {
@@ -80,7 +81,7 @@ class GameRoom {
     // Update Player Info
     playerSocket.on("updateplayerinfo", (info) => {
       playerSocket.playerData.nickname = info.nickname;
-      playerSocket.playerData.emoji = info.emoji;
+      playerSocket.playerData.emoji = lodash.toArray(info.emoji)[0];
       this.sendStateToAll();
     });
 

@@ -46,11 +46,7 @@ export default class PlayerInfoSet extends Component {
                     type="text"
                     value={this.state.emoji}
                     onChange={(event) =>
-                      this.setState({
-                        emoji: String.fromCodePoint(
-                          event.target.value.codePointAt(0)
-                        ),
-                      })
+                      this.setState({ emoji: event.target.value })
                     }
                   />
                 </div>
