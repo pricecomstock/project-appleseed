@@ -13,7 +13,6 @@ class GameRoom {
 
     // this._countdownWillEnd = 0;
     this._adminKey = generateBase64Id(32);
-    this._allowedToJoin = true; // FIXME needs to be checked on reconnect
     this._playerSockets = [];
     this._adminSockets = [];
 
@@ -71,7 +70,7 @@ class GameRoom {
   }
 
   get allowedToJoin() {
-    return this._allowedToJoin;
+    return this.state === "lobby";
   }
 
   addPlayer(playerSocket) {

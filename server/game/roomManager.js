@@ -53,7 +53,7 @@ class RoomManager {
         if (this.checkRoomExists(roomCode)) {
           let joinedRoom = this.getRoomWithCode(roomCode);
           if (!joinedRoom.allowedToJoin) {
-            socket.emit("error", { data: "can't join right now" });
+            socket.emit("unjoinable", { data: "can't join right now" });
             return;
           }
           // console.log("Joined room", joinedRoom);
@@ -166,6 +166,15 @@ class RoomManager {
         // true if this array has our code in it
         .includes(code)
     );
+  }
+
+  checkRoomJoinability(code) {
+    let room = this.getRoomWithCode(code);
+    if (room && room.allowedToJoin) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getRoomWithCode(code) {

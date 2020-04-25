@@ -22,10 +22,20 @@ export default class Home extends Component {
       .post("/checkroom", { code: this.state.enteredCode })
       .then((res) => {
         console.log(res);
-        if (res.data.success) {
+        if (res.data.exists && res.data.joinable) {
           this.props.history.push(`/play/${res.data.code}`);
+        } else if (res.data.exists && !res.data.joinable) {
+          console.log("Room is not joinable");
+          this.setState({
+            isJoinError: true,
+            joinErrorMessage: "Room is not currently joinable.",
+          });
         } else {
-          console.log("Room does not exist!");
+          console.log("Room does not exist");
+          this.setState({
+            isJoinError: true,
+            joinErrorMessage: "Room not found.",
+          });
         }
       })
       .catch((err) => {
@@ -34,7 +44,7 @@ export default class Home extends Component {
   };
 
   handleCodeChange = (event) => {
-    this.setState({ enteredCode: event.target.value });
+    this.setState({ enteredCode: event.target.value.substring(0, 4) });
   };
 
   render() {
@@ -72,6 +82,9 @@ export default class Home extends Component {
                 </button>
               </div>
             </div>
+            {this.state.isJoinError && (
+              <p class="has-text-danger">{this.state.joinErrorMessage}</p>
+            )}
             <hr />
             <p>Or create a new one!</p>
             <button

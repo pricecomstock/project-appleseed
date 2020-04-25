@@ -107,7 +107,7 @@ export default class HostView extends Component {
 
     this.state.socket.on("timer", (data) => {
       console.log("Date.now()", Date.now());
-      console.log("Timer", data); // TODO NEXT Make timer progress display on frontend
+      console.log("Timer", data);
       this.startTimer(data.msTotal, data.msRemaining);
     });
 

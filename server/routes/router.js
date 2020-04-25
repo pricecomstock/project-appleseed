@@ -38,11 +38,13 @@ function createRouter(io) {
 
   router.post("/checkroom", function (req, res) {
     let code = req.body.code.toUpperCase();
-    console.debug("Checking existence of:", code);
-    let success = roomManager.checkRoomExists(code);
+    console.debug("Checking existence/joinability of:", code);
+    let exists = roomManager.checkRoomExists(code);
+    let joinable = roomManager.checkRoomJoinability(code);
     res.json({
-      success: success,
+      exists: exists,
       code: code,
+      joinable: joinable,
     });
   });
 
