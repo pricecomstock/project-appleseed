@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 
+import C from "../../constants";
+
 export default function Prompt(props) {
   const [answer, setAnswer] = useState("");
 
@@ -20,7 +22,9 @@ export default function Prompt(props) {
             className="input"
             type="text"
             value={answer}
-            onChange={(event) => setAnswer(event.target.value)}
+            onChange={(event) =>
+              setAnswer(event.target.value.substring(0, C.MAX_ANSWER_CHARS))
+            }
             onKeyPress={(e) => {
               if (e.key === "Enter") {
                 submit();

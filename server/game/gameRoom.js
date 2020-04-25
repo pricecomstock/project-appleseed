@@ -5,6 +5,8 @@ const PointTracker = require("./pointTracker");
 const Timer = require("./timer");
 const lodash = require("lodash");
 
+const C = require("../../src/constants");
+
 class GameRoom {
   constructor(code, io) {
     //TODO: Add game options
@@ -89,18 +91,20 @@ class GameRoom {
 
     // Update Player Info
     playerSocket.on("updateplayerinfo", (info) => {
-      playerSocket.playerData.nickname = info.nickname;
+      playerSocket.playerData.nickname = info.nickname.substring(
+        0,
+        C.MAX_NAME_CHARS
+      );
       playerSocket.playerData.emoji = lodash.toArray(info.emoji)[0];
       this.sendStateToAll();
     });
 
     // Submit an answer to a prompt
     playerSocket.on("answerprompt", (data) => {
-      // TODO input validation
       this._prompts.answer(
         playerSocket.playerData.playerId,
         data.promptId,
-        data.answer
+        data.answer.substring(0, C.MAX_ANSWER_CHARS)
       );
     });
 

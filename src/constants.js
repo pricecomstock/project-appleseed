@@ -1,6 +1,9 @@
 const C = {
   TIMER_COUNTDOWN_INTERVAL: 30,
   TIMER_SAFETY_BUFFER: 1000,
+
+  MAX_ANSWER_CHARS: 60,
+  MAX_NAME_CHARS: 20,
 };
 
 module.exports = C;

@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 
+import C from "../../constants";
+
 export default class PlayerInfoSet extends Component {
   state = {
     name: "",
@@ -32,7 +34,9 @@ export default class PlayerInfoSet extends Component {
                     type="text"
                     value={this.state.name}
                     onChange={(event) =>
-                      this.setState({ name: event.target.value })
+                      this.setState({
+                        name: event.target.value.substring(0, C.MAX_NAME_CHARS),
+                      })
                     }
                   />
                 </div>
