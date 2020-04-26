@@ -38,7 +38,7 @@ export default class ControlButtons extends Component {
 
   render() {
     return (
-      <div className="buttons">
+      <div className="buttons are-medium">
         {this.props.currentState === "lobby" && (
           <button className="button is-primary" onClick={this.startGame}>
             Start Game
