@@ -5,8 +5,8 @@ export default class ReadingDisplay extends Component {
     return (
       <div>
         <div className="hero is-dark">
-          <div class="hero-body">
-            <div class="container has-text-centered">
+          <div className="hero-body">
+            <div className="container has-text-centered">
               <h1 className="is-size-1">{this.props.prompt.text}</h1>
             </div>
             <div className="container">
