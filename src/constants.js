@@ -3,7 +3,7 @@ const C = {
   TIMER_SAFETY_BUFFER: 1000,
 
   MAX_ANSWER_CHARS: 60,
-  MAX_NAME_CHARS: 20,
+  MAX_NAME_CHARS: 18,
 };
 
 module.exports = C;
