@@ -116,8 +116,19 @@ class GameRoom {
     });
 
     playerSocket.on("vote", (data) => {
-      console.log(`received vote from ${data.playerId} for ${data.index}`);
       this._currentVotingResults[data.playerId] = data.index;
+      console.log(
+        `received vote from ${data.playerId} for ${data.index}. ${
+          Object.keys(this._currentVotingResults).length
+        } total!`
+      );
+      // End voting phase if everyone has voted
+      if (
+        Object.keys(this._currentVotingResults).length ===
+        this._playerSockets.length
+      ) {
+        this._timer.finish();
+      }
     });
   }
 

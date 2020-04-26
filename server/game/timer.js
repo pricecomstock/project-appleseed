@@ -62,6 +62,12 @@ class Timer {
     clearTimeout(this._checkTimeoutId);
     this.pausedAt = Date.now();
   }
+
+  finish() {
+    // instantly execute oncomplete function and cancel the timer
+    this.cancel();
+    this._onComplete();
+  }
 }
 
 test = () => {
