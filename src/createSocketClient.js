@@ -1,6 +1,9 @@
 import socketIOClient from "socket.io-client";
 
-const endpoint = "http://localhost:4001";
+let endpoint = undefined;
+if (process.env.NODE_ENV === "development") {
+  endpoint = "http://localhost:4001";
+}
 
 function createSocketClient() {
   const socket = socketIOClient(endpoint);
