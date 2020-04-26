@@ -17,6 +17,10 @@ class PromptMatchup {
     this._answers.set(playerId, answer);
   }
 
+  isAnsweredBy(playerId) {
+    return this._answers.has(playerId);
+  }
+
   get id() {
     return this._id;
   }
@@ -107,6 +111,12 @@ class PromptSet {
 
   getPromptsForPlayer(id) {
     return this._promptsByPlayer.get(id);
+  }
+
+  getUnansweredPromptsForPlayer(id) {
+    return this.getPromptsForPlayer(id).filter((promptMatchup) => {
+      return !promptMatchup.isAnsweredBy(id);
+    });
   }
 
   get promptsByPlayer() {

@@ -85,6 +85,14 @@ class GameRoom {
     return this._playerSockets.length >= 2;
   }
 
+  replacePlayerSocketForId(playerId, replacementSocket) {
+    let oldIndex = this._playerSockets.findIndex((socket) => {
+      return socket.playerData.playerId === playerId;
+    });
+    this._playerSockets.splice(oldIndex, 1); // delete old
+    this.addPlayer(replacementSocket); // add new, with listeners
+  }
+
   addPlayer(playerSocket) {
     // Add to Player Sockets list
     this._playerSockets.push(playerSocket);
@@ -101,6 +109,7 @@ class GameRoom {
 
     // Submit an answer to a prompt
     playerSocket.on("answerprompt", (data) => {
+      console.log(`Received answer to ${data.promptId}: ${data.answer}`);
       this._prompts.answer(
         playerSocket.playerData.playerId,
         data.promptId,
@@ -180,6 +189,24 @@ class GameRoom {
     this._adminSockets.push(adminSocket);
   }
 
+  sendUnansweredPromptsToPlayer(playerSocket) {
+    let unansweredPrompts = this._prompts
+      .getUnansweredPromptsForPlayer(playerSocket.playerData.playerId)
+      .map((p) => {
+        return p.sendable;
+      });
+    playerSocket.emit("prompts", {
+      prompts: unansweredPrompts,
+    });
+  }
+
+  givePlayerCurrentInfo(playerSocket) {
+    // For reconnects
+    if (this.state === "prompts") {
+      this.sendUnansweredPromptsToPlayer(playerSocket);
+    }
+  }
+
   get playerData() {
     return this._playerSockets.map((playerSocket) => {
       return playerSocket.playerData;
@@ -191,15 +218,9 @@ class GameRoom {
   }
 
   sendPromptsToPlayers() {
-    for (let [playerId, prompts] of this._prompts.promptsByPlayer) {
-      let socket = this.getPlayerSocketWithId(playerId);
-      // console.log(`Sending player ${playerId} socket:`, socket);
-      console.log("Sending player prompts:", prompts);
-      socket.emit("prompts", {
-        prompts: prompts.map((p) => {
-          return p.sendable;
-        }),
-      });
+    for (let playerSocket of this._playerSockets) {
+      console.log("Sending player prompts:");
+      this.sendUnansweredPromptsToPlayer(playerSocket);
     }
   }
 

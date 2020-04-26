@@ -52,7 +52,8 @@ class RoomManager {
 
         if (this.checkRoomExists(roomCode)) {
           let joinedRoom = this.getRoomWithCode(roomCode);
-          if (!joinedRoom.allowedToJoin) {
+          let existingPlayer = joinedRoom.getPlayerDataWithId(requestedId);
+          if (!joinedRoom.allowedToJoin && !existingPlayer) {
             socket.emit("unjoinable", { data: "can't join right now" });
             return;
           }
@@ -63,11 +64,13 @@ class RoomManager {
           // If we're in development, every instance should be new player
           if (requestedId && process.env.NODE_ENV !== "development") {
             console.log("player reconnecting");
-            let existingPlayer = joinedRoom.getPlayerDataWithId(requestedId);
+
             if (existingPlayer) {
               console.log("Player exists!", existingPlayer);
               socket.playerData = existingPlayer;
               socket.playerData.connected = true;
+              joinedRoom.replacePlayerSocketForId(requestedId, socket);
+              joinedRoom.givePlayerCurrentInfo(socket);
             } else {
               console.log(
                 `Claimed ID ${requestedId} does not exist, creating a new one.`
