@@ -70,7 +70,6 @@ class RoomManager {
               socket.playerData = existingPlayer;
               socket.playerData.connected = true;
               joinedRoom.replacePlayerSocketForId(requestedId, socket);
-              joinedRoom.givePlayerCurrentInfo(socket);
             } else {
               console.log(
                 `Claimed ID ${requestedId} does not exist, creating a new one.`
@@ -86,6 +85,7 @@ class RoomManager {
 
           socket.emit("playerIdAssigned", socket.playerData.playerId);
           sendRoomUpdates(roomCode);
+          joinedRoom.givePlayerCurrentInfo(socket);
         }
       });
 

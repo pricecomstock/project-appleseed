@@ -121,7 +121,7 @@ export default class PlayerView extends Component {
 
     this.state.socket.on("timer", (data) => {
       // console.log("Date.now()", Date.now());
-      // console.log("Timer", data);
+      console.log("Timer", data);
       this.startTimer(data.msTotal, data.msRemaining);
     });
 
@@ -151,15 +151,17 @@ export default class PlayerView extends Component {
             </div>
             <div className="level-right">
               <div className="level-item">
-                <PlayerInfoView
-                  playerInfo={this.state.playerInfo}
-                  // TODO this should probably just be decided server side
-                  canEdit={
-                    this.state.currentState === "lobby" ||
-                    this.state.currentState === "finalScores"
-                  }
-                  onEdit={() => this.setState({ editingPlayerInfo: true })}
-                ></PlayerInfoView>
+                {this.state.playerInfo && (
+                  <PlayerInfoView
+                    playerInfo={this.state.playerInfo}
+                    // TODO this should probably just be decided server side
+                    canEdit={
+                      this.state.currentState === "lobby" ||
+                      this.state.currentState === "finalScores"
+                    }
+                    onEdit={() => this.setState({ editingPlayerInfo: true })}
+                  ></PlayerInfoView>
+                )}
               </div>
             </div>
           </div>

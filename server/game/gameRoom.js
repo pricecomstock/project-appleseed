@@ -255,7 +255,7 @@ class GameRoom {
   }
 
   sendStateToIndividual(socket) {
-    this.emitToAdmins("state", this.stateSummary());
+    socket.emit("state", this.stateSummary());
   }
 
   emitToAll(event, data) {
@@ -310,6 +310,7 @@ class GameRoom {
   sendTimerToIndividualPlayer(playerSocket) {
     try {
       playerSocket.emit("timer", this._timer.summary());
+      console.log("Sending timer to", playerSocket.playerData.nickname);
     } catch (error) {
       console.log(error);
     }
