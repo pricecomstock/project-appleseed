@@ -107,7 +107,11 @@ class RoomManager {
 
           sendRoomUpdates(roomCode);
         } else {
-          socket.emit("adminkeyerror", {});
+          if (this.checkRoomExists(roomCode)) {
+            socket.emit("adminkeyerror", {});
+          } else {
+            socket.emit("roomdoesnotexisterror", {});
+          }
         }
       });
 
