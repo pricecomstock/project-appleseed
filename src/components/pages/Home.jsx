@@ -21,10 +21,15 @@ export default class Home extends Component {
     axios
       .post("/checkroom", { code: this.state.enteredCode })
       .then((res) => {
-        console.log(res);
-        if (res.data.exists && res.data.joinable) {
+        let claimedExistingId = localStorage.getItem(res.data.code);
+        // allowed to rejoin if existing player Id
+        if (res.data.exists && (res.data.joinable || claimedExistingId)) {
           this.props.history.push(`/play/${res.data.code}`);
-        } else if (res.data.exists && !res.data.joinable) {
+        } else if (
+          res.data.exists &&
+          !res.data.joinable &&
+          !claimedExistingId // we don't have an existing player Id
+        ) {
           console.log("Room is not joinable");
           this.setState({
             isJoinError: true,
