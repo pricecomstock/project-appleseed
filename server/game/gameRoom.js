@@ -26,8 +26,6 @@ class GameRoom {
     this._currentVotingResults = {};
     this._currentScoringDetails = {};
 
-    this._timer = null;
-
     this._options = {
       maxPlayers: 16,
 
@@ -202,8 +200,13 @@ class GameRoom {
 
   givePlayerCurrentInfo(playerSocket) {
     // For reconnects
+    this.sendStateToIndividual(playerSocket);
     if (this.state === "prompts") {
       this.sendUnansweredPromptsToPlayer(playerSocket);
+      this.sendTimerToIndividualPlayer(playerSocket);
+    } else if (this.state === "voting") {
+      this.sendVotingOptionsToIndividualPlayer(playerSocket);
+      this.sendTimerToIndividualPlayer(playerSocket);
     }
   }
 
@@ -229,6 +232,10 @@ class GameRoom {
   }
 
   sendStateToAdminsOnly() {
+    this.emitToAdmins("state", this.stateSummary());
+  }
+
+  sendStateToIndividual(socket) {
     this.emitToAdmins("state", this.stateSummary());
   }
 
@@ -270,9 +277,23 @@ class GameRoom {
     });
   }
 
+  sendVotingOptionsToIndividualPlayer(playerSocket) {
+    playerSocket.emit("votingoptions", {
+      currentVotingMatchup: this._currentVotingMatchup,
+    });
+  }
+
   createAndSendTimer(seconds, onCompleteFunction) {
     this._timer = Timer.createWithSeconds(seconds, onCompleteFunction);
     this.emitToAll("timer", this._timer.summary());
+  }
+
+  sendTimerToIndividualPlayer(playerSocket) {
+    try {
+      playerSocket.emit("timer", this._timer.summary());
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   processVotingPoints() {
