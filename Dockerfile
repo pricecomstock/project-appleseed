@@ -15,6 +15,7 @@ ENV PORT 80
 ENV NODE_ENV production
 
 RUN npm run build
+RUN ["node", "./server/game/prompts/syncFromSheety.js"]
 
 EXPOSE 80
 
