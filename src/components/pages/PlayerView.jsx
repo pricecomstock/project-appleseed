@@ -71,7 +71,9 @@ export default class PlayerView extends Component {
       msTotal: msTotal,
       // Safety buffer to err on giving players extra time
       msRemaining: msRemaining - C.TIMER_SAFETY_BUFFER,
-      timerIsVisible: true,
+      timerIsVisible:
+        this.state.currentState === "voting" ||
+        this.state.currentState === "prompts",
     });
 
     this.setState({

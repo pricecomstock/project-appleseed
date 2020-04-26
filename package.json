@@ -27,6 +27,7 @@
     "eject": "react-scripts eject",
     "sheety": "node server/game/prompts/syncFromSheety.js",
     "prod-server": "NODE_ENV=production nodemon ./server/server.js",
+    "test-server": "NODE_ENV=production CORS=allow nodemon ./server/server.js",
     "dev-server": "NODE_ENV=development nodemon ./server/server.js"
   },
   "eslintConfig": {

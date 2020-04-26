@@ -16,7 +16,7 @@ const io = socketIo(server);
 const api = createRouter(io);
 
 // CORS rules and backend API
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development" || process.env.CORS === "allow") {
   app.options("*", cors());
   app.use("/api", cors(), api);
 } else {
