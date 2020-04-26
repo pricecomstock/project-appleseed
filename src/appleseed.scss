@@ -28,3 +28,9 @@ $family-sans-serif: "Nunito", sans-serif;
 .leaderboard-low {
   margin-bottom: 0.5em !important;
 }
+
+.wrapped-text {
+  white-space: normal;
+  height: auto;
+  overflow: wrap;
+}

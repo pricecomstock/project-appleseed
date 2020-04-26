@@ -8,12 +8,12 @@ export default class PlayerVote extends Component {
           this.props.currentVotingMatchup.answers.map((answer, index) => {
             return (
               <button
-                className="button is-large is-fullwidth is-outlined"
+                className="button is-medium is-fullwidth is-outlined wrapped-text"
                 onClick={() => {
                   this.props.submitVote(index);
                 }}
               >
-                {answer[1]}
+                <p>{answer[1]}</p>
               </button>
             );
           })}
