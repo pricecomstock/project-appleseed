@@ -51,7 +51,7 @@ export default class Home extends Component {
     return (
       <div className="container has-text-centered">
         <header>
-          <h1 className="title">Project Appleseed</h1>
+          <h1 className="title">bitwits!</h1>
         </header>
         <div className="columns is-centered">
           <div className="column is-one-third-tablet">

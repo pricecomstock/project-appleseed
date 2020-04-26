@@ -186,9 +186,11 @@ class GameRoom {
     });
   }
 
-  sendPrompts() {
+  createPromptSet() {
     this._prompts = new PromptSet(this.playerData.map((pd) => pd.playerId));
-    // console.log("Prompts:", this._prompts);
+  }
+
+  sendPromptsToPlayers() {
     for (let [playerId, prompts] of this._prompts.promptsByPlayer) {
       let socket = this.getPlayerSocketWithId(playerId);
       // console.log(`Sending player ${playerId} socket:`, socket);
@@ -226,7 +228,7 @@ class GameRoom {
     return state;
   }
 
-  prepareMatchupsToSend() {
+  prepareFinalizedMatchupsToSend() {
     this._finalizedMatchupsToSend = this._prompts.finalizeMatchups();
     console.log("Finalized Matchups:", this._finalizedMatchupsToSend);
   }
@@ -314,13 +316,14 @@ StateMachine.factory(GameRoom, {
       console.log("Game Started");
     },
     onBeforeClosePrompts: function () {
-      this.prepareMatchupsToSend();
+      this.prepareFinalizedMatchupsToSend();
       console.log("closePrompts");
     },
     onPrompts: function () {
       console.log("Prompts!");
       this._numberOfRoundsPlayed++;
-      this.sendPrompts();
+      this.createPromptSet();
+      this.sendPromptsToPlayers();
 
       // Time Limits
       this.createAndSendTimer(this._options.promptTimeLimit, () => {
@@ -399,14 +402,6 @@ StateMachine.factory(GameRoom, {
         scoreboardData: this.calculateScoreboardData(),
       });
       console.log("endGame");
-    },
-    onNewGameNewPlayers: function () {
-      // TODO Implement
-      console.log("newGameNewPlayers");
-    },
-    onNewGameSamePlayers: function () {
-      // TODO Implement
-      console.log("newGameSamePlayers");
     },
   },
 });
