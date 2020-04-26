@@ -113,6 +113,12 @@ class GameRoom {
         data.promptId,
         data.answer.substring(0, C.MAX_ANSWER_CHARS)
       );
+      // Double check state to narrow window of async issues
+      // It might still be a problem
+      // TODO add label to timer and check that when finishing
+      if (this.state === "prompts" && this._prompts.areAllAnswered) {
+        this._timer.finish();
+      }
     });
 
     playerSocket.on("vote", (data) => {
@@ -123,9 +129,11 @@ class GameRoom {
         } total!`
       );
       // End voting phase if everyone has voted
+      // See async note on early ending for prompts
       if (
+        this.state === "voting" &&
         Object.keys(this._currentVotingResults).length ===
-        this._playerSockets.length
+          this._playerSockets.length
       ) {
         this._timer.finish();
       }

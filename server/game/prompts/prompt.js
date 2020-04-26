@@ -21,6 +21,10 @@ class PromptMatchup {
     return this._answers.has(playerId);
   }
 
+  get isAnsweredByAll() {
+    return this._answers.size === this._players.length;
+  }
+
   get id() {
     return this._id;
   }
@@ -52,11 +56,19 @@ class PromptSet {
     this._promptsByPlayer = new Map();
     this._finalizedMatchups = [];
 
+    this._numAnswersExpected = this.PROMPTS_PER_PLAYER * this._playerIds.length;
+    this._numAnswersSubmitted = 0;
+
     this.createPromptMatchups();
   }
 
   answer(playerId, promptId, answer) {
-    this._matchups.get(promptId).answer(playerId, answer);
+    let matchup = this._matchups.get(promptId);
+    if (!matchup.isAnsweredBy(playerId)) {
+      // this shouldn't ever skip but just in case
+      this._numAnswersSubmitted++;
+    }
+    matchup.answer(playerId, answer);
   }
 
   createPromptMatchups() {
@@ -127,6 +139,10 @@ class PromptSet {
     return [...this._matchups.values()].map((matchup) => {
       return matchup.sendable;
     });
+  }
+
+  get areAllAnswered() {
+    return this._numAnswersExpected === this._numAnswersSubmitted;
   }
 
   finalizeMatchups() {
