@@ -40,28 +40,37 @@ export default class ControlButtons extends Component {
     return (
       <div className="buttons are-medium">
         {this.props.currentState === "lobby" && (
-          <button className="button is-primary" onClick={this.startGame}>
+          <button
+            className="button is-rounded is-primary"
+            onClick={this.startGame}
+          >
             Start Game
           </button>
         )}
         {this.props.currentState === "prompts" && (
-          <button className="button is-link" onClick={this.closePrompts}>
+          <button
+            className="button is-rounded is-link"
+            onClick={this.closePrompts}
+          >
             Close Prompts
           </button>
         )}
         {this.props.currentState === "voting" && (
-          <button className="button is-link" onClick={this.closeVoting}>
+          <button
+            className="button is-rounded is-link"
+            onClick={this.closeVoting}
+          >
             Close Voting
           </button>
         )}
         {this.props.currentState === "scoring" && (
-          <button className="button is-link" onClick={this.nextSet}>
+          <button className="button is-rounded is-link" onClick={this.nextSet}>
             Next Set
           </button>
         )}
         {this.props.currentState === "scoring" && (
           <button
-            className="button is-warning is-outlined is-small"
+            className="button is-rounded is-warning is-outlined is-small"
             onClick={this.endRound}
           >
             End Round
@@ -69,20 +78,23 @@ export default class ControlButtons extends Component {
         )}
         {this.props.currentState === "scoring" && (
           <button
-            className="button is-danger is-outlined is-small"
+            className="button is-rounded is-danger is-outlined is-small"
             onClick={this.endGame}
           >
             End Game
           </button>
         )}
         {this.props.currentState === "endOfRound" && (
-          <button className="button is-warning" onClick={this.nextRound}>
+          <button
+            className="button is-rounded is-warning"
+            onClick={this.nextRound}
+          >
             Next Round
           </button>
         )}
         {this.props.currentState === "finalScores" && (
           <button
-            className="button is-warning"
+            className="button is-rounded is-warning"
             onClick={this.newGameNewPlayers}
           >
             New Game, New Players
@@ -90,7 +102,7 @@ export default class ControlButtons extends Component {
         )}
         {this.props.currentState === "finalScores" && (
           <button
-            className="button is-warning"
+            className="button is-rounded is-warning"
             onClick={this.newGameSamePlayers}
           >
             New Game, Same Players

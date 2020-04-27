@@ -6,7 +6,7 @@ export default class Timer extends Component {
     return (
       <div>
         <progress
-          className={classNames("progress", "is-large", {
+          className={classNames("progress", "is-medium", {
             "is-primary": this.props.msRemaining > 10000,
             "is-warning":
               this.props.msRemaining <= 10000 && this.props.msRemaining > 3000,
@@ -17,7 +17,7 @@ export default class Timer extends Component {
         >
           {Math.floor(this.props.msRemaining / 1000)}s
         </progress>
-        <div className="has-text-centered is-size-3">
+        <div className="has-text-centered is-size-5">
           {this.props.msRemaining > 0
             ? Math.floor(this.props.msRemaining / 1000)
             : 0}

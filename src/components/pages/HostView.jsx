@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
+import LobbyView from "../host/LobbyView";
 import ReadingDisplay from "../host/ReadingDisplay";
 import Scoreboard from "../host/Scoreboard";
 import ControlButtons from "../host/ControlButtons";
@@ -32,7 +33,7 @@ export default class HostView extends Component {
     timerIsVisible: false,
     timerIntervalId: null,
 
-    debugDisplay: true,
+    debugDisplay: false,
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -129,14 +130,15 @@ export default class HostView extends Component {
             label={this.state.currentState}
           ></Timer>
         )}
+        {/* Admin Header */}
         <div className="level">
           <div className="level-left">
             <div className="level-item is-size-5">
               <p>
-                Join at {C.INSTRUCTION_DISPLAY_URL} with code{" "}
                 <span className="tag is-info is-large has-text-weight-bold is-size-4">
                   {this.state.roomCode}
-                </span>
+                </span>{" "}
+                join at {window.location.host}
               </p>
             </div>
           </div>
@@ -147,34 +149,24 @@ export default class HostView extends Component {
             ></ControlButtons>
           </div>
         </div>
-        <div className="box level">
-          <div className="level-left">
-            <span className="level-item tag is-success is-medium">
-              Admin Debug
-            </span>
-            <div className="level-item">state={this.state.currentState}</div>
-          </div>
-        </div>
-        {this.state.currentState === "lobby" && (
-          <div className="container">
-            <a
-              href={`/play/${this.state.roomCode}`}
-              className="button is-small"
-              target="_blank"
-            >
-              Join as Player in New Tab
-            </a>
-            <h1 className="title has-text-centered">
-              {this.state.players.length}/16 Players:
-            </h1>
-            <div className="columns is-multiline">
-              {this.state.players.map((player, index) => (
-                <div className="column is-one-quarter is-size-4" key={index}>
-                  {player.emoji} {player.nickname}
-                </div>
-              ))}
+        {/* Debug View */}
+        {this.state.debugDisplay && (
+          <div className="box level">
+            <div className="level-left">
+              <span className="level-item tag is-success is-medium">Admin</span>
+              <span className="level-item tag is-warning is-medium">
+                Debug View
+              </span>
+              <div className="level-item">state={this.state.currentState}</div>
             </div>
           </div>
+        )}
+        {/* Lobby View */}
+        {this.state.currentState === "lobby" && (
+          <LobbyView
+            roomCode={this.state.roomCode}
+            players={this.state.players}
+          ></LobbyView>
         )}
 
         <hr />
