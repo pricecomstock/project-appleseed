@@ -34,8 +34,8 @@ class GameRoom {
       pointsForShutout: 200,
 
       promptTimeLimit: 90,
-      votingTimeLimit: 22,
-      roundDelay: 7,
+      votingTimeLimit: 25,
+      roundDelay: 12,
     };
 
     this._numberOfRoundsPlayed = 0;
