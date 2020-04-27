@@ -219,13 +219,15 @@ class GameRoom {
 
   givePlayerCurrentInfo(playerSocket) {
     // For reconnects
-    this.sendStateToIndividual(playerSocket);
-    if (this.state === "prompts") {
-      this.sendUnansweredPromptsToPlayer(playerSocket);
-      this.sendTimerToIndividualPlayer(playerSocket);
-    } else if (this.state === "voting") {
-      this.sendVotingOptionsToIndividualPlayer(playerSocket);
-      this.sendTimerToIndividualPlayer(playerSocket);
+    if (playerSocket && playerSocket.playerData.playerId) {
+      this.sendStateToIndividual(playerSocket);
+      if (this.state === "prompts") {
+        this.sendUnansweredPromptsToPlayer(playerSocket);
+        this.sendTimerToIndividualPlayer(playerSocket);
+      } else if (this.state === "voting") {
+        this.sendVotingOptionsToIndividualPlayer(playerSocket);
+        this.sendTimerToIndividualPlayer(playerSocket);
+      }
     }
   }
 

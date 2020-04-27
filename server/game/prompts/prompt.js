@@ -126,9 +126,14 @@ class PromptSet {
   }
 
   getUnansweredPromptsForPlayer(id) {
-    return this.getPromptsForPlayer(id).filter((promptMatchup) => {
-      return !promptMatchup.isAnsweredBy(id);
-    });
+    let allPromptsForPlayer = this.getPromptsForPlayer(id);
+    if (allPromptsForPlayer) {
+      return allPromptsForPlayer.filter((promptMatchup) => {
+        return !promptMatchup.isAnsweredBy(id);
+      });
+    } else {
+      return [];
+    }
   }
 
   get promptsByPlayer() {
