@@ -148,9 +148,15 @@ export default class PlayerView extends Component {
           <div className="level is-mobile">
             <div className="level-left">
               <div className="level-item">
-                <span className="tag is-light is-info is-medium">
-                  {this.state.roomCode}
-                </span>
+                {this.state.timerIsVisible ? (
+                  <span className="tag is-light is-warning is-medium">
+                    {Math.floor(this.state.msRemaining / 1000)}s
+                  </span>
+                ) : (
+                  <span className="tag is-light is-info is-medium">
+                    {this.state.roomCode}
+                  </span>
+                )}
               </div>
             </div>
             <div className="level-right">
