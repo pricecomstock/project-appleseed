@@ -135,13 +135,6 @@ export default class PlayerView extends Component {
   render() {
     return (
       <div>
-        {this.state.timerIsVisible && (
-          <Timer
-            msRemaining={this.state.msRemaining}
-            msTotal={this.state.msTotal}
-            label={this.state.currentState}
-          ></Timer>
-        )}
         {this.state.editingPlayerInfo &&
           this.state.currentState === "lobby" && (
             <PlayerInfoSet
@@ -155,7 +148,9 @@ export default class PlayerView extends Component {
           <div className="level is-mobile">
             <div className="level-left">
               <div className="level-item">
-                <span className="tag is-light is-info is-large">Player</span>
+                <span className="tag is-light is-info is-medium">
+                  {this.state.roomCode}
+                </span>
               </div>
             </div>
             <div className="level-right">
@@ -163,26 +158,21 @@ export default class PlayerView extends Component {
                 {this.state.playerInfo && (
                   <PlayerInfoView
                     playerInfo={this.state.playerInfo}
-                    // TODO this should probably just be decided server side
-                    canEdit={
-                      this.state.currentState === "lobby" ||
-                      this.state.currentState === "finalScores"
-                    }
+                    canEdit={this.state.currentState === "lobby"}
                     onEdit={() => this.setState({ editingPlayerInfo: true })}
                   ></PlayerInfoView>
                 )}
               </div>
             </div>
           </div>
-          <h3>Room Code: {this.state.roomCode}</h3>
-          <p>Player ID: {this.state.playerId}</p>
-          {/* <h3>Prompts</h3>
-          <ul>
-            {this.state.prompts.map((prompt, index) => (
-              <li key={index}>{prompt.text}</li>
-            ))}
-          </ul> */}
         </div>
+
+        {this.state.timerIsVisible && (
+          <Timer
+            msRemaining={this.state.msRemaining}
+            msTotal={this.state.msTotal}
+          ></Timer>
+        )}
         <hr />
         {this.state.prompts.length > this.state.promptIndex && (
           <Prompt

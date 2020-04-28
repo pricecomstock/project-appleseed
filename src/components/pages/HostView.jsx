@@ -123,13 +123,6 @@ export default class HostView extends Component {
   render() {
     return (
       <div>
-        {this.state.timerIsVisible && (
-          <Timer
-            msRemaining={this.state.msRemaining}
-            msTotal={this.state.msTotal}
-            label={this.state.currentState}
-          ></Timer>
-        )}
         {/* Admin Header */}
         <div className="level">
           <div className="level-left">
@@ -160,6 +153,15 @@ export default class HostView extends Component {
               <div className="level-item">state={this.state.currentState}</div>
             </div>
           </div>
+        )}
+        {/* Timer */}
+        {this.state.timerIsVisible && (
+          <Timer
+            msRemaining={this.state.msRemaining}
+            msTotal={this.state.msTotal}
+            label={this.state.currentState}
+            showLabel="true"
+          ></Timer>
         )}
         {/* Lobby View */}
         {this.state.currentState === "lobby" && (

@@ -17,12 +17,14 @@ export default class Timer extends Component {
         >
           {Math.floor(this.props.msRemaining / 1000)}s
         </progress>
-        <div className="has-text-centered is-size-5">
-          {this.props.msRemaining > 0
-            ? Math.floor(this.props.msRemaining / 1000)
-            : 0}
-          s left for {this.props.label}
-        </div>
+        {this.props.showLabel && (
+          <div className="has-text-centered is-size-5">
+            {this.props.msRemaining > 0
+              ? Math.floor(this.props.msRemaining / 1000)
+              : 0}
+            s left for {this.props.label}
+          </div>
+        )}
       </div>
     );
   }
