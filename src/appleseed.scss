@@ -34,3 +34,15 @@ $family-sans-serif: "Nunito", sans-serif;
   height: auto;
   overflow: wrap;
 }
+
+.lobby-player-view {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.lobby-player-view > div {
+  flex: 0 1 23%;
+}

@@ -20,13 +20,16 @@ export default class LobbyView extends Component {
           </a>
         </div>
         <hr />
-        <h1 className="title has-text-centered">
+        <h3 className="title has-text-centered">
           {this.props.players.length}/16 Players:
-        </h1>
-        <div className="columns is-multiline">
+        </h3>
+        {/* This would be easier to just do with CSS Flexbox */}
+
+        <div className="lobby-player-view">
           {this.props.players.map((player, index) => (
-            <div className="column is-one-quarter is-size-4" key={index}>
-              {player.emoji} {player.nickname}
+            <div className="box is-size-4 freshly-added" key={index}>
+              <span className="is-size-2">{player.emoji}</span>{" "}
+              {player.nickname}
             </div>
           ))}
         </div>
