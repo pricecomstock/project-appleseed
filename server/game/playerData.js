@@ -1,10 +1,11 @@
 const generateBase64Id = require("./util").generateBase64Id;
+const { randomEmoji, randomPlayerName } = require("./flavor");
 
 class PlayerData {
   constructor() {
     this.connected = true;
-    this.nickname = "human-" + generateBase64Id(4);
-    this.emoji = "😀";
+    this.nickname = randomPlayerName();
+    this.emoji = randomEmoji();
     this.playerId = generateBase64Id(12);
   }
 }

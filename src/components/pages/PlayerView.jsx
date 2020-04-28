@@ -7,7 +7,6 @@ import Prompt from "../player/Prompt";
 import Timer from "../Timer";
 
 import createSocketClient from "../../createSocketClient";
-import { randomEmoji, randomPlayerName } from "../../util/flavor";
 
 // https://www.valentinog.com/blog/socket-react/
 
@@ -22,7 +21,7 @@ export default class PlayerView extends Component {
     promptIndex: 0,
     socket: createSocketClient(),
     playerId: "",
-    playerInfo: { emoji: randomEmoji(), nickname: randomPlayerName() },
+    playerInfo: { emoji: "😾", nickname: "player" },
     editingPlayerInfo: false,
     currentVotingMatchup: {},
     voteSubmitted: false,
