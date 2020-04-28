@@ -10,11 +10,11 @@ export default class ReadingDisplay extends Component {
               <h1 className="is-size-1">{this.props.prompt.text}</h1>
             </div>
             <div className="container">
-              <div className="columns is-centered is-multiline">
+              <div className="reading-answers-view">
                 {this.props.prompt.answers &&
                   this.props.prompt.answers.map((answer, answerIndex) => {
                     return (
-                      <div className="column is-one-third" key={answerIndex}>
+                      <div className="" key={answerIndex}>
                         <div className="box has-text-centered">
                           <h3 className="is-size-2">{answer[1]}</h3>
                           {this.props.votingIsComplete && (

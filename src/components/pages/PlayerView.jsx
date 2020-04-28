@@ -4,10 +4,10 @@ import PlayerInfoSet from "../player/PlayerInfoSet";
 import PlayerInfoView from "../player/PlayerInfoView";
 import PlayerVote from "../player/PlayerVote";
 import Prompt from "../player/Prompt";
-
 import Timer from "../Timer";
 
 import createSocketClient from "../../createSocketClient";
+import { randomEmoji, randomPlayerName } from "../../util/flavor";
 
 // https://www.valentinog.com/blog/socket-react/
 
@@ -22,7 +22,7 @@ export default class PlayerView extends Component {
     promptIndex: 0,
     socket: createSocketClient(),
     playerId: "",
-    playerInfo: { emoji: "😀", nickname: "player" },
+    playerInfo: { emoji: randomEmoji(), nickname: randomPlayerName() },
     editingPlayerInfo: false,
     currentVotingMatchup: {},
     voteSubmitted: false,
@@ -101,7 +101,7 @@ export default class PlayerView extends Component {
 
     this.state.socket.on("playerIdAssigned", (assignedId) => {
       console.log("player ID assigned: ", assignedId);
-      this.setState({ playerId: assignedId });
+      this.setState({ playerId: assignedId, editingPlayerInfo: true });
       localStorage.setItem(this.state.roomCode, this.state.playerId);
     });
 
@@ -142,6 +142,15 @@ export default class PlayerView extends Component {
             label={this.state.currentState}
           ></Timer>
         )}
+        {this.state.editingPlayerInfo &&
+          this.state.currentState === "lobby" && (
+            <PlayerInfoSet
+              socket={this.state.socket}
+              previousName={this.state.playerInfo.nickname}
+              previousEmoji={this.state.playerInfo.emoji}
+              hide={() => this.setState({ editingPlayerInfo: false })}
+            ></PlayerInfoSet>
+          )}
         <div className="content">
           <div className="level is-mobile">
             <div className="level-left">
@@ -175,14 +184,6 @@ export default class PlayerView extends Component {
           </ul> */}
         </div>
         <hr />
-        {true && (
-          // {this.state.gameState.state == "preGame" && (
-          <PlayerInfoSet
-            socket={this.state.socket}
-            active={this.state.editingPlayerInfo}
-            hide={() => this.setState({ editingPlayerInfo: false })}
-          ></PlayerInfoSet>
-        )}
         {this.state.prompts.length > this.state.promptIndex && (
           <Prompt
             prompt={this.state.prompts[this.state.promptIndex]}

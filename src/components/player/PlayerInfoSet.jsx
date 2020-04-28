@@ -17,49 +17,60 @@ export default class PlayerInfoSet extends Component {
     this.props.hide();
   };
 
+  componentDidMount() {
+    this.setState({
+      name: this.props.previousName,
+      emoji: this.props.previousEmoji,
+    });
+  }
+
   render() {
     return (
       <div>
-        <div
-          className={classNames("modal", { "is-active": this.props.active })}
-        >
-          <div className="modal-background"></div>
-          <div className="modal-content">
-            <div className="box">
-              <div className="field">
-                <label className="label">Name</label>
-                <div className="control">
-                  <input
-                    className="input"
-                    type="text"
-                    value={this.state.name}
-                    onChange={(event) =>
-                      this.setState({
-                        name: event.target.value.substring(0, C.MAX_NAME_CHARS),
-                      })
-                    }
-                  />
-                </div>
+        <div>
+          <div className="box">
+            Enter a name and emoji!
+            <div className="field">
+              <label className="label">Name</label>
+              <div className="control">
+                <input
+                  className="input"
+                  type="text"
+                  value={this.state.name}
+                  onChange={(event) =>
+                    this.setState({
+                      name: event.target.value.substring(0, C.MAX_NAME_CHARS),
+                    })
+                  }
+                />
               </div>
-
-              <div className="field">
-                <label className="label">emoji</label>
-                <div className="control">
-                  <input
-                    className="input"
-                    type="text"
-                    value={this.state.emoji}
-                    onChange={(event) =>
-                      this.setState({ emoji: event.target.value })
-                    }
-                  />
-                </div>
+            </div>
+            <div className="field">
+              <label className="label">emoji</label>
+              <div className="control">
+                <input
+                  className="input"
+                  type="text"
+                  value={this.state.emoji}
+                  onChange={(event) =>
+                    this.setState({ emoji: event.target.value })
+                  }
+                />
               </div>
+            </div>
+            <div className="buttons">
               <button
                 className="button is-primary"
                 onClick={this.sendUpdatedInfo}
               >
-                Update
+                Submit
+              </button>
+
+              <button
+                className="button is-danger is-outlined"
+                onClick={this.props.hide}
+              >
+                Close
               </button>
             </div>
           </div>
