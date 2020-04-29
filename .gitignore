@@ -24,3 +24,5 @@ yarn-error.log*
 
 **/sheety.json
 .vscode
+
+db
