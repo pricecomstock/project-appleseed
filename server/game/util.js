@@ -40,6 +40,10 @@ function getShuffledCopyOfArray(originalArray) {
   return array;
 }
 
+function randomItemFromArray(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 function mapToObject(map) {
   let obj = Array.from(map).reduce((obj, [key, value]) => {
     obj[key] = value;
@@ -55,5 +59,6 @@ module.exports = {
   playerRoom,
   audienceRoom,
   getShuffledCopyOfArray,
+  randomItemFromArray,
   mapToObject,
 };

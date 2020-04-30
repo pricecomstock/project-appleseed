@@ -1,6 +1,4 @@
-function randomItemFromArray(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+const { randomItemFromArray } = require("./util");
 
 function randomEmoji() {
   const possibleEmoji = [

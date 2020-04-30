@@ -1,11 +1,21 @@
 const getPrompt = require("./sheetyPrompts");
-const { getShuffledCopyOfArray, generateBase64Id } = require("../util");
+const {
+  getShuffledCopyOfArray,
+  randomItemFromArray,
+  generateBase64Id,
+} = require("../util");
 // stackoverflow.com/questions/21295162/javascript-randomly-pair-items-from-array-without-repeats
 
 class PromptMatchup {
-  constructor(text, players) {
-    this._players = players;
-    this._text = text;
+  constructor(answeringPlayers, allPlayerNames) {
+    this._players = answeringPlayers;
+    // Insert any player names needed
+    this._text = getPrompt()
+      .replace(/_+/g, "______") // normalize blanks
+      .replace(/%p/g, (match, offset, string) => {
+        return `${randomItemFromArray(allPlayerNames)}`;
+      });
+
     this._answers = new Map();
 
     // TODO guarantee no duplicates
@@ -47,10 +57,13 @@ class PromptMatchup {
 }
 
 class PromptSet {
-  constructor(playerIds) {
+  constructor(playerDatas) {
     this.PROMPTS_PER_PLAYER = 2;
     this.PLAYERS_PER_PROMPT = 2;
-    this._playerIds = playerIds;
+    this._playerNames = playerDatas.map((pd) => {
+      return pd.emoji + pd.nickname;
+    });
+    this._playerIds = playerDatas.map((pd) => pd.playerId);
 
     this._matchups = new Map();
     this._promptsByPlayer = new Map();
@@ -107,7 +120,10 @@ class PromptSet {
         }
       });
 
-      const promptMatchup = new PromptMatchup(getPrompt(), selectedPlayers);
+      const promptMatchup = new PromptMatchup(
+        selectedPlayers,
+        this._playerNames
+      );
       // console.log("Matchup: ", promptMatchup);
       selectedPlayers.forEach((playerId) => {
         let currentPrompts = this._promptsByPlayer.get(playerId);

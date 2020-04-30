@@ -238,7 +238,7 @@ class GameRoom {
   }
 
   createPromptSet() {
-    this._prompts = new PromptSet(this.playerData.map((pd) => pd.playerId));
+    this._prompts = new PromptSet(this.playerData);
   }
 
   sendPromptsToPlayers() {
