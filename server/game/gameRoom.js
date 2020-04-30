@@ -1,6 +1,7 @@
 const { generateBase64Id, adminRoom } = require("./util");
 const StateMachine = require("javascript-state-machine");
-const { PromptSet } = require("./prompts/prompt");
+const { PromptRound } = require("./prompts/prompt");
+const options = require("./options");
 const PointTracker = require("./pointTracker");
 const Timer = require("./timer");
 const lodash = require("lodash");
@@ -26,19 +27,8 @@ class GameRoom {
     this._currentVotingResults = {};
     this._currentScoringDetails = {};
 
-    this._options = {
-      maxPlayers: 16,
-
-      numberOfRounds: 2,
-      pointsPerPrompt: 1200,
-      pointsForShutout: 200,
-
-      promptTimeLimit: 90,
-      votingTimeLimit: 25,
-      roundDelay: 12,
-    };
-
-    this._numberOfRoundsPlayed = 0;
+    this._options = options.DEFAULT;
+    this._currentRoundIndex = 0;
 
     this._pointTracker = null;
 
@@ -56,6 +46,10 @@ class GameRoom {
 
   get code() {
     return this._code;
+  }
+
+  get currentRoundOptions() {
+    return this._options.rounds[this._currentRoundIndex];
   }
 
   getPlayerDataWithId(playerId) {
@@ -237,8 +231,8 @@ class GameRoom {
     });
   }
 
-  createPromptSet() {
-    this._prompts = new PromptSet(this.playerData);
+  createPromptRound() {
+    this._prompts = new PromptRound(this.playerData, this.currentRoundOptions);
   }
 
   sendPromptsToPlayers() {
@@ -376,6 +370,7 @@ StateMachine.factory(GameRoom, {
       this.sendStateToAll();
     },
     onStartGame: function () {
+      this._currentRoundIndex = 0;
       this.initializePointTracker();
       console.log("Game Started");
     },
@@ -384,9 +379,13 @@ StateMachine.factory(GameRoom, {
       console.log("closePrompts");
     },
     onPrompts: function () {
-      console.log("Prompts!");
-      this._numberOfRoundsPlayed++;
-      this.createPromptSet();
+      console.log(
+        `Starting round ${
+          this._currentRoundIndex + 1
+        } of prompts with options:`,
+        this.currentRoundOptions
+      );
+      this.createPromptRound();
       this.sendPromptsToPlayers();
 
       // Time Limits
@@ -421,12 +420,12 @@ StateMachine.factory(GameRoom, {
 
       if (this._finalizedMatchupsToSend.length > 0) {
         // More answers to read
-        this.createAndSendTimer(this._options.roundDelay, () => {
+        this.createAndSendTimer(this._options.promptResultDelay, () => {
           if (this.can("nextSet")) {
             this.nextSet();
           }
         });
-      } else if (this._numberOfRoundsPlayed >= this._options.numberOfRounds) {
+      } else if (this._currentRoundIndex >= this._options.rounds.length) {
         // No more answers, no more rounds
         this.createAndSendTimer(this._options.roundDelay, () => {
           if (this.can("endGame")) {
@@ -457,9 +456,9 @@ StateMachine.factory(GameRoom, {
         scoreboardData: this.calculateScoreboardData(),
       });
     },
-    onNextRound: function () {
-      // TODO Implement
-      console.log("nextRound");
+    onBeforeNextRound: function () {
+      this._currentRoundIndex++;
+      console.log("");
     },
     onEndGame: function () {
       this.emitToAdmins("scoreboarddata", {
