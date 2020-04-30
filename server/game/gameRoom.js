@@ -425,7 +425,7 @@ StateMachine.factory(GameRoom, {
             this.nextSet();
           }
         });
-      } else if (this._currentRoundIndex >= this._options.rounds.length) {
+      } else if (this._currentRoundIndex >= this._options.rounds.length - 1) {
         // No more answers, no more rounds
         this.createAndSendTimer(this._options.roundDelay, () => {
           if (this.can("endGame")) {
@@ -434,6 +434,7 @@ StateMachine.factory(GameRoom, {
         });
       } else {
         // No more answers, but anther round
+        this._currentRoundIndex++;
         this.createAndSendTimer(this._options.roundDelay, () => {
           if (this.can("endRound")) {
             this.endRound();
@@ -455,10 +456,6 @@ StateMachine.factory(GameRoom, {
       this.emitToAdmins("scoreboarddata", {
         scoreboardData: this.calculateScoreboardData(),
       });
-    },
-    onBeforeNextRound: function () {
-      this._currentRoundIndex++;
-      console.log("");
     },
     onEndGame: function () {
       this.emitToAdmins("scoreboarddata", {
