@@ -74,14 +74,6 @@ export default class ControlButtons extends Component {
         )}
         {this.props.currentState === "scoring" && (
           <button
-            className="button is-rounded is-link is-outlined is-small"
-            onClick={this.nextSet}
-          >
-            Next Set
-          </button>
-        )}
-        {this.props.currentState === "scoring" && (
-          <button
             className="button is-rounded is-warning is-outlined is-small"
             onClick={this.endRound}
           >
