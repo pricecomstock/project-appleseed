@@ -54,8 +54,9 @@ $family-sans-serif: "Nunito", sans-serif;
   align-items: stretch;
   align-content: flex-start;
   row-gap: 1em;
+  column-gap: 1em;
 
   > div {
-    flex: 0 1 24%;
+    flex: 1 1 24%;
   }
 }
