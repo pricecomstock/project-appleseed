@@ -98,6 +98,8 @@ export default class Home extends Component {
             >
               Create Game
             </button>
+            <hr />
+            Or <a href="/uploadprompts">create your own set of prompts!</a>
           </div>
         </div>
       </div>

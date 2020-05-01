@@ -48,6 +48,20 @@ function createRouter(io) {
     });
   });
 
+  router.post("/uploadprompts", (req, res) => {
+    console.log(req.body.promptEntry);
+    let submittedPrompts = req.body.promptEntry;
+    let promptArray = submittedPrompts.replace(/ {2,}/g, " ").split("\n");
+    promptArray = promptArray.filter((prompt) => {
+      return prompt.length > 0;
+    });
+    if (promptArray.length === 0) {
+      res.send("Empty submission!");
+    }
+
+    res.send({ success: true, id: "ABCD-EFGH-IJKL-MNOP" });
+  });
+
   return router;
 }
 
