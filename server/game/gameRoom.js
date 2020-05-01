@@ -183,6 +183,12 @@ class GameRoom {
       }
     });
 
+    adminSocket.on("skip", (data) => {
+      if (!this._timer.completed) {
+        this._timer.finish();
+      }
+    });
+
     adminSocket.on("newGameNewPlayers", (data) => {
       if (this.can("newGameNewPlayers")) {
         this._timer.cancel();

@@ -12,6 +12,7 @@ class Timer {
     this.pausedAt = null;
 
     this._onComplete = onCompleteFunction;
+    this.completed = false;
 
     this._checkTimeoutId = null;
 
@@ -35,6 +36,7 @@ class Timer {
 
   checkTimer() {
     if (Date.now() > this.endTime) {
+      this.completed = true;
       this._onComplete();
     } else {
       this.setCheckTimeout(RECHECK_INTERVAL);
@@ -55,6 +57,7 @@ class Timer {
   }
 
   cancel() {
+    this.completed = true;
     clearTimeout(this._checkTimeoutId);
   }
 
@@ -66,6 +69,7 @@ class Timer {
   finish() {
     // instantly execute oncomplete function and cancel the timer
     this.cancel();
+    this.completed = true;
     this._onComplete();
   }
 }
