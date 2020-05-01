@@ -16,7 +16,7 @@ export default class ReadingDisplay extends Component {
                     return (
                       <div className="" key={answerIndex}>
                         <div className="box has-text-centered">
-                          <h3 className="is-size-2">{answer[1]}</h3>
+                          <h3 className="is-size-3">{answer[1]}</h3>
                           {this.props.votingIsComplete && (
                             <span className="tag is-info is-large">
                               {this.props.getPlayerInfoById(answer[0]).emoji}{" "}
