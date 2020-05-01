@@ -44,6 +44,12 @@ function randomItemFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// FIXME This is probably inefficient on large arrays
+function randomItemsFromArrayWithoutRepeats(arr, n) {
+  let shuffled = getShuffledCopyOfArray(arr);
+  return shuffled.slice(0, n);
+}
+
 function mapToObject(map) {
   let obj = Array.from(map).reduce((obj, [key, value]) => {
     obj[key] = value;
@@ -60,5 +66,6 @@ module.exports = {
   audienceRoom,
   getShuffledCopyOfArray,
   randomItemFromArray,
+  randomItemsFromArrayWithoutRepeats,
   mapToObject,
 };

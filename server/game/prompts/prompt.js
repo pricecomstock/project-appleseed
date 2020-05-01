@@ -2,6 +2,7 @@ const getPrompt = require("./sheetyPrompts");
 const {
   getShuffledCopyOfArray,
   randomItemFromArray,
+  randomItemsFromArrayWithoutRepeats,
   generateBase64Id,
 } = require("../util");
 // stackoverflow.com/questions/21295162/javascript-randomly-pair-items-from-array-without-repeats
@@ -94,40 +95,96 @@ class PromptRound {
     if (this._roundOptions.answersPerPrompt === answersPerPromptOptions.ALL) {
       this.createNewPromptForPlayers(this._playerIds); // All players
     } else {
-      let playerLists = [];
-      // step 1, create random lists of players.
-      // Players will be in lists n times to answer n prompts
-      // There will be m lists, where each prompt is answered by m players
-      for (let i = 0; i < this._roundOptions.answersPerPrompt; i++) {
-        let shuffledPlayers = [];
-        // Notice - 1 because everyone will be in 2 by default
-        for (let j = 0; j < this._roundOptions.promptsPerPlayer - 1; j++) {
-          shuffledPlayers = shuffledPlayers.concat(
-            getShuffledCopyOfArray(this._playerIds)
+      // An array where each index is the number of prompts still needed for each player
+      let playerPool = Array(this._roundOptions.promptsPerPlayer + 1);
+      playerPool.fill(
+        (() => {
+          // immediately exec function so these aren't all getting the same array
+          // I don't know if this is necessary but oh well
+          return [];
+        })()
+      );
+      playerPool[this._roundOptions.promptsPerPlayer] = [...this._playerIds];
+
+      let totalPromptsRemaining =
+        (this._roundOptions.promptsPerPlayer * this._playerIds.length) /
+        this._roundOptions.answersPerPrompt;
+
+      let maxBucketNumber = this._roundOptions.promptsPerPlayer;
+      let selectPlayers = () => {
+        let playersInMaxBucket = playerPool[maxBucketNumber];
+        // We evenly match remaining players that need max more prompts
+        if (playersInMaxBucket.length === this._roundOptions.answersPerPrompt) {
+          playerPool[maxBucketNumber - 1] = [
+            // demote
+            ...playerPool[maxBucketNumber - 1],
+            ...playersInMaxBucket,
+          ];
+          playerPool[maxBucketNumber] = [];
+          maxBucketNumber--; // move max bucket down
+          return playersInMaxBucket; // return all players from max bucket
+        } else if (
+          playersInMaxBucket.length > this._roundOptions.answersPerPrompt
+        ) {
+          // We have extra players in this bucket still
+          let selectedPlayers = randomItemsFromArrayWithoutRepeats(
+            playersInMaxBucket,
+            this._roundOptions.answersPerPrompt
           );
-        }
-        playerLists.push(shuffledPlayers);
-      }
-      // console.log(playerLists);
-
-      // Step 2 pull items off each list
-      // console.log("Prompt shuffled player lists: ", playerLists);
-      while (playerLists[0].length > 0) {
-        let selectedPlayers = [];
-
-        // Pick a player from each random list
-        playerLists.forEach((playerList) => {
-          // Grab first player who isn't already selected
-          for (let i = 0; i < playerList.length; i++) {
-            const player = playerList[i];
-            if (!selectedPlayers.includes(player)) {
-              // Remove player from playerList and put in selected
-              // Splice returns array, so we pull item out with [0]
-              selectedPlayers.push(playerList.splice(i, 1)[0]);
-              break;
+          // remove selected from top bucket
+          playerPool[maxBucketNumber] = playersInMaxBucket.filter(
+            (playerId) => {
+              return !selectedPlayers.includes(playerId);
             }
-          }
-        });
+          );
+          // demote selected
+          playerPool[maxBucketNumber - 1] = [
+            ...playerPool[maxBucketNumber - 1],
+            ...selectedPlayers,
+          ];
+
+          return selectedPlayers;
+        } else {
+          // Not enough players in bucket
+          let selectedPlayers = playersInMaxBucket;
+          let numPlayersStillNeeded =
+            this._roundOptions.answersPerPrompt - selectedPlayers.length;
+
+          let fromNextBucket = randomItemsFromArrayWithoutRepeats(
+            playerPool[maxBucketNumber - 1],
+            numPlayersStillNeeded
+          );
+          selectedPlayers = [...selectedPlayers, ...fromNextBucket];
+          // demote players from next bucket into next-next bucket
+          playerPool[maxBucketNumber - 2] = [
+            ...playerPool[maxBucketNumber - 2],
+            ...fromNextBucket,
+          ];
+          // remove selected from next bucket
+          playerPool[maxBucketNumber - 1] = playerPool[
+            maxBucketNumber - 1
+          ].filter((playerId) => {
+            return !fromNextBucket.includes(playerId);
+          });
+
+          // demote players from max bucket into next bucket
+          playerPool[maxBucketNumber - 1] = [
+            ...playerPool[maxBucketNumber - 1],
+            ...playersInMaxBucket,
+          ];
+          // remove selected from top bucket
+          playerPool[maxBucketNumber] = [];
+
+          return selectedPlayers;
+        }
+      };
+
+      while (totalPromptsRemaining > 0) {
+        console.table(playerPool);
+        let selectedPlayers = selectPlayers();
+        console.log("Creating prompt for", selectedPlayers);
+        totalPromptsRemaining--;
+
         this.createNewPromptForPlayers(selectedPlayers);
       }
     }
