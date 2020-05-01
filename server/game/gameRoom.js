@@ -435,6 +435,7 @@ StateMachine.factory(GameRoom, {
       } else {
         // No more answers, but anther round
         this._currentRoundIndex++;
+        this._pointTracker.nextRound();
         this.createAndSendTimer(this._options.roundDelay, () => {
           if (this.can("endRound")) {
             this.endRound();
