@@ -101,7 +101,7 @@ class GameRoom {
 
     // Submit an answer to a prompt
     playerSocket.on("answerprompt", (data) => {
-      console.log(`Received answer to ${data.promptId}: ${data.answer}`);
+      // console.log(`Received answer to ${data.promptId}: ${data.answer}`);
       this._prompts.answer(
         playerSocket.playerData.playerId,
         data.promptId,
@@ -117,11 +117,11 @@ class GameRoom {
 
     playerSocket.on("vote", (data) => {
       this._currentVotingResults[data.playerId] = data.index;
-      console.log(
-        `received vote from ${data.playerId} for ${data.index}. ${
-          Object.keys(this._currentVotingResults).length
-        } total!`
-      );
+      // console.log(
+      //   `received vote from ${data.playerId} for ${data.index}. ${
+      //     Object.keys(this._currentVotingResults).length
+      //   } total!`
+      // );
       // End voting phase if everyone has voted
       // See async note on early ending for prompts
       if (
@@ -243,7 +243,6 @@ class GameRoom {
 
   sendPromptsToPlayers() {
     for (let playerSocket of this._playerSockets) {
-      console.log("Sending player prompts:");
       this.sendUnansweredPromptsToPlayer(playerSocket);
     }
   }
@@ -279,7 +278,6 @@ class GameRoom {
 
   prepareFinalizedMatchupsToSend() {
     this._finalizedMatchupsToSend = this._prompts.finalizeMatchups();
-    console.log("Finalized Matchups:", this._finalizedMatchupsToSend);
   }
 
   sendNextFilledPromptToAdmin() {
@@ -312,7 +310,6 @@ class GameRoom {
   sendTimerToIndividualPlayer(playerSocket) {
     try {
       playerSocket.emit("timer", this._timer.summary());
-      console.log("Sending timer to", playerSocket.playerData.nickname);
     } catch (error) {
       console.log(error);
     }

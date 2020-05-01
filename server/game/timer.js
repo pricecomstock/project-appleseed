@@ -17,7 +17,6 @@ class Timer {
     this._checkTimeoutId = null;
 
     this.setCheckTimeout(this.ms - EARLY_CHECKING_OFFSET_MS);
-    console.log("Timer", this.summary());
   }
 
   static createToEndAt(endTimeMs, onCompleteFunction) {

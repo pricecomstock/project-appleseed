@@ -180,9 +180,9 @@ class PromptRound {
       };
 
       while (totalPromptsRemaining > 0) {
-        console.table(playerPool);
+        // console.table(playerPool);
         let selectedPlayers = selectPlayers();
-        console.log("Creating prompt for", selectedPlayers);
+        // console.log("Creating prompt for", selectedPlayers);
         totalPromptsRemaining--;
 
         this.createNewPromptForPlayers(selectedPlayers);
