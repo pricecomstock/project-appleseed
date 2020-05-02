@@ -88,16 +88,30 @@ export default class Home extends Component {
               </div>
             </div>
             {this.state.isJoinError && (
-              <p class="has-text-danger">{this.state.joinErrorMessage}</p>
+              <p className="has-text-danger">{this.state.joinErrorMessage}</p>
             )}
             <hr />
             <p>Or create a new one!</p>
-            <button
-              onClick={this.createGame}
-              className="button is-primary is-outlined is-large"
-            >
-              Create Game
-            </button>
+            <div className="field">
+              <button
+                onClick={this.createGame}
+                className="button is-primary is-outlined is-large"
+              >
+                Create Game
+              </button>
+            </div>
+            <div className="field">
+              <p className="help">
+                Enter a custom prompt set code if you want!
+              </p>
+              <div className="control">
+                <input
+                  className="input is-medium"
+                  type="text"
+                  placeholder="ABCD-EFGH-IJKL-MNOP"
+                ></input>
+              </div>
+            </div>
             <hr />
             Or <a href="/uploadprompts">create your own set of prompts!</a>
           </div>

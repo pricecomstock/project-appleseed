@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Options from "./Options";
 
 export default class LobbyView extends Component {
   render() {
@@ -33,6 +34,8 @@ export default class LobbyView extends Component {
             </div>
           ))}
         </div>
+        <hr />
+        <Options></Options>
       </div>
     );
   }

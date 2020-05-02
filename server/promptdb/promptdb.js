@@ -85,20 +85,20 @@ Prompt.init(
 Prompt.belongsTo(CustomSet);
 
 // FIXME probably not for long term production, buddy
-CustomSet.sync({ force: true }).then(() => {
-  // return CustomSet.create({
-  //   name: "custom!",
-  //   description: "A test custom set.",
-  //   id: "asdfqwerzxcvuiop",
-  // });
-});
+// CustomSet.sync({ force: true }).then(() => {
+//   // return CustomSet.create({
+//   //   name: "custom!",
+//   //   description: "A test custom set.",
+//   //   id: "asdfqwerzxcvuiop",
+//   // });
+// });
 
-Prompt.sync({ force: true }).then(() => {
-  // return Prompt.create({
-  //   text: "What's a good prompt for this game?",
-  //   customSet: "asdfqwerzxcvuiop",
-  // });
-});
+// Prompt.sync({ force: true }).then(() => {
+//   // return Prompt.create({
+//   //   text: "What's a good prompt for this game?",
+//   //   customSet: "asdfqwerzxcvuiop",
+//   // });
+// });
 
 async function generateUniqueCustomSetId() {
   const codeLength = 16;
