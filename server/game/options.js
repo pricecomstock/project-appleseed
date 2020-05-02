@@ -3,8 +3,8 @@ const { answersPerPromptOptions } = require("./prompts/prompt");
 const defaultOptions = {
   maxPlayers: 16,
 
-  pointsPerPrompt: 12000,
-  pointsForShutout: 2000,
+  pointsPerPrompt: 6000,
+  pointsForShutout: 1000,
 
   rounds: [
     {
