@@ -184,6 +184,7 @@ export default class HostView extends Component {
         <hr />
         {this.state.currentState === "prompts" && (
           <PlayerList
+            vibrate={true}
             players={this.state.players.filter((player) => {
               return this.state.yetToAnswer.includes(player.playerId);
             })}

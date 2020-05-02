@@ -108,11 +108,7 @@ class GameRoom {
         data.answer.substring(0, C.MAX_ANSWER_CHARS)
       );
 
-      console.log("Yet to answer", this._prompts.getUnfinishedPlayers());
-
-      this.emitToAdmins("yettoanswer", {
-        yetToAnswer: this._prompts.getUnfinishedPlayers(),
-      });
+      this.emitYetToAnswer();
       // Double check state to narrow window of async issues
       // It might still be a problem
       // TODO add label to timer and check that when finishing
@@ -133,6 +129,12 @@ class GameRoom {
       ) {
         this._timer.finish();
       }
+    });
+  }
+
+  emitYetToAnswer() {
+    this.emitToAdmins("yettoanswer", {
+      yetToAnswer: this._prompts.getUnfinishedPlayers(),
     });
   }
 
@@ -393,6 +395,7 @@ StateMachine.factory(GameRoom, {
       );
       this.createPromptRound();
       this.sendPromptsToPlayers();
+      this.emitYetToAnswer();
 
       // Time Limits
       this.createAndSendTimer(this._options.promptTimeLimit, () => {
