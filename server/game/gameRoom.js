@@ -116,14 +116,10 @@ class GameRoom {
     });
 
     playerSocket.on("vote", (data) => {
+      // don't count from players who answered this prompt!
+      // if (this._currentVotingMatchup.answers[data.index][0] !== data.playerId) {
       this._currentVotingResults[data.playerId] = data.index;
-      // console.log(
-      //   `received vote from ${data.playerId} for ${data.index}. ${
-      //     Object.keys(this._currentVotingResults).length
-      //   } total!`
-      // );
-      // End voting phase if everyone has voted
-      // See async note on early ending for prompts
+      // Check if everyone has voted
       if (
         this.state === "voting" &&
         Object.keys(this._currentVotingResults).length ===

@@ -23,8 +23,9 @@ export default class PlayerView extends Component {
     playerId: "",
     playerInfo: { emoji: "😾", nickname: "player" },
     editingPlayerInfo: false,
+
     currentVotingMatchup: {},
-    voteSubmitted: false,
+    showVotingOptions: false,
 
     clientTimerCalculatedEndTime: 0,
     msRemaining: 0,
@@ -60,7 +61,7 @@ export default class PlayerView extends Component {
       index: index,
       playerId: this.state.playerId,
     });
-    this.setState({ voteSubmitted: true });
+    this.setState({ showVotingOptions: false });
   };
 
   startTimer(msTotal, msRemaining) {
@@ -112,7 +113,12 @@ export default class PlayerView extends Component {
     this.state.socket.on("votingoptions", (data) => {
       this.setState({
         currentVotingMatchup: data.currentVotingMatchup,
-        voteSubmitted: false,
+        showVotingOptions: true,
+        // data.currentVotingMatchup.answers.some(
+        //   (answerPair) => {
+        //     answerPair[0] === this.state.playerId;
+        //   }
+        // ),
         prompts: [],
         promptIndex: 0,
       });
@@ -186,7 +192,7 @@ export default class PlayerView extends Component {
           ></Prompt>
         )}
         {this.state.currentState === "voting" &&
-          this.state.voteSubmitted === false && (
+          this.state.showVotingOptions === true && (
             <PlayerVote
               submitVote={this.submitVote}
               currentVotingMatchup={this.state.currentVotingMatchup}

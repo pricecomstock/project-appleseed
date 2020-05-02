@@ -28,6 +28,7 @@ const defaultOptions = {
   votingTimeLimit: 25,
   promptResultDelay: 7,
   roundDelay: 12,
+  selfVoting: false,
 };
 
 module.exports = { DEFAULT: defaultOptions };
