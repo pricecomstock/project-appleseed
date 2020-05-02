@@ -85,20 +85,10 @@ Prompt.init(
 Prompt.belongsTo(CustomSet);
 
 // FIXME probably not for long term production, buddy
-// CustomSet.sync({ force: true }).then(() => {
-//   // return CustomSet.create({
-//   //   name: "custom!",
-//   //   description: "A test custom set.",
-//   //   id: "asdfqwerzxcvuiop",
-//   // });
-// });
-
-// Prompt.sync({ force: true }).then(() => {
-//   // return Prompt.create({
-//   //   text: "What's a good prompt for this game?",
-//   //   customSet: "asdfqwerzxcvuiop",
-//   // });
-// });
+async function initializeDatabase() {
+  await CustomSet.sync({ force: true });
+  await Prompt.sync({ force: true });
+}
 
 async function generateUniqueCustomSetId() {
   const codeLength = 16;
@@ -173,4 +163,5 @@ module.exports = {
   createCustomSet,
   replaceCustomSet,
   getAllPromptsFromCustomSet,
+  initializeDatabase,
 };
