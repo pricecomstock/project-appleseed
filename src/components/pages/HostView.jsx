@@ -5,6 +5,7 @@ import ReadingDisplay from "../host/ReadingDisplay";
 import Scoreboard from "../host/Scoreboard";
 import ControlButtons from "../host/ControlButtons";
 import Timer from "../Timer";
+import PlayerList from "../host/PlayerList";
 
 import createSocketClient from "../../createSocketClient";
 
@@ -19,6 +20,8 @@ export default class HostView extends Component {
     currentState: "lobby",
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
+
+    yetToAnswer: [],
 
     filledPrompt: {},
     currentVotingResults: {},
@@ -84,6 +87,10 @@ export default class HostView extends Component {
     });
     this.state.socket.on("adminkeyerror", (data) => {
       console.log("Admin Key Error");
+    });
+
+    this.state.socket.on("yettoanswer", (data) => {
+      this.setState({ yetToAnswer: data.yetToAnswer });
     });
 
     this.state.socket.on("nextfilledprompt", (data) => {
@@ -165,13 +172,23 @@ export default class HostView extends Component {
         )}
         {/* Lobby View */}
         {this.state.currentState === "lobby" && (
-          <LobbyView
-            roomCode={this.state.roomCode}
-            players={this.state.players}
-          ></LobbyView>
+          <>
+            <LobbyView
+              players={this.state.players}
+              roomCode={this.state.roomCode}
+            ></LobbyView>
+            <PlayerList players={this.state.players}></PlayerList>
+          </>
         )}
 
         <hr />
+        {this.state.currentState === "prompts" && (
+          <PlayerList
+            players={this.state.players.filter((player) => {
+              return this.state.yetToAnswer.includes(player.playerId);
+            })}
+          ></PlayerList>
+        )}
         {(this.state.currentState === "reading" ||
           this.state.currentState === "voting" ||
           this.state.currentState === "scoring") &&

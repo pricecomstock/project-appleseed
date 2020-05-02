@@ -21,21 +21,11 @@ export default class LobbyView extends Component {
           </a>
         </div>
         <hr />
+        <Options></Options>
+        <hr />
         <h3 className="title has-text-centered">
           {this.props.players.length}/16 Players:
         </h3>
-        {/* This would be easier to just do with CSS Flexbox */}
-
-        <div className="lobby-player-view">
-          {this.props.players.map((player, index) => (
-            <div className="box is-size-4 freshly-added" key={index}>
-              <span className="is-size-2">{player.emoji}</span>{" "}
-              {player.nickname}
-            </div>
-          ))}
-        </div>
-        <hr />
-        <Options></Options>
       </div>
     );
   }

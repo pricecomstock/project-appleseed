@@ -73,6 +73,12 @@ class PromptRound {
 
     this._matchups = new Map();
     this._promptsByPlayer = new Map();
+    this._unfinishedAnswering = new Set(this._playerIds);
+    this._numAnswersByPlayer = new Map(
+      this._playerIds.map((id) => {
+        return [id, 0];
+      })
+    );
     this._finalizedMatchups = [];
 
     this._numAnswersExpected =
@@ -86,6 +92,17 @@ class PromptRound {
     let matchup = this._matchups.get(promptId);
     if (!matchup.isAnsweredBy(playerId)) {
       // this shouldn't ever skip but just in case
+      this._numAnswersByPlayer.set(
+        playerId,
+        this._numAnswersByPlayer.get(playerId) + 1
+      );
+      if (
+        this._numAnswersByPlayer.get(playerId) ==
+        this._roundOptions.promptsPerPlayer
+      ) {
+        this._unfinishedAnswering.delete(playerId);
+      }
+
       this._numAnswersSubmitted++;
     }
     matchup.answer(playerId, answer);
@@ -206,6 +223,10 @@ class PromptRound {
 
   getPromptsForPlayer(id) {
     return this._promptsByPlayer.get(id);
+  }
+
+  getUnfinishedPlayers() {
+    return [...this._unfinishedAnswering];
   }
 
   getUnansweredPromptsForPlayer(id) {
