@@ -9,7 +9,8 @@ export default class UploadPrompts extends Component {
         promptEntry: this.state.promptEntry,
       })
       .then((res) => {
-        this.setState({ promptEntry: "", id: res.data.id });
+        let prettyId = res.data.id.replace(/(\w{4}(?!$))/g, "$1-");
+        this.setState({ promptEntry: "", id: prettyId });
       })
       .catch((err) => console.error(err));
   };
@@ -18,7 +19,7 @@ export default class UploadPrompts extends Component {
     return (
       <div className="columns is-vcentered is-centered is-desktop">
         <div className="column is-half">
-          <div class="field">
+          <div className="field">
             <div className="content">
               <p>Paste prompts in below.</p>
               <ul>
@@ -33,10 +34,11 @@ export default class UploadPrompts extends Component {
                 </li>
               </ul>
             </div>
-            <label class="label">Prompts</label>
-            <div class="control">
+            <label className="label">Prompts</label>
+            <div className="control">
               <textarea
-                class="textarea"
+                value={this.state.promptEntry}
+                className="textarea"
                 placeholder="Enter one prompt per line."
                 onChange={(e) => this.setState({ promptEntry: e.target.value })}
               ></textarea>

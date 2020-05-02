@@ -1,10 +1,9 @@
 const Sequelize = require("sequelize");
 const Model = Sequelize.Model;
 
-// Init DB
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: "../../db/promptdb.sqlite",
+  storage: __dirname + "/../../db/promptdb.sqlite",
 });
 
 sequelize
@@ -85,50 +84,89 @@ Prompt.init(
   }
 );
 
-// belongsTo puts the relationship info on target (customSet), unlike hasOne
-// Prompt.belongsTo(CustomSet);
-// Doing it this way because sets are optional for prompts
-CustomSet.hasMany(Prompt);
+// belongsTo puts the relationship info on source (player), unlike hasOne
+Prompt.belongsTo(CustomSet);
 
 // FIXME probably not for long term production, buddy
 CustomSet.sync({ force: true }).then(() => {
-  return CustomSet.create({
-    name: "custom!",
-    description: "A test custom set.",
-    id: "asdfqwerzxcvuiop",
-  });
+  // return CustomSet.create({
+  //   name: "custom!",
+  //   description: "A test custom set.",
+  //   id: "asdfqwerzxcvuiop",
+  // });
 });
 
 Prompt.sync({ force: true }).then(() => {
-  return Prompt.create({
-    text: "What's a good prompt for this game?",
-    customSet: "asdfqwerzxcvuiop",
-  });
+  // return Prompt.create({
+  //   text: "What's a good prompt for this game?",
+  //   customSet: "asdfqwerzxcvuiop",
+  // });
 });
+
+async function generateUniqueCustomSetId() {
+  const codeLength = 16;
+  const validCharacters = "ABCDEFHJLMNOPQRSTVWXYZ";
+
+  let exists = true;
+  let code = "";
+  while (exists) {
+    code = "";
+    for (let i = 0; i < codeLength; i++) {
+      code +=
+        validCharacters[Math.floor(Math.random() * validCharacters.length)];
+    }
+    // retry if it exists
+    exists =
+      (await CustomSet.findOne({
+        where: { id: code },
+      })) !== null;
+  }
+
+  return code;
+}
 
 async function getAllPromptsFromCustomSet(id) {
   let dbResults = await Prompt.findAll({
     where: {
-      customSet: id,
+      customSetId: id,
     },
   });
   return dbResults.map((prompt) => prompt.text);
 }
 
-async function createOrReplaceCustomSet(id, prompts) {
+async function createCustomSet(prompts) {
+  let id = await generateUniqueCustomSetId();
+  CustomSet.create({
+    name: "temp",
+    id: id,
+  });
+  return await replaceCustomSet(id, prompts);
+}
+
+async function replaceCustomSet(id, prompts) {
   await Prompt.destroy({
     where: {
-      customSet: id,
+      customSetId: id,
     },
   });
-  Prompt.bulkCreate(
-    prompts.map((prompt) => {
-      return {
-        text: prompt,
-        familyFriendly: false,
-        usesPlayerName: prompt.search(/%p/g) != -1,
-        defaultSet: false,
-      };
-    })
-  );
+  let promptsToInsert = prompts.map((prompt) => {
+    return {
+      text: prompt,
+      familyFriendly: false,
+      usesPlayerName: prompt.search(/%p/g) != -1,
+      defaultSet: false,
+      customSetId: id,
+    };
+  });
+  let created = await Prompt.bulkCreate(promptsToInsert);
+  Prompt.findAll().then((result) => {
+    // console.log(result);
+  });
+  return id;
 }
+
+module.exports = {
+  createCustomSet,
+  replaceCustomSet,
+  getAllPromptsFromCustomSet,
+};
