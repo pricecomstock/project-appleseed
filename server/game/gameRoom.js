@@ -200,6 +200,7 @@ class GameRoom {
       if (this.can("newGameSamePlayers")) {
         this._timer.cancel();
         this.newGameSamePlayers();
+        this._currentRoundIndex = 0;
       }
     });
 
