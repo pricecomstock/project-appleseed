@@ -100,18 +100,6 @@ export default class Home extends Component {
                 Create Game
               </button>
             </div>
-            <div className="field">
-              <p className="help">
-                Enter a custom prompt set code if you want!
-              </p>
-              <div className="control">
-                <input
-                  className="input is-medium"
-                  type="text"
-                  placeholder="ABCD-EFGH-IJKL-MNOP"
-                ></input>
-              </div>
-            </div>
             <hr />
             Or <a href="/uploadprompts">create your own set of prompts!</a>
           </div>
