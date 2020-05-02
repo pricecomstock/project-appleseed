@@ -50,13 +50,16 @@ $family-sans-serif: "Nunito", sans-serif;
 .reading-answers-view {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: stretch;
   align-content: flex-start;
   row-gap: 1em;
   column-gap: 1em;
 
+  overflow-wrap: anywhere;
+  hyphens: auto;
+
   > div {
-    flex: 1 1 24%;
+    flex: 0 1 24%;
   }
 }
