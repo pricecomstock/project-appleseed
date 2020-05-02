@@ -131,6 +131,15 @@ async function getAllPromptsFromCustomSet(id) {
   return dbResults.map((prompt) => prompt.text);
 }
 
+async function getAllDefaultPrompts() {
+  let dbResults = await Prompt.findAll({
+    where: {
+      defaultSet: true,
+    },
+  });
+  return dbResults;
+}
+
 async function createCustomSet(name, description, prompts) {
   let id = await generateUniqueCustomSetId();
   CustomSet.create({

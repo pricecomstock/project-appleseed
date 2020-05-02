@@ -44,10 +44,19 @@ function randomItemFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// FIXME This is probably inefficient on large arrays
 function randomItemsFromArrayWithoutRepeats(arr, n) {
-  let shuffled = getShuffledCopyOfArray(arr);
-  return shuffled.slice(0, n);
+  let arrCopy = [...arr];
+  return popRandomItemsFromArrayWithoutRepeats(arrCopy, n);
+}
+
+// TODO convert this to only handle indexes for max efficiency
+function popRandomItemsFromArrayWithoutRepeats(arr, n) {
+  let selected = [];
+  for (let i = 0; i < n; i++) {
+    let item = arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
+    selected.push(item);
+  }
+  return selected;
 }
 
 function mapToObject(map) {
