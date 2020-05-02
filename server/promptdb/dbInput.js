@@ -33,9 +33,13 @@ function convertPromptTextToArrayAndNormalize(promptText) {
   return promptArray;
 }
 
-async function createCustomPromptSetFromText(promptText) {
+async function createCustomPromptSetFromText(name, description, promptText) {
+  let cleanName = name || "";
+  let cleanDesc = description || "";
+  cleanName = name.slice(0, C.MAX_CUSTOM_SET_NAME_CHARS);
+  cleanDesc = description.slice(0, C.MAX_CUSTOM_SET_NAME_CHARS);
   let promptArray = convertPromptTextToArrayAndNormalize(promptText);
-  return await promptdb.createCustomSet(promptArray);
+  return await promptdb.createCustomSet(cleanName, cleanDesc, promptArray);
 }
 
 module.exports = {

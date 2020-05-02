@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import axios from "../../axios-backend";
+import C from "../../constants";
 
 export default class UploadPrompts extends Component {
-  state = { promptEntry: "", id: "" };
+  state = { name: "", description: "", promptEntry: "", id: "" };
   submitPrompts = () => {
     axios
       .post("/uploadprompts", {
         promptEntry: this.state.promptEntry,
+        name: this.state.name,
+        description: this.state.description,
       })
       .then((res) => {
         let prettyId = res.data.id.replace(/(\w{4}(?!$))/g, "$1-");
@@ -19,6 +22,39 @@ export default class UploadPrompts extends Component {
     return (
       <div className="columns is-vcentered is-centered is-desktop">
         <div className="column is-half">
+          <div className="field">
+            <label className="label">Name</label>
+            <div className="control">
+              <input
+                value={this.state.name}
+                className="input"
+                placeholder="Enter one prompt per line."
+                onChange={(e) =>
+                  this.setState({
+                    name: e.target.value.slice(0, C.MAX_CUSTOM_SET_NAME_CHARS),
+                  })
+                }
+              ></input>
+            </div>
+          </div>
+          <div className="field">
+            <label className="label">Description</label>
+            <div className="control">
+              <input
+                value={this.state.description}
+                className="input"
+                placeholder="Enter one prompt per line."
+                onChange={(e) =>
+                  this.setState({
+                    description: e.target.value.slice(
+                      0,
+                      C.MAX_CUSTOM_SET_DESCRIPTION_CHARS
+                    ),
+                  })
+                }
+              ></input>
+            </div>
+          </div>
           <div className="field">
             <div className="content">
               <p>Paste prompts in below.</p>

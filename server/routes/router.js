@@ -50,10 +50,12 @@ function createRouter(io) {
   });
 
   router.post("/uploadprompts", (req, res) => {
-    let submittedPrompts = req.body.promptEntry;
-    console.log("submitted prompts", submittedPrompts);
     dbInput
-      .createCustomPromptSetFromText(submittedPrompts)
+      .createCustomPromptSetFromText(
+        req.body.name,
+        req.body.description,
+        req.body.promptEntry
+      )
       .then((id) => {
         res.send({ success: true, id: id });
       })

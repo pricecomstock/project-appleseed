@@ -21,17 +21,14 @@ CustomSet.init(
   {
     name: {
       type: Sequelize.STRING(30),
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+      allowNull: true,
+      defaultValue: "custom set",
     },
     description: {
       type: Sequelize.STRING,
       allowNull: true,
     },
     id: {
-      // TODO can we generate this on insert?
       primaryKey: true,
       type: Sequelize.STRING(16),
       unique: true,
@@ -134,10 +131,11 @@ async function getAllPromptsFromCustomSet(id) {
   return dbResults.map((prompt) => prompt.text);
 }
 
-async function createCustomSet(prompts) {
+async function createCustomSet(name, description, prompts) {
   let id = await generateUniqueCustomSetId();
   CustomSet.create({
-    name: "temp",
+    name: name,
+    description: description,
     id: id,
   });
   return await replaceCustomSet(id, prompts);
@@ -158,10 +156,7 @@ async function replaceCustomSet(id, prompts) {
       customSetId: id,
     };
   });
-  let created = await Prompt.bulkCreate(promptsToInsert);
-  Prompt.findAll().then((result) => {
-    // console.log(result);
-  });
+  await Prompt.bulkCreate(promptsToInsert);
   return id;
 }
 
