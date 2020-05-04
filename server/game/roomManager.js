@@ -33,6 +33,7 @@ class RoomManager {
         let roomToUpdate = this.getRoomWithCode(roomCode);
         if (roomToUpdate) {
           roomToUpdate.sendStateToAll();
+          roomToUpdate.sendPlayerDataToAll();
         }
       };
 

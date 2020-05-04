@@ -96,7 +96,7 @@ class GameRoom {
         C.MAX_NAME_CHARS
       );
       playerSocket.playerData.emoji = lodash.toArray(info.emoji)[0];
-      this.sendStateToAll();
+      this.sendPlayerDataToAll();
     });
 
     // Submit an answer to a prompt
@@ -272,6 +272,12 @@ class GameRoom {
     }
   }
 
+  sendPlayerDataToAll() {
+    this.emitToAll("players", {
+      players: this._playerSockets.map((socket) => socket.playerData),
+    });
+  }
+
   sendStateToAll() {
     this.emitToAll("state", this.stateSummary());
   }
@@ -295,7 +301,6 @@ class GameRoom {
   // Relevant parts of state and data combined for sending to clients
   stateSummary() {
     let state = {
-      players: this._playerSockets.map((socket) => socket.playerData),
       currentState: this.state,
     };
     return state;

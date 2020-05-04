@@ -83,7 +83,10 @@ export default class HostView extends Component {
     this.state.socket.on("state", (newGameState) => {
       console.log("Game state updated", newGameState);
       this.setState({ currentState: newGameState.currentState });
-      this.setState({ players: newGameState.players });
+    });
+    this.state.socket.on("players", (data) => {
+      console.log("Players", data);
+      this.setState({ players: data.players });
     });
     this.state.socket.on("adminkeyerror", (data) => {
       console.log("Admin Key Error");

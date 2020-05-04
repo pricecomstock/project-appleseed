@@ -93,7 +93,12 @@ export default class PlayerView extends Component {
       console.log("Game state updated", newGameState);
       this.setState({
         currentState: newGameState.currentState,
-        playerInfo: newGameState.players.find((player) => {
+      });
+    });
+
+    this.state.socket.on("players", (data) => {
+      this.setState({
+        playerInfo: data.players.find((player) => {
           return player.playerId === this.state.playerId;
         }),
       });
