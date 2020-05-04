@@ -204,7 +204,6 @@ class GameRoom {
       if (this.can("newGameSamePlayers")) {
         this._timer.cancel();
         this.newGameSamePlayers();
-        this._currentRoundIndex = 0;
       }
     });
 
@@ -398,21 +397,33 @@ StateMachine.factory(GameRoom, {
       this.emitYetToAnswer();
 
       // Time Limits
-      this.createAndSendTimer(this._options.promptTimeLimit, () => {
-        if (this.can("closePrompts")) {
-          this.closePrompts();
+      this.createAndSendTimer(
+        options.calculatePromptTimeForRound(
+          this._options,
+          this._currentRoundIndex
+        ),
+        () => {
+          if (this.can("closePrompts")) {
+            this.closePrompts();
+          }
         }
-      });
+      );
     },
     onVoting: function () {
       this._currentVotingResults = {};
       this.sendNextFilledPromptToAdmin();
       this.sendVotingOptionsToPlayers();
-      this.createAndSendTimer(this._options.votingTimeLimit, () => {
-        if (this.can("closeVoting")) {
-          this.closeVoting();
+      this.createAndSendTimer(
+        options.calculateVotingTimeLimitForAnswers(
+          this._options,
+          this._currentVotingMatchup.answers.length
+        ),
+        () => {
+          if (this.can("closeVoting")) {
+            this.closeVoting();
+          }
         }
-      });
+      );
       console.log("initiateVoting");
     },
     onCloseVoting: function () {
@@ -474,6 +485,12 @@ StateMachine.factory(GameRoom, {
         scoreboardData: this.calculateScoreboardData(),
       });
       console.log("endGame");
+    },
+    onNewGameSamePlayers: function () {
+      this._currentRoundIndex = 0;
+    },
+    onNewGameNewPlayers: function () {
+      this._currentRoundIndex = 0;
     },
   },
 });
