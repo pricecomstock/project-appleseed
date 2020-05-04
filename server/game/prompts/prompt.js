@@ -58,6 +58,7 @@ class PromptMatchup {
       id: this._id,
       text: this._text,
       answers: [...this._answers],
+      players: this._players,
     };
   }
 }

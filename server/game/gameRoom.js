@@ -118,16 +118,34 @@ class GameRoom {
     });
 
     playerSocket.on("vote", (data) => {
+      const votingMode = this.currentRoundOptions.votingMode;
       // don't count from players who answered this prompt!
+
       // if (this._currentVotingMatchup.answers[data.index][0] !== data.playerId) {
-      this._currentVotingResults[data.playerId] = data.index;
-      // Check if everyone has voted
       if (
-        this.state === "voting" &&
-        Object.keys(this._currentVotingResults).length ===
-          this._playerSockets.length
+        votingMode === options.votingModes.ANY ||
+        // If in NOT_OWN_QUESTIONS mode, make sure player isn't on this prompt
+        (votingMode === options.votingModes.NOT_OWN_QUESTIONS &&
+          !this._currentVotingMatchup.players.includes(
+            playerSocket.playerData.playerId
+          )) ||
+        // If in NOT_OWN_ANSWER mode, make sure player isn't voting for own answer
+        (votingMode === options.votingModes.NOT_OWN_ANSWER &&
+          this._currentVotingMatchup.answers[data.index][0] !==
+            playerSocket.playerData.playerId)
       ) {
-        this._timer.finish();
+        this._currentVotingResults[data.playerId] = data.index;
+        // Check if everyone has voted
+        let maxVotes = this._playerSockets.length;
+        if (votingMode === options.votingModes.NOT_OWN_QUESTIONS) {
+          maxVotes -= this.currentRoundOptions.answersPerPrompt;
+        }
+        if (
+          this.state === "voting" &&
+          Object.keys(this._currentVotingResults).length === maxVotes
+        ) {
+          this._timer.finish();
+        }
       }
     });
   }
@@ -181,7 +199,10 @@ class GameRoom {
     });
 
     adminSocket.on("nextRound", (data) => {
-      if (this.can("nextRound")) {
+      if (
+        this.can("nextRound") &&
+        this._currentRoundIndex < this._options.rounds.length - 1
+      ) {
         this._timer.cancel();
         this.nextRound();
       }
