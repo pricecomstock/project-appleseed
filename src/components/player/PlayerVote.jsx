@@ -9,18 +9,31 @@ export default class PlayerVote extends Component {
         </div>
         <div className="buttons">
           {this.props.currentVotingMatchup.answers &&
-            this.props.currentVotingMatchup.answers.map((answer, index) => {
-              return (
-                <button
-                  className="button is-medium is-fullwidth is-outlined wrapped-text"
-                  onClick={() => {
-                    this.props.submitVote(index);
-                  }}
-                >
-                  <p>{answer[1]}</p>
-                </button>
-              );
-            })}
+            this.props.currentVotingMatchup.answers
+              .map((answer, index) => {
+                return [...answer, index]; // append original index before filtering
+              })
+              .filter((answer) => {
+                // keep if we aren't filtering, or player ID doesn't match
+                return (
+                  !this.props.filterOwnAnswer ||
+                  answer[0] !== this.props.playerId
+                );
+              })
+              .map((answer, buttonIndex) => {
+                let answerIndex = answer[2];
+                return (
+                  <button
+                    className="button is-medium is-fullwidth is-outlined wrapped-text"
+                    onClick={() => {
+                      this.props.submitVote(answerIndex);
+                    }}
+                    key={buttonIndex}
+                  >
+                    <p>{answer[1]}</p>
+                  </button>
+                );
+              })}
         </div>
       </div>
     );

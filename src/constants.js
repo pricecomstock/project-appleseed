@@ -10,6 +10,12 @@ const C = {
   MAX_PROMPT_CHARS: 140,
   MAX_ANSWER_CHARS: 60,
   MAX_NAME_CHARS: 18,
+
+  VOTING_MODES: {
+    NOT_OWN_QUESTIONS: "not own questions", // can't vote for own prompts
+    NOT_OWN_ANSWER: "not own answer", // can vote for other answers on own prompts
+    ANY: "any", // can vote for any answer
+  },
 };
 
 module.exports = C;

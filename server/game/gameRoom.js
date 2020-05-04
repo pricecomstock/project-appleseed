@@ -123,21 +123,22 @@ class GameRoom {
 
       // if (this._currentVotingMatchup.answers[data.index][0] !== data.playerId) {
       if (
-        votingMode === options.votingModes.ANY ||
+        votingMode === C.VOTING_MODES.ANY ||
         // If in NOT_OWN_QUESTIONS mode, make sure player isn't on this prompt
-        (votingMode === options.votingModes.NOT_OWN_QUESTIONS &&
+        (votingMode === C.VOTING_MODES.NOT_OWN_QUESTIONS &&
           !this._currentVotingMatchup.players.includes(
             playerSocket.playerData.playerId
           )) ||
         // If in NOT_OWN_ANSWER mode, make sure player isn't voting for own answer
-        (votingMode === options.votingModes.NOT_OWN_ANSWER &&
+        (votingMode === C.VOTING_MODES.NOT_OWN_ANSWER &&
           this._currentVotingMatchup.answers[data.index][0] !==
             playerSocket.playerData.playerId)
       ) {
+        // console.log(`Counting vote from ${} for ${data.index}`);
         this._currentVotingResults[data.playerId] = data.index;
         // Check if everyone has voted
         let maxVotes = this._playerSockets.length;
-        if (votingMode === options.votingModes.NOT_OWN_QUESTIONS) {
+        if (votingMode === C.VOTING_MODES.NOT_OWN_QUESTIONS) {
           maxVotes -= this.currentRoundOptions.answersPerPrompt;
         }
         if (
@@ -244,6 +245,8 @@ class GameRoom {
 
   givePlayerCurrentInfo(playerSocket) {
     // For reconnects
+    this.sendOptionsToIndividual(playerSocket);
+
     if (playerSocket && playerSocket.playerData.playerId) {
       this.sendStateToIndividual(playerSocket);
       if (this.state === "prompts") {
@@ -270,6 +273,20 @@ class GameRoom {
     for (let playerSocket of this._playerSockets) {
       this.sendUnansweredPromptsToPlayer(playerSocket);
     }
+  }
+
+  sendOptionsToAll() {
+    this.emitToAll("gameoptions", {
+      options: this._options,
+      currentRoundIndex: this._currentRoundIndex,
+    });
+  }
+
+  sendOptionsToIndividual(playerSocket) {
+    playerSocket.emit("gameoptions", {
+      options: this._options,
+      currentRoundIndex: this._currentRoundIndex,
+    });
   }
 
   sendPlayerDataToAll() {
@@ -418,6 +435,7 @@ StateMachine.factory(GameRoom, {
         } of prompts with options:`,
         this.currentRoundOptions
       );
+      this.sendOptionsToAll();
       this.createPromptRound();
       this.sendPromptsToPlayers();
       this.emitYetToAnswer();

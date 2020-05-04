@@ -1,10 +1,7 @@
 const { answersPerPromptOptions } = require("./prompts/prompt");
+const C = require("../../src/constants");
 
-const votingModes = {
-  NOT_OWN_QUESTIONS: "not own questions", // can't vote for own prompts
-  NOT_OWN_ANSWER: "not own answer", // can vote for other answers on own prompts
-  ANY: "any", // can vote for any answer
-};
+const votingModes = C.VOTING_MODES;
 
 function calculatePromptTimeForRound(options, roundIndex) {
   return (
@@ -58,6 +55,5 @@ const defaultOptions = {
 module.exports = {
   calculatePromptTimeForRound,
   calculateVotingTimeLimitForAnswers,
-  votingModes,
   DEFAULT: defaultOptions,
 };

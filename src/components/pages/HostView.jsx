@@ -21,6 +21,9 @@ export default class HostView extends Component {
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
 
+    gameOptions: {},
+    currentRoundIndex: 0,
+
     yetToAnswer: [],
 
     filledPrompt: {},
@@ -88,6 +91,14 @@ export default class HostView extends Component {
       console.log("Players", data);
       this.setState({ players: data.players });
     });
+
+    this.state.socket.on("gameoptions", (data) => {
+      this.setState({
+        gameOptions: data.options,
+        currentRoundIndex: data.currentRoundIndex,
+      });
+    });
+
     this.state.socket.on("adminkeyerror", (data) => {
       console.log("Admin Key Error");
     });

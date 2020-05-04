@@ -17,6 +17,8 @@ export default class PlayerView extends Component {
     roomCode: this.props.match.params.code,
     // players: [],
     currentState: "lobby",
+    gameOptions: {},
+    currentRoundIndex: 0,
     prompts: [],
     promptIndex: 0,
     socket: createSocketClient(),
@@ -104,6 +106,13 @@ export default class PlayerView extends Component {
       });
     });
 
+    this.state.socket.on("gameoptions", (data) => {
+      this.setState({
+        gameOptions: data.options,
+        currentRoundIndex: data.currentRoundIndex,
+      });
+    });
+
     this.state.socket.on("playerIdAssigned", (assignedId) => {
       console.log("player ID assigned: ", assignedId);
       this.setState({ playerId: assignedId, editingPlayerInfo: true });
@@ -116,14 +125,22 @@ export default class PlayerView extends Component {
     });
 
     this.state.socket.on("votingoptions", (data) => {
+      let votingMode = this.state.gameOptions.rounds[
+        this.state.currentRoundIndex
+      ].votingMode;
+      let showVotingOptions = true;
+      // Don't show voting options if player participated in this question
+      // and mode is NOT_OWN_QUESTIONS
+      if (
+        votingMode === C.VOTING_MODES.NOT_OWN_QUESTIONS &&
+        // player was asked this prompt
+        data.currentVotingMatchup.players.includes(this.state.playerId)
+      ) {
+        showVotingOptions = false;
+      }
       this.setState({
         currentVotingMatchup: data.currentVotingMatchup,
-        showVotingOptions: true,
-        // data.currentVotingMatchup.answers.some(
-        //   (answerPair) => {
-        //     answerPair[0] === this.state.playerId;
-        //   }
-        // ),
+        showVotingOptions: showVotingOptions,
         prompts: [],
         promptIndex: 0,
       });
@@ -201,7 +218,18 @@ export default class PlayerView extends Component {
             <PlayerVote
               submitVote={this.submitVote}
               currentVotingMatchup={this.state.currentVotingMatchup}
+              filterOwnAnswer={
+                this.state.gameOptions.rounds[this.state.currentRoundIndex]
+                  .votingMode === C.VOTING_MODES.NOT_OWN_ANSWER
+              }
+              playerId={this.state.playerId}
             ></PlayerVote>
+          )}
+        {this.state.currentState === "voting" &&
+          this.state.showVotingOptions === false && (
+            <p className="has-text-centered is-size-4">
+              Waiting on other players to vote!
+            </p>
           )}
       </div>
     );
