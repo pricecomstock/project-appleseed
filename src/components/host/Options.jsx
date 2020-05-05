@@ -5,6 +5,10 @@ export default class Options extends Component {
     customPromptSetCode: "",
   };
 
+  loadCustomPromptSet = () => {
+    this.props.loadCustomPromptSet(this.state.customPromptSetCode);
+  };
+
   updateOptions = () => {
     this.props.updateOptions();
   };
@@ -28,7 +32,12 @@ export default class Options extends Component {
             ></input>
           </div>
           <div className="control">
-            <button className="button is-info">Load</button>
+            <button
+              className="button is-info"
+              onClick={this.loadCustomPromptSet}
+            >
+              Load
+            </button>
           </div>
         </div>
         {/* <button className="button" onClick={this.updateOptions}>

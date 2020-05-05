@@ -1,6 +1,7 @@
 const { generateBase64Id, adminRoom } = require("./util");
 const StateMachine = require("javascript-state-machine");
 const { PromptRound } = require("./prompts/prompt");
+const { PromptPicker } = require("./prompts/promptPicker");
 const options = require("./options");
 const PointTracker = require("./pointTracker");
 const Timer = require("./timer");
@@ -20,6 +21,7 @@ class GameRoom {
     this._playerSockets = [];
     this._adminSockets = [];
 
+    this._promptPicker = new PromptPicker(); // default prompts
     this._prompts = {};
     this._finalizedMatchupsToSend = [];
 
@@ -229,6 +231,17 @@ class GameRoom {
       }
     });
 
+    adminSocket.on("loadcustomset", (data) => {
+      console.log("Loading custom set", data.code);
+      if (this.state === "lobby") {
+        try {
+          this._promptPicker = PromptPicker.CreateForCustomSet(data.code);
+        } catch (error) {
+          console.error("Custom set doesn't exist");
+        }
+      }
+    });
+
     this._adminSockets.push(adminSocket);
   }
 
@@ -266,7 +279,11 @@ class GameRoom {
   }
 
   createPromptRound() {
-    this._prompts = new PromptRound(this.playerData, this.currentRoundOptions);
+    this._prompts = new PromptRound(
+      this.playerData,
+      this.currentRoundOptions,
+      this._promptPicker
+    );
   }
 
   sendPromptsToPlayers() {

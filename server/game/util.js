@@ -44,6 +44,10 @@ function randomItemFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function popRandomItemFromArray(arr) {
+  return arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
+}
+
 function randomItemsFromArrayWithoutRepeats(arr, n) {
   let arrCopy = [...arr];
   return popRandomItemsFromArrayWithoutRepeats(arrCopy, n);
@@ -75,6 +79,8 @@ module.exports = {
   audienceRoom,
   getShuffledCopyOfArray,
   randomItemFromArray,
+  popRandomItemFromArray,
   randomItemsFromArrayWithoutRepeats,
+  popRandomItemsFromArrayWithoutRepeats,
   mapToObject,
 };

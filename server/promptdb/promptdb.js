@@ -113,11 +113,18 @@ async function generateUniqueCustomSetId() {
 }
 
 async function getAllPromptsFromCustomSet(id) {
+  let normalizedId = id
+    .replace(/[^A-Z]/g, "")
+    .substring(0, 16)
+    .toUpperCase();
   let dbResults = await Prompt.findAll({
     where: {
-      customSetId: id,
+      customSetId: normalizedId,
     },
   });
+  if (dbResults.length === 0) {
+    throw Error("Custom set does not exist");
+  }
   return dbResults.map((prompt) => prompt.text);
 }
 
@@ -163,5 +170,6 @@ module.exports = {
   createCustomSet,
   replaceCustomSet,
   getAllPromptsFromCustomSet,
+  getAllDefaultPrompts,
   initializeDatabase,
 };

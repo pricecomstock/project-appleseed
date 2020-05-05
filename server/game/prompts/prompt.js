@@ -13,15 +13,10 @@ const answersPerPromptOptions = {
 };
 
 class PromptMatchup {
-  constructor(answeringPlayers, allPlayerNames) {
+  constructor(answeringPlayers, prompt) {
     this._players = answeringPlayers;
     // Insert any player names needed
-    this._text = getPrompt()
-      .replace(/_+/g, "______") // normalize blanks
-      .replace(/%p/g, (match, offset, string) => {
-        return `${randomItemFromArray(allPlayerNames)}`;
-      });
-
+    this._text = prompt;
     this._answers = new Map();
 
     // TODO guarantee no duplicates
@@ -64,7 +59,7 @@ class PromptMatchup {
 }
 
 class PromptRound {
-  constructor(playerDatas, roundOptions) {
+  constructor(playerDatas, roundOptions, promptPicker) {
     this._roundOptions = roundOptions;
 
     this._playerNames = playerDatas.map((pd) => {
@@ -72,6 +67,7 @@ class PromptRound {
     });
     this._playerIds = playerDatas.map((pd) => pd.playerId);
 
+    this._promptPicker = promptPicker;
     this._matchups = new Map();
     this._promptsByPlayer = new Map();
     this._unfinishedAnswering = new Set(this._playerIds);
@@ -209,7 +205,13 @@ class PromptRound {
   }
 
   createNewPromptForPlayers(selectedPlayers) {
-    const promptMatchup = new PromptMatchup(selectedPlayers, this._playerNames);
+    let prompt = this._promptPicker
+      .getPrompt()
+      .replace(/_+/g, "______") // normalize blanks
+      .replace(/%p/g, (match, offset, string) => {
+        return `${randomItemFromArray(this._playerNames)}`;
+      });
+    const promptMatchup = new PromptMatchup(selectedPlayers, prompt);
 
     selectedPlayers.forEach((playerId) => {
       let currentPrompts = this._promptsByPlayer.get(playerId);

@@ -6,6 +6,7 @@ import Scoreboard from "../host/Scoreboard";
 import ControlButtons from "../host/ControlButtons";
 import Timer from "../Timer";
 import PlayerList from "../host/PlayerList";
+import Options from "../host/Options";
 
 import createSocketClient from "../../createSocketClient";
 
@@ -56,6 +57,12 @@ export default class HostView extends Component {
   getPlayerInfoById = (playerId) => {
     return this.state.players.find((player) => {
       return player.playerId === playerId;
+    });
+  };
+
+  loadCustomPromptSet = (code) => {
+    this.state.socket.emit("loadcustomset", {
+      code: code,
     });
   };
 
@@ -187,6 +194,7 @@ export default class HostView extends Component {
         {/* Lobby View */}
         {this.state.currentState === "lobby" && (
           <>
+            <Options loadCustomPromptSet={this.loadCustomPromptSet}></Options>
             <LobbyView
               players={this.state.players}
               roomCode={this.state.roomCode}

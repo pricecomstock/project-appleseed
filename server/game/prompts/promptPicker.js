@@ -2,7 +2,12 @@ const {
   getAllDefaultPrompts,
   getAllPromptsFromCustomSet,
 } = require("../../promptdb/promptdb");
-const { randomItemsFromArrayWithoutRepeats } = require("../util");
+const {
+  randomItemsFromArrayWithoutRepeats,
+  popRandomItemsFromArrayWithoutRepeats,
+  randomItemFromArray,
+  popRandomItemFromArray,
+} = require("../util");
 
 var defaultPrompts = [];
 
@@ -18,21 +23,35 @@ function getRandomDefaultPrompts(count) {
   return randomItemsFromArrayWithoutRepeats(defaultPrompts);
 }
 
+function getRandomDefaultPrompt() {
+  return randomItemFromArray(defaultPrompts);
+}
+
 class PromptPicker {
-  constructor(customSetCode) {
-    this._customSetCode = customSetCode;
-    this._customPrompts = [];
-    getAllPromptsFromCustomSet(this._customSetCode).then((prompts) => {
-      this._customPrompts = prompts;
-    });
+  constructor(useCustomSet, customSetCode) {
+    if (useCustomSet) {
+      this._customSetCode = customSetCode;
+      getAllPromptsFromCustomSet(this._customSetCode).then((prompts) => {
+        this._customPrompts = prompts;
+      });
+    } else {
+      this._customSetCode = null;
+      this._customPrompts = [];
+    }
+  }
+
+  static CreateForCustomSet(customSetCode) {
+    return new PromptPicker(true, customSetCode);
   }
 
   getPrompts(count) {
     let selected = [];
     if (count <= this._customPrompts.length) {
       // we have enough custom prompts
-      selected = randomItemsFromArrayWithoutRepeats(this._customPrompts, count);
-      this._customPrompts = this._customPrompts.filter();
+      selected = popRandomItemsFromArrayWithoutRepeats(
+        this._customPrompts,
+        count
+      );
     } else {
       // select all custom prompts
       selected = this._customPrompts;
@@ -44,9 +63,18 @@ class PromptPicker {
     }
     return selected;
   }
+
+  getPrompt() {
+    if (this._customPrompts.length > 0) {
+      return popRandomItemFromArray(this._customPrompts);
+    } else {
+      return getRandomDefaultPrompt();
+    }
+  }
 }
 
 module.exports = {
+  getRandomDefaultPrompt,
   getRandomDefaultPrompts,
   PromptPicker,
 };

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Options from "./Options";
 
 export default class LobbyView extends Component {
   render() {
@@ -20,8 +19,6 @@ export default class LobbyView extends Component {
             Join as Player in New Tab
           </a>
         </div>
-        <hr />
-        <Options></Options>
         <hr />
         <h3 className="title has-text-centered">
           {this.props.players.length}/16 Players:
