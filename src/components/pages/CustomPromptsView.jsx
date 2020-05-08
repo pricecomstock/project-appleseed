@@ -31,7 +31,7 @@ export default class CustomPrompts extends Component {
               })}
               onClick={() => this.setState({ mode: modes.EDIT })}
             >
-              <a>Edit</a>
+              <a>View/Export</a>
             </li>
           </ul>
         </div>
