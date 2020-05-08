@@ -134,7 +134,7 @@ async function getAllDefaultPrompts() {
       defaultSet: true,
     },
   });
-  return dbResults;
+  return dbResults.map((prompt) => prompt.text);
 }
 
 async function createCustomSet(name, description, prompts) {
@@ -166,10 +166,24 @@ async function replaceCustomSet(id, prompts) {
   return id;
 }
 
+async function insertDefaultPrompts(promptObjects) {
+  let promptsToInsert = promptObjects.map((promptObject) => {
+    return {
+      text: promptObject.text,
+      familyFriendly: promptObject.isFamilyFriendly,
+      usesPlayerName: promptObject.text.search(/%p/g) != -1,
+      defaultSet: true,
+      customSetId: null,
+    };
+  });
+  await Prompt.bulkCreate(promptsToInsert);
+}
+
 module.exports = {
   createCustomSet,
   replaceCustomSet,
   getAllPromptsFromCustomSet,
+  insertDefaultPrompts,
   getAllDefaultPrompts,
   initializeDatabase,
 };

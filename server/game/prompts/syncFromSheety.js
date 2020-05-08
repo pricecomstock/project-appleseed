@@ -1,18 +1,30 @@
 const axios = require("axios");
+const {
+  initializeDatabase,
+  insertDefaultPrompts,
+} = require("../../promptdb/promptdb");
 const fs = require("fs");
 
 const sheetyUrl =
   "https://v2-api.sheety.co/c732e4da3ff5d7345f492f050ab149e9/appleseed/prompts";
-const fileName = "./server/game/prompts/sheety.json";
+// const fileName = "./server/game/prompts/sheety.json";
 
-function sync() {
+async function sync() {
+  await initializeDatabase();
   axios
     .get(sheetyUrl)
     .then((res) => {
-      let prompts = res.data.prompts.map((prompt) => {
-        return prompt["yourPrompt:"];
+      let promptObjects = res.data.prompts.map((promptJson) => {
+        return {
+          text: promptJson["yourPrompt:"],
+          isFamilyFriendly:
+            promptJson["flags"] &&
+            promptJson["flags"].search(/NOT Family Friendly/g) != -1,
+        };
       });
-      fs.writeFileSync(fileName, JSON.stringify({ prompts }));
+      insertDefaultPrompts(promptObjects).then((result) =>
+        console.log("Inserted prompts!")
+      );
     })
     .catch((e) => {
       console.error("Error:", e);

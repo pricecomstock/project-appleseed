@@ -14,6 +14,7 @@ var defaultPrompts = [];
 getAllDefaultPrompts()
   .then((prompts) => {
     defaultPrompts = prompts;
+    console.log(`Loaded ${prompts.length} default prompts`);
   })
   .catch((err) => {
     console.error("Uh oh, something went wrong loading the prompt DB");
