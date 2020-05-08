@@ -7,8 +7,13 @@ if (process.env.NODE_ENV === "development") {
   baseURL = "http://localhost:4001/api";
 }
 
-const instance = axios.create({
+const api = axios.create({
   baseURL: baseURL,
 });
 
-export default instance;
+// api.interceptors.request.use((req) => {
+//   console.log("API Request: ", req);
+//   return req;
+// });
+
+export default api;

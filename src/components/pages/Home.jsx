@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "../../axios-backend";
+import { Link } from "react-router-dom";
 
 export default class Home extends Component {
   state = { enteredCode: "" };
@@ -101,7 +102,7 @@ export default class Home extends Component {
               </button>
             </div>
             <hr />
-            Or <a href="/uploadprompts">create your own set of prompts!</a>
+            Or <Link to="/customprompts">create your own set of prompts!</Link>
           </div>
         </div>
       </div>
