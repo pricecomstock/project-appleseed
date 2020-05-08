@@ -205,12 +205,18 @@ export default class HostView extends Component {
 
         <hr />
         {this.state.currentState === "prompts" && (
-          <PlayerList
-            vibrate={true}
-            players={this.state.players.filter((player) => {
-              return this.state.yetToAnswer.includes(player.playerId);
-            })}
-          ></PlayerList>
+          <div>
+            <h1 className="has-text-centered is-size-2">
+              Answer prompts on your devices now!
+            </h1>
+            <hr />
+            <PlayerList
+              vibrate={true}
+              players={this.state.players.filter((player) => {
+                return this.state.yetToAnswer.includes(player.playerId);
+              })}
+            ></PlayerList>
+          </div>
         )}
         {(this.state.currentState === "reading" ||
           this.state.currentState === "voting" ||
