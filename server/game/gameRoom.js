@@ -235,7 +235,12 @@ class GameRoom {
       console.log("Loading custom set", data.code);
       if (this.state === "lobby") {
         try {
-          this._promptPicker = PromptPicker.CreateForCustomSet(data.code);
+          this._promptPicker = PromptPicker.CreateForCustomSet(
+            data.code,
+            () => {
+              this.sendCustomPromptStatus();
+            }
+          );
         } catch (error) {
           console.error("Custom set doesn't exist");
         }
@@ -304,6 +309,13 @@ class GameRoom {
       options: this._options,
       currentRoundIndex: this._currentRoundIndex,
     });
+  }
+
+  sendCustomPromptStatus() {
+    this.emitToAdmins(
+      "custompromptstatus",
+      this._promptPicker.customSetSummary
+    );
   }
 
   sendPlayerDataToAll() {
@@ -549,9 +561,11 @@ StateMachine.factory(GameRoom, {
     },
     onNewGameSamePlayers: function () {
       this._currentRoundIndex = 0;
+      this.sendCustomPromptStatus();
     },
     onNewGameNewPlayers: function () {
       this._currentRoundIndex = 0;
+      this.sendCustomPromptStatus();
     },
   },
 });

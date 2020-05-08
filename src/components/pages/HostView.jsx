@@ -22,6 +22,8 @@ export default class HostView extends Component {
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
     socket: createSocketClient(),
 
+    customSetData: {},
+
     gameOptions: {},
     currentRoundIndex: 0,
 
@@ -141,6 +143,13 @@ export default class HostView extends Component {
       this.startTimer(data.msTotal, data.msRemaining);
     });
 
+    this.state.socket.on("custompromptstatus", (data) => {
+      console.log("Custom Prompt Status", data);
+      this.setState({
+        customSetData: data,
+      });
+    });
+
     this.joinThisRoomAsAdmin();
   }
 
@@ -194,7 +203,10 @@ export default class HostView extends Component {
         {/* Lobby View */}
         {this.state.currentState === "lobby" && (
           <>
-            <Options loadCustomPromptSet={this.loadCustomPromptSet}></Options>
+            <Options
+              loadCustomPromptSet={this.loadCustomPromptSet}
+              customSetData={this.state.customSetData}
+            ></Options>
             <LobbyView
               players={this.state.players}
               roomCode={this.state.roomCode}

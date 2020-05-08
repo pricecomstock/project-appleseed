@@ -1,6 +1,6 @@
 const {
   getAllDefaultPrompts,
-  getAllPromptsFromCustomSet,
+  getCustomSet,
 } = require("../../promptdb/promptdb");
 const {
   randomItemsFromArrayWithoutRepeats,
@@ -29,20 +29,34 @@ function getRandomDefaultPrompt() {
 }
 
 class PromptPicker {
-  constructor(useCustomSet, customSetCode) {
+  constructor(useCustomSet, customSetCode, customSetLoadedCallback) {
     if (useCustomSet) {
       this._customSetCode = customSetCode;
-      getAllPromptsFromCustomSet(this._customSetCode).then((prompts) => {
-        this._customPrompts = prompts;
-      });
+      getCustomSet(this._customSetCode)
+        .then((customSet) => {
+          this._customPrompts = customSet.prompts;
+          this._customPromptSetData = customSet.metadata;
+          customSetLoadedCallback();
+        })
+        .catch((err) => console.error(err));
     } else {
       this._customSetCode = null;
       this._customPrompts = [];
+      this._customPromptSetData = { name: "default", description: "" };
     }
   }
 
-  static CreateForCustomSet(customSetCode) {
-    return new PromptPicker(true, customSetCode);
+  static CreateForCustomSet(customSetCode, customSetLoadedCallback) {
+    return new PromptPicker(true, customSetCode, customSetLoadedCallback);
+  }
+
+  get customSetSummary() {
+    return {
+      numRemaining: this._customPrompts.length,
+      name: this._customPromptSetData.name,
+      description: this._customPromptSetData.description,
+      code: this._customSetCode,
+    };
   }
 
   getPrompts(count) {

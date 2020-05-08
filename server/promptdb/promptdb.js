@@ -128,6 +128,30 @@ async function getAllPromptsFromCustomSet(id) {
   return dbResults.map((prompt) => prompt.text);
 }
 
+async function getCustomSetData(id) {
+  return await CustomSet.findOne({
+    where: {
+      id: id,
+    },
+  });
+}
+
+async function getCustomSet(id) {
+  let normalizedId = id
+    .replace(/[^A-Z]/g, "")
+    .substring(0, 16)
+    .toUpperCase();
+
+  let [prompts, metadata] = await Promise.all([
+    getAllPromptsFromCustomSet(normalizedId),
+    getCustomSetData(normalizedId),
+  ]);
+  if (!metadata) {
+    throw Error("Custom set does not exist");
+  }
+  return { prompts: prompts.map((prompt) => prompt.text), metadata };
+}
+
 async function getAllDefaultPrompts() {
   let dbResults = await Prompt.findAll({
     where: {
@@ -192,6 +216,8 @@ module.exports = {
   createCustomSet,
   replaceCustomSet,
   getAllPromptsFromCustomSet,
+  getCustomSetData,
+  getCustomSet,
   replaceDefaultPrompts,
   insertDefaultPrompts,
   getAllDefaultPrompts,

@@ -39,6 +39,7 @@ export default class Options extends Component {
               Load
             </button>
           </div>
+          {JSON.stringify(this.props.customSetData)}
         </div>
         {/* <button className="button" onClick={this.updateOptions}>
           Update Options
