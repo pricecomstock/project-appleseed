@@ -1,7 +1,7 @@
 var express = require("express");
 var RoomManager = require("../game/roomManager.js");
 const dbInput = require("../promptdb/dbInput");
-const { getAllPromptsFromCustomSet } = require("../promptdb/promptdb");
+const { getCustomSet } = require("../promptdb/promptdb");
 
 function createRouter(io) {
   // Set up router
@@ -21,10 +21,9 @@ function createRouter(io) {
   //-----//
 
   router.get("/loadcustomsetforediting/:id", function (req, res) {
-    getAllPromptsFromCustomSet(req.params.id)
-      .then((prompts) => {
-        console.log(prompts);
-        res.json({ prompts: prompts });
+    getCustomSet(req.params.id)
+      .then((set) => {
+        res.json(set);
       })
       .catch((err) => {
         console.error(err);

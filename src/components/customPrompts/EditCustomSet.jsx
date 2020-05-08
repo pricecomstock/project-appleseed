@@ -1,10 +1,37 @@
 import React, { Component } from "react";
 import axios from "../../axios-backend";
 
+function download(filename, text) {
+  var element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
 export default class EditCustomSet extends Component {
   state = {
     customSetCode: "",
     prompts: [],
+    metadata: {
+      name: "",
+      description: "",
+    },
+  };
+
+  downloadTextFile = () => {
+    download(
+      `prompts_${this.state.metadata.name}.txt`,
+      this.state.prompts.join("\n")
+    );
   };
 
   loadCustomSet = () => {
@@ -22,7 +49,10 @@ export default class EditCustomSet extends Component {
       .get(`loadcustomsetforediting/${this.state.customSetCode}`)
       .then((res) => {
         console.log(res.data);
-        this.setState({ prompts: res.data.prompts });
+        this.setState({
+          prompts: res.data.prompts,
+          metadata: res.data.metadata,
+        });
       })
       .catch((err) => console.error(err));
   };
@@ -62,10 +92,21 @@ export default class EditCustomSet extends Component {
             </div>
           </div>
         )}
-        {this.state.prompts.length > 0 &&
-          this.state.prompts.map((prompt, index) => {
-            return <p key={index}>{prompt}</p>;
-          })}
+        {this.state.prompts.length > 0 && (
+          <>
+            <button
+              className="button is-primary is-outlined"
+              onClick={this.downloadTextFile}
+            >
+              Download .txt
+            </button>
+            <div>
+              {this.state.prompts.map((prompt, index) => {
+                return <p key={index}>{prompt}</p>;
+              })}
+            </div>
+          </>
+        )}
       </div>
     );
   }
