@@ -7,6 +7,7 @@ import Home from "./components/pages/Home";
 import HostView from "./components/pages/HostView";
 import PlayerView from "./components/pages/PlayerView";
 import CustomPrompts from "./components/pages/CustomPromptsView";
+import TestView from "./components/pages/TestView";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/host/:code" component={HostView}></Route>
           <Route exact path="/play/:code" component={PlayerView}></Route>
           <Route path="/customprompts" component={CustomPrompts}></Route>
+          <Route path="/test" component={TestView}></Route>
         </Switch>
       </div>
     </Router>
