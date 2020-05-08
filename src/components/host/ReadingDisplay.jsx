@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import classNames from "classnames";
+import AnswerCard from "./AnswerCard";
 
 export default class ReadingDisplay extends Component {
   textClass = () => {
@@ -29,68 +29,27 @@ export default class ReadingDisplay extends Component {
                 {this.props.prompt.answers &&
                   this.props.prompt.answers.map((answer, answerIndex) => {
                     return (
-                      <div className="" key={answerIndex}>
-                        <div className="box has-text-centered">
-                          <h3 className={classNames(this.textClass())}>
-                            {answer[1]}
-                          </h3>
-                          {this.props.votingIsComplete && (
-                            <span className="tag is-info is-large">
-                              {this.props.getPlayerInfoById(answer[0]).emoji}{" "}
-                              {this.props.getPlayerInfoById(answer[0]).nickname}
-                            </span>
-                          )}
-                        </div>
-                        {this.props.votingIsComplete && (
-                          <div>
-                            <div className="tags">
-                              <span className="tag is-success is-large">
-                                +{" "}
-                                {this.props.scoringDetails &&
-                                  this.props.scoringDetails.pointsArray[
-                                    answerIndex
-                                  ]}
-                              </span>
-                              {this.props.scoringDetails.isShutout &&
-                                this.props.scoringDetails.shutoutIndex ===
-                                  answerIndex && (
-                                  <span className="tag is-success is-light is-large">
-                                    + {this.props.scoringDetails.shutoutPoints}{" "}
-                                    for shutout!
-                                  </span>
-                                )}
-                            </div>
-                            <div className="tags">
-                              {Object.entries(this.props.votingResults).map(
-                                (entry, voterIndex) => {
-                                  let playerId = entry[0];
-                                  let voteIndex = entry[1];
-
-                                  if (voteIndex === answerIndex) {
-                                    return (
-                                      <span
-                                        className="tag is-medium is-light"
-                                        key={voterIndex}
-                                      >
-                                        {/* FIXME this is probably very bad performance */}
-                                        {
-                                          this.props.getPlayerInfoById(playerId)
-                                            .emoji
-                                        }
-                                        &nbsp;
-                                        {
-                                          this.props.getPlayerInfoById(playerId)
-                                            .nickname
-                                        }
-                                      </span>
-                                    );
-                                  }
-                                }
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      <AnswerCard
+                        key={answerIndex}
+                        text={answer[1]}
+                        playerData={this.props.getPlayerInfoById(answer[0])}
+                        votingIsComplete={this.props.votingIsComplete}
+                        basePoints={
+                          this.props.scoringDetails.pointsArray[answerIndex]
+                        }
+                        isShutout={
+                          this.props.scoringDetails.isShutout &&
+                          this.props.scoringDetails.shutoutIndex === answerIndex
+                        }
+                        shutoutPoints={this.props.scoringDetails.shutoutPoints}
+                        voters={this.props.votingResults
+                          .filter((entry) => {
+                            return entry[1] === answerIndex;
+                          })
+                          .map((entry) => {
+                            this.props.getPlayerInfoById(entry[0]);
+                          })} // FIXME performance?
+                      ></AnswerCard>
                     );
                   })}
               </div>
