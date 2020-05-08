@@ -205,7 +205,7 @@ export default class HostView extends Component {
           <>
             <Options
               loadCustomPromptSet={this.loadCustomPromptSet}
-              customSetData={this.state.customSetData}
+              loadedCustomSetData={this.state.customSetData}
             ></Options>
             <LobbyView
               players={this.state.players}

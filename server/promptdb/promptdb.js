@@ -149,7 +149,7 @@ async function getCustomSet(id) {
   if (!metadata) {
     throw Error("Custom set does not exist");
   }
-  return { prompts: prompts.map((prompt) => prompt.text), metadata };
+  return { prompts, metadata };
 }
 
 async function getAllDefaultPrompts() {

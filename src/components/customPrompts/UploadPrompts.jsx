@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "../../axios-backend";
 import C from "../../constants";
+import { prettyCustomPromptSetId } from "../../util/stringFilter";
 
 export default class UploadPrompts extends Component {
   state = { name: "", description: "", promptEntry: "", id: "" };
@@ -12,7 +13,7 @@ export default class UploadPrompts extends Component {
         description: this.state.description,
       })
       .then((res) => {
-        let prettyId = res.data.id.replace(/(\w{4}(?!$))/g, "$1-");
+        let prettyId = prettyCustomPromptSetId(res.data.id);
         this.setState({ promptEntry: "", id: prettyId });
       })
       .catch((err) => console.error(err));
