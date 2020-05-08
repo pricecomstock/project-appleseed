@@ -1,7 +1,7 @@
 const axios = require("axios");
 const {
   initializeDatabase,
-  insertDefaultPrompts,
+  replaceDefaultPrompts,
 } = require("../../promptdb/promptdb");
 const fs = require("fs");
 
@@ -10,7 +10,7 @@ const sheetyUrl =
 // const fileName = "./server/game/prompts/sheety.json";
 
 async function sync() {
-  await initializeDatabase();
+  // await initializeDatabase();
   axios
     .get(sheetyUrl)
     .then((res) => {
@@ -22,7 +22,7 @@ async function sync() {
             promptJson["flags"].search(/NOT Family Friendly/g) != -1,
         };
       });
-      insertDefaultPrompts(promptObjects).then((result) =>
+      replaceDefaultPrompts(promptObjects).then((result) =>
         console.log("Inserted prompts!")
       );
     })
@@ -33,3 +33,5 @@ async function sync() {
 }
 
 sync();
+
+module.exports = sync;

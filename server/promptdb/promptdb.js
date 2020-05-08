@@ -166,6 +166,15 @@ async function replaceCustomSet(id, prompts) {
   return id;
 }
 
+async function replaceDefaultPrompts(promptObjects) {
+  await Prompt.destroy({
+    where: {
+      defaultSet: true,
+    },
+  });
+  return await insertDefaultPrompts(promptObjects);
+}
+
 async function insertDefaultPrompts(promptObjects) {
   let promptsToInsert = promptObjects.map((promptObject) => {
     return {
@@ -183,6 +192,7 @@ module.exports = {
   createCustomSet,
   replaceCustomSet,
   getAllPromptsFromCustomSet,
+  replaceDefaultPrompts,
   insertDefaultPrompts,
   getAllDefaultPrompts,
   initializeDatabase,
