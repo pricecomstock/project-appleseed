@@ -20,9 +20,11 @@ export default class LobbyView extends Component {
           </a>
         </div>
         <hr />
-        <h3 className="title has-text-centered">
-          {this.props.players.length}/16 Players:
-        </h3>
+        {this.props.players && (
+          <h3 className="title has-text-centered">
+            {this.props.players.length}/16 Players:
+          </h3>
+        )}
       </div>
     );
   }

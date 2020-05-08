@@ -1,6 +1,21 @@
 import React, { Component } from "react";
+import classNames from "classnames";
 
 export default class ReadingDisplay extends Component {
+  textClass = () => {
+    if (this.props.prompt.answers) {
+      if (this.props.prompt.answers.length < 4) {
+        return ["is-size-3"];
+      } else if (this.props.prompt.answers.length < 8) {
+        return ["is-size-4"];
+      } else {
+        return ["is-size-5"];
+      }
+    } else {
+      return ["is-size-4"];
+    }
+  };
+
   render() {
     return (
       <div>
@@ -16,7 +31,9 @@ export default class ReadingDisplay extends Component {
                     return (
                       <div className="" key={answerIndex}>
                         <div className="box has-text-centered">
-                          <h3 className="is-size-3">{answer[1]}</h3>
+                          <h3 className={classNames(this.textClass())}>
+                            {answer[1]}
+                          </h3>
                           {this.props.votingIsComplete && (
                             <span className="tag is-info is-large">
                               {this.props.getPlayerInfoById(answer[0]).emoji}{" "}
