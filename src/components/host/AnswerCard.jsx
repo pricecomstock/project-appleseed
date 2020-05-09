@@ -5,38 +5,33 @@ export default class AnswerCard extends Component {
   render() {
     console.log("voters", this.props.voters);
     return (
-      <div className="">
-        <div className="box has-text-centered">
-          <h3 className="is-size-4">{this.props.text}</h3>
-          {this.props.votingIsComplete && (
-            <span className="tag is-info is-large">
-              {this.props.playerData.emoji} {this.props.playerData.nickname}
-            </span>
-          )}
+      <div className="answer-card-container">
+        <div className="answer-card flex-center-text">
+          <p className="is-size-4 answer-text">{this.props.text}</p>
         </div>
         {this.props.votingIsComplete && (
-          <div>
-            <div className="tags">
-              <span className="tag is-success is-large">
-                + {this.props.basePoints}
-              </span>
-              {this.props.isShutout && (
-                <span className="tag is-success is-light is-large">
-                  + {this.props.shutoutPoints} for shutout!
-                </span>
-              )}
-            </div>
-            <div className="tags">
-              {this.props.voters.map((playerData, voterIndex) => {
-                return (
-                  <span className="tag is-medium is-light" key={voterIndex}>
-                    {playerData.emoji}
-                    &nbsp;
-                    {playerData.nickname}
-                  </span>
-                );
-              })}
-            </div>
+          <div className="author answer-badge">
+            <div className="answer-badge-emoji">
+              {this.props.playerData.emoji}
+            </div>{" "}
+            <div>{this.props.playerData.nickname}</div>
+          </div>
+        )}
+        {this.props.votingIsComplete && (
+          <div className="points">
+            {this.props.isShutout && (
+              <div className="answer-badge">
+                + {this.props.shutoutPoints} (shutout)
+              </div>
+            )}
+            <div className="answer-badge">+ {this.props.basePoints}</div>
+          </div>
+        )}
+        {this.props.votingIsComplete && this.props.voters.length > 0 && (
+          <div className="voters answer-badge answer-badge-emoji">
+            {this.props.voters.map((playerData, voterIndex) => {
+              return <span key={voterIndex}>{playerData.emoji}</span>;
+            })}
           </div>
         )}
       </div>

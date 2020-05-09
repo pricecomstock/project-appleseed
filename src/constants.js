@@ -9,7 +9,7 @@ const C = {
 
   MAX_PROMPT_CHARS: 140,
   MAX_ANSWER_CHARS: 60,
-  MAX_NAME_CHARS: 18,
+  MAX_NAME_CHARS: 14,
 
   VOTING_MODES: {
     NOT_OWN_QUESTIONS: "not own questions", // can't vote for own prompts

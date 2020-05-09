@@ -1,57 +1,128 @@
 import React, { Component } from "react";
 import ReadingDisplay from "../host/ReadingDisplay";
+import C from "../../constants";
 
-const testData = {
-  prompt: {
-    text:
-      "What's a reasonable prompt? Not too long, not too short. Just right?",
-    answers: [
-      ["id", "Hell yeah"],
-      ["id", "Cool!"],
-      ["id", "A longer answer with a few short words! Maybe a little tag"],
-      ["id", "Another normal answer"],
-      ["id", "A looooooooooooooooooooooooooooooooooooooooooooooong word"],
-      ["id", "How reasonable"],
-    ],
-  },
-  playerData: {
+const randomItemFromArray = (arr) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
+const nicknames = ["Cool Player", "pc", "SaRaH", "Joe", "Longname Fryer"];
+const emoji = ["⚡", "🌈", "🍑", "🥑", "🌯", "🌭", "🌵", "🏈", "📀", "🗿"];
+const randomPlayerData = (_id) => {
+  return {
     connected: true,
-    nickname: "CoolPlayer",
-    emoji: "🍻",
+    nickname: randomItemFromArray(nicknames),
+    emoji: randomItemFromArray(emoji),
     playerId: "abcdefgi123",
-  },
-  scoringDetails: {
-    pointsArray: [6000, 0, 0, 0, 0, 0],
-    isShutout: true,
-    shutoutIndex: 0,
-    shutoutPoints: "1000",
-  },
-  votingResults: { a: 0, b: 0, c: 0, d: 0, e: 0, f: 1 },
+  };
+};
+
+const generateTestData = (numPlayers) => {
+  const generateAnswer = () => {
+    const words = [
+      "a",
+      "ok",
+      "the",
+      "cool",
+      "nice",
+      "damn",
+      "great",
+      "while",
+      "friend",
+      "tastier",
+      "goodbye",
+      "kombucha",
+      "greatest",
+      "reasonable",
+      "looooooooooooooong",
+      "suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuper",
+    ];
+    const numWords = Math.floor(Math.random() * 5) + 3;
+    const answerWords = [];
+    for (let i = 0; i < numWords; i++) {
+      answerWords.push(words[Math.floor(Math.random() * words.length)]);
+    }
+    return answerWords.join(" ").substr(0, C.MAX_ANSWER_CHARS);
+  };
+  const generateAnswerPairs = (number) => {
+    const pairs = [];
+    for (let i = 0; i < number; i++) {
+      pairs.push(["id", generateAnswer()]);
+    }
+    return pairs;
+  };
+  const generateVotingResults = (numPlayers) => {
+    const results = {};
+    const keys = Array(numPlayers)
+      .fill(0)
+      .map(() => {
+        return Math.random() * 1000; // this might collide sometimes but its test data so oh well
+      });
+    for (const key of keys) {
+      let setToZero = Math.random() < 0.7; // set most answers to 0 for testing longer groups
+      results[key] = setToZero ? 0 : Math.floor(Math.random() * numPlayers);
+    }
+    return results;
+  };
+  return {
+    prompt: {
+      text:
+        "What's a reasonable prompt? Not too long, not too short. Just right?",
+      answers: generateAnswerPairs(numPlayers),
+    },
+    scoringDetails: {
+      pointsArray: Array(numPlayers).fill(12000),
+      isShutout: true,
+      shutoutIndex: 0,
+      shutoutPoints: "1000",
+    },
+    votingResults: generateVotingResults(numPlayers),
+  };
 };
 
 export default class TestView extends Component {
   state = {
     rd_votingComplete: true,
+    testData: generateTestData(6),
+    numPlayers: 6,
   };
   toggleVotingComplete = () => {
     this.setState({
       rd_votingComplete: !this.state.rd_votingComplete,
     });
   };
+
+  setNumPlayers = (numPlayers) => {
+    this.setState({
+      numPlayers: numPlayers,
+      testData: generateTestData(numPlayers),
+    });
+  };
+
   render() {
     return (
       <div>
-        <button onClick={this.toggleVotingComplete}>
+        <button className="button" onClick={this.toggleVotingComplete}>
           Toggle Voting Complete
         </button>
+        <button
+          className="button"
+          onClick={() => this.setNumPlayers(this.state.numPlayers - 1)}
+        >
+          Remove Player
+        </button>
+        <button
+          className="button"
+          onClick={() => this.setNumPlayers(this.state.numPlayers + 1)}
+        >
+          Add Player
+        </button>
         <ReadingDisplay
-          prompt={testData.prompt}
-          votingResults={testData.votingResults}
-          scoringDetails={testData.scoringDetails}
+          prompt={this.state.testData.prompt}
+          votingResults={this.state.testData.votingResults}
+          scoringDetails={this.state.testData.scoringDetails}
           votingIsComplete={this.state.rd_votingComplete}
-          getPlayerInfoById={(id) => {
-            return testData.playerData;
-          }}
+          getPlayerInfoById={randomPlayerData}
         ></ReadingDisplay>
       </div>
     );
