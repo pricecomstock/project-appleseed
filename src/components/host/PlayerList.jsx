@@ -8,10 +8,12 @@ export default class PlayerList extends Component {
         <div className="lobby-player-view">
           {this.props.players.map((player, index) => (
             <div
-              className={classNames("box is-size-4 freshly-added", {
-                vibrate: this.props.vibrate,
-              })}
+              className={classNames(
+                "lobby-player-list-item is-size-4",
+                this.props.extraCssClasses
+              )}
               key={index}
+              style={{ "animation-duration": "1.5s" }}
             >
               <span className="is-size-2">{player.emoji}</span>{" "}
               {player.nickname}

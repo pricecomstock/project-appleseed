@@ -43,8 +43,14 @@ $family-sans-serif: "Nunito", sans-serif;
   align-content: flex-start;
 
   > div {
-    flex: 0 1 23%;
+    flex: 0 1 20%;
   }
+}
+
+.lobby-player-list-item {
+  border: 2px solid black;
+  border-radius: 8px;
+  margin: 1rem;
 }
 
 .reading-answers-view {

@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./mvp.css";
 import "./appleseed.scss";
+import "@loadingio/loading.css/dist/loading.css"; // TODO use min
 
 import Home from "./components/pages/Home";
 import HostView from "./components/pages/HostView";

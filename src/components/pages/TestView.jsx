@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ReadingDisplay from "../host/ReadingDisplay";
+import PlayerList from "../host/PlayerList";
 import C from "../../constants";
 
 const randomItemFromArray = (arr) => {
@@ -77,6 +78,11 @@ const generateTestData = (numPlayers) => {
       shutoutPoints: "1000",
     },
     votingResults: generateVotingResults(numPlayers),
+    players: Array(numPlayers)
+      .fill(0)
+      .map(() => {
+        return randomPlayerData();
+      }),
   };
 };
 
@@ -102,6 +108,7 @@ export default class TestView extends Component {
   render() {
     return (
       <div>
+        <h1 className="title">ReadingView</h1>
         <button className="button" onClick={this.toggleVotingComplete}>
           Toggle Voting Complete
         </button>
@@ -124,6 +131,12 @@ export default class TestView extends Component {
           votingIsComplete={this.state.rd_votingComplete}
           getPlayerInfoById={randomPlayerData}
         ></ReadingDisplay>
+        <hr />
+        <h1 className="title">PlayerList</h1>
+        <PlayerList
+          players={this.state.testData.players}
+          extraCssClasses="ld ld-bounce"
+        ></PlayerList>
       </div>
     );
   }
