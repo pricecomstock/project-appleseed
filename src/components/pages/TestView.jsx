@@ -72,7 +72,11 @@ const generateTestData = (numPlayers) => {
       answers: generateAnswerPairs(numPlayers),
     },
     scoringDetails: {
-      pointsArray: Array(numPlayers).fill(12000),
+      pointsArray: Array(numPlayers)
+        .fill(0)
+        .map(() => {
+          return Math.random() < 0.4 ? Math.floor(Math.random() * 12000) : 0;
+        }),
       isShutout: true,
       shutoutIndex: 0,
       shutoutPoints: "1000",

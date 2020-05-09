@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import classNames from "classnames";
+import { CSSTransition } from "react-transition-group";
+import "../../transitions.css";
 
 export default class AnswerCard extends Component {
   render() {
@@ -10,12 +12,18 @@ export default class AnswerCard extends Component {
           <p className="answer-text">{this.props.text}</p>
         </div>
         {this.props.votingIsComplete && (
-          <div className="author answer-badge">
-            <div className="answer-badge-emoji">
-              {this.props.playerData.emoji}
-            </div>{" "}
-            <div>{this.props.playerData.nickname}</div>
-          </div>
+          <CSSTransition
+            in={this.props.votingIsComplete}
+            timeout={500}
+            classNames="pop-in"
+          >
+            <div className="author answer-badge">
+              <div className="answer-badge-emoji">
+                {this.props.playerData.emoji}
+              </div>{" "}
+              <div>{this.props.playerData.nickname}</div>
+            </div>
+          </CSSTransition>
         )}
         {this.props.votingIsComplete && (
           <div className="points">
@@ -24,10 +32,14 @@ export default class AnswerCard extends Component {
                 className="shutout answer-badge ld ld-tick"
                 style={{ "animation-duration": "1.5s" }}
               >
-                + {this.props.shutoutPoints} (shutout)
+                + {this.props.shutoutPoints} shutout
               </div>
             )}
-            <div className="answer-badge ld ld-beat">
+            <div
+              className={classNames("answer-badge", {
+                "nonzero ld ld-beat": this.props.basePoints > 0,
+              })}
+            >
               + {this.props.basePoints}
             </div>
           </div>
