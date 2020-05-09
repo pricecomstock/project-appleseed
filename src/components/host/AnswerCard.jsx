@@ -7,7 +7,7 @@ export default class AnswerCard extends Component {
     return (
       <div className="answer-card-container">
         <div className="answer-card flex-center-text">
-          <p className="is-size-4 answer-text">{this.props.text}</p>
+          <p className="answer-text">{this.props.text}</p>
         </div>
         {this.props.votingIsComplete && (
           <div className="author answer-badge">
@@ -20,11 +20,16 @@ export default class AnswerCard extends Component {
         {this.props.votingIsComplete && (
           <div className="points">
             {this.props.isShutout && (
-              <div className="answer-badge">
+              <div
+                className="shutout answer-badge ld ld-tick"
+                style={{ "animation-duration": "1.5s" }}
+              >
                 + {this.props.shutoutPoints} (shutout)
               </div>
             )}
-            <div className="answer-badge">+ {this.props.basePoints}</div>
+            <div className="answer-badge ld ld-beat">
+              + {this.props.basePoints}
+            </div>
           </div>
         )}
         {this.props.votingIsComplete && this.props.voters.length > 0 && (

@@ -38,7 +38,7 @@ $family-sans-serif: "Nunito", sans-serif;
 .lobby-player-view {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: flex-start;
   align-content: flex-start;
 
@@ -98,6 +98,10 @@ $family-sans-serif: "Nunito", sans-serif;
   > p.answer-text {
     flex: 0 0 100%;
     text-align: center;
+    font-size: 1.5vw;
+    @media (min-aspect-ratio: 2/1) {
+      font-size: 3vh;
+    }
   }
 }
 
@@ -157,6 +161,7 @@ $family-sans-serif: "Nunito", sans-serif;
   align-items: right;
   align-content: center;
   flex-wrap: wrap;
+  font-size: 1.25rem;
   // font-size: 1.75rem;
   // background-color: $info;
   // border-radius: 8px;
@@ -164,7 +169,11 @@ $family-sans-serif: "Nunito", sans-serif;
   // padding: 0.25rem 0.5rem;
   > div {
     background-color: $green;
-    font-size: 1.25rem;
     color: white;
+  }
+
+  > div.shutout {
+    font-size: 1.5rem;
+    z-index: 3;
   }
 }
