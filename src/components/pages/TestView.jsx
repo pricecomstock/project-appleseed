@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReadingDisplay from "../host/ReadingDisplay";
 import PlayerList from "../host/PlayerList";
+import Timer from "../Timer";
 import C from "../../constants";
 
 const randomItemFromArray = (arr) => {
@@ -142,6 +143,28 @@ export default class TestView extends Component {
           extraCssClasses="ld ld-bounce"
         ></PlayerList>
         <PlayerList players={this.state.testData.players}></PlayerList>
+        <hr />
+        <h1 className="title">Timer</h1>
+        <Timer
+          msRemaining={20000}
+          msTotal={30000}
+          label="timer"
+          showLabel={true}
+        ></Timer>
+        <Timer
+          msRemaining={8000}
+          msTotal={30000}
+          label="timer"
+          showLabel={false}
+        ></Timer>
+        <div style={{ width: "400px" }}>
+          <Timer
+            msRemaining={2500}
+            msTotal={30000}
+            label="timer"
+            showLabel={true}
+          ></Timer>
+        </div>
       </div>
     );
   }
