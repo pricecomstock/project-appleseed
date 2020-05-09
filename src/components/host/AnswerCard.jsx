@@ -3,10 +3,11 @@ import classNames from "classnames";
 
 export default class AnswerCard extends Component {
   render() {
+    console.log("voters", this.props.voters);
     return (
       <div className="">
         <div className="box has-text-centered">
-          <h3 className={classNames(this.textClass())}>{this.props.text}</h3>
+          <h3 className="is-size-4">{this.props.text}</h3>
           {this.props.votingIsComplete && (
             <span className="tag is-info is-large">
               {this.props.playerData.emoji} {this.props.playerData.nickname}
@@ -29,7 +30,6 @@ export default class AnswerCard extends Component {
               {this.props.voters.map((playerData, voterIndex) => {
                 return (
                   <span className="tag is-medium is-light" key={voterIndex}>
-                    {/* FIXME this is probably very bad performance */}
                     {playerData.emoji}
                     &nbsp;
                     {playerData.nickname}
