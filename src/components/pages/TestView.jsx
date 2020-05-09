@@ -137,6 +137,7 @@ export default class TestView extends Component {
           players={this.state.testData.players}
           extraCssClasses="ld ld-bounce"
         ></PlayerList>
+        <PlayerList players={this.state.testData.players}></PlayerList>
       </div>
     );
   }

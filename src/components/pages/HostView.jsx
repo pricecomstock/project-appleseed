@@ -223,7 +223,7 @@ export default class HostView extends Component {
             </h1>
             <hr />
             <PlayerList
-              attention={true}
+              extraCssClasses="ld ld-bounce"
               players={this.state.players.filter((player) => {
                 return this.state.yetToAnswer.includes(player.playerId);
               })}
