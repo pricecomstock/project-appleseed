@@ -20,18 +20,14 @@ export default class ReadingDisplay extends Component {
                       playerData={this.props.getPlayerInfoById(answer[0])}
                       votingIsComplete={this.props.votingIsComplete}
                       basePoints={
-                        this.props.scoringDetails &&
+                        this.props.scoringDetails.pointsArray &&
                         this.props.scoringDetails.pointsArray[answerIndex]
                       }
                       isShutout={
-                        this.props.scoringDetails &&
                         this.props.scoringDetails.isShutout &&
                         this.props.scoringDetails.shutoutIndex === answerIndex
                       }
-                      shutoutPoints={
-                        this.props.scoringDetails &&
-                        this.props.scoringDetails.shutoutPoints
-                      }
+                      shutoutPoints={this.props.scoringDetails.shutoutPoints}
                       voters={Object.entries(this.props.votingResults)
                         .filter((entry) => {
                           return entry[1] === answerIndex;
