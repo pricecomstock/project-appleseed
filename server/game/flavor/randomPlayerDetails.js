@@ -1,4 +1,4 @@
-const { randomItemFromArray } = require("./util");
+const { randomItemFromArray } = require("../util");
 
 function randomEmoji() {
   const possibleEmoji = [

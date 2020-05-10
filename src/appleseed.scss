@@ -210,16 +210,28 @@ $family-sans-serif: "Nunito", sans-serif;
   }
 }
 
-.host-view {
-  background: repeating-linear-gradient(
-    45deg,
-    #007ea7,
-    #007ea7 30px,
-    #00739b 30px,
-    #00739b 60px
-  );
-  color: $white-ter;
+div.fun-bg {
+  z-index: -5;
+  position: absolute;
+  top: 0;
+  left: 0;
+
   height: 100vh;
+  width: 100%;
+
+  // background: repeating-linear-gradient(
+  //   45deg,
+  //   #007ea7,
+  //   #007ea7 30px,
+  //   #00739b 30px,
+  //   #00739b 60px
+  // );
+}
+
+.host-view {
+  color: $white-ter;
+  height: 100%;
+  width: 100%;
   display: grid;
   grid-template-columns: 5% repeat(4, 1fr) 5%;
   grid-template-rows: 6% 2fr repeat(2, 1fr) 5%;

@@ -4,6 +4,7 @@ import "./mvp.css";
 import "./appleseed.scss";
 import "@loadingio/loading.css/dist/loading.css"; // TODO use min
 import "@loadingio/transition.css/dist/transition.css"; // TODO use min
+import "pattern.css";
 
 import Home from "./components/pages/Home";
 import HostView from "./components/pages/HostView";

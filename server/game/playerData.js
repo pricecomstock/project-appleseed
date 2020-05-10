@@ -1,5 +1,8 @@
 const generateBase64Id = require("./util").generateBase64Id;
-const { randomEmoji, randomPlayerName } = require("./flavor");
+const {
+  randomEmoji,
+  randomPlayerName,
+} = require("./flavor/randomPlayerDetails");
 
 class PlayerData {
   constructor() {

@@ -2,6 +2,7 @@ const { generateBase64Id, adminRoom } = require("./util");
 const StateMachine = require("javascript-state-machine");
 const { PromptRound } = require("./prompts/prompt");
 const { PromptPicker } = require("./prompts/promptPicker");
+const { getRandomTheme } = require("./flavor/themes");
 const options = require("./options");
 const PointTracker = require("./pointTracker");
 const Timer = require("./timer");
@@ -34,6 +35,7 @@ class GameRoom {
 
     this._pointTracker = null;
 
+    this._currentTheme = getRandomTheme();
     // Game state
     this._fsm();
   }
@@ -88,6 +90,7 @@ class GameRoom {
   }
 
   addPlayer(playerSocket) {
+    this.sendThemeToIndividual(playerSocket);
     // Add to Player Sockets list
     this._playerSockets.push(playerSocket);
 
@@ -160,6 +163,7 @@ class GameRoom {
   }
 
   addAdmin(adminSocket) {
+    this.sendThemeToIndividual(adminSocket);
     adminSocket.on("startGame", (data) => {
       if (this.can("startGame")) {
         this.startGame();
@@ -264,6 +268,7 @@ class GameRoom {
   givePlayerCurrentInfo(playerSocket) {
     // For reconnects
     this.sendOptionsToIndividual(playerSocket);
+    this.sendThemeToIndividual(playerSocket);
 
     if (playerSocket && playerSocket.playerData.playerId) {
       this.sendStateToIndividual(playerSocket);
@@ -326,6 +331,14 @@ class GameRoom {
 
   sendStateToAll() {
     this.emitToAll("state", this.stateSummary());
+  }
+
+  sendThemeToAll() {
+    this.emitToAll("theme", this._currentTheme);
+  }
+
+  sendThemeToIndividual(socket) {
+    socket.emit("theme", this._currentTheme);
   }
 
   sendStateToAdminsOnly() {
@@ -429,6 +442,11 @@ class GameRoom {
     });
     return scoreboardData;
   }
+
+  newTheme() {
+    this._currentTheme = getRandomTheme();
+    this.sendThemeToAll();
+  }
 }
 
 StateMachine.factory(GameRoom, {
@@ -464,6 +482,7 @@ StateMachine.factory(GameRoom, {
         } of prompts with options:`,
         this.currentRoundOptions
       );
+      this.newTheme();
       this.sendOptionsToAll();
       this.createPromptRound();
       this.sendPromptsToPlayers();
