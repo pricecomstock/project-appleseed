@@ -45,7 +45,7 @@ export default class ControlButtons extends Component {
       <div className="buttons are-medium">
         {this.props.currentState === "lobby" && (
           <button
-            className="button is-rounded is-primary"
+            className="button is-rounded is-warning is-inverted"
             onClick={this.startGame}
           >
             Start Game

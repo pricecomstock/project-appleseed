@@ -55,7 +55,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="container has-text-centered">
+      <div className="section container has-text-centered">
         <header>
           <h1 className="title">bitwits!</h1>
         </header>

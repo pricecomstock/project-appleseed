@@ -14,7 +14,7 @@ import TestView from "./components/pages/TestView";
 function App() {
   return (
     <Router>
-      <div className="App section">
+      <div className="">
         {/* notice "exact" */}
         <Switch>
           <Route exact path="/" component={Home}></Route>

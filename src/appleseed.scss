@@ -49,6 +49,7 @@ $family-sans-serif: "Nunito", sans-serif;
 
 .lobby-player-list-item {
   border: 3px solid black;
+  color: $black-ter;
   border-radius: 8px;
   margin: 1rem;
   text-align: center;
@@ -194,6 +195,7 @@ $family-sans-serif: "Nunito", sans-serif;
   margin: 0.2vh 0;
   border-radius: 8px;
   border: 3px solid black;
+  width: 100%;
 
   > .timer-label {
     display: flex;
@@ -204,5 +206,47 @@ $family-sans-serif: "Nunito", sans-serif;
     height: 100%;
     font-size: 2.5vh;
     font-weight: bold;
+    color: $black-ter;
   }
+}
+
+.host-view {
+  background: repeating-linear-gradient(
+    45deg,
+    #007ea7,
+    #007ea7 30px,
+    #00739b 30px,
+    #00739b 60px
+  );
+  color: $white-ter;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 5% repeat(4, 1fr) 5%;
+  grid-template-rows: 6% 2fr repeat(2, 1fr) 5%;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+}
+
+.host-main {
+  grid-area: 2 / 1 / 5 / 7;
+}
+.host-footer {
+  grid-area: 5 / 1 / 6 / 7;
+}
+.host-header {
+  grid-area: 1 / 1 / 2 / 7;
+  padding: 2vh 1vw;
+  margin: 2vh 0;
+}
+.host-lower {
+  grid-area: 4 / 2 / 5 / 6;
+}
+.host-lower-left {
+  grid-area: 4 / 2 / 5 / 3;
+}
+.host-lower-right {
+  grid-area: 4 / 3 / 5 / 6;
+}
+.host-top-main {
+  grid-area: 2 / 2 / 4 / 6;
 }

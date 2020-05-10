@@ -5,8 +5,8 @@ export default class LobbyView extends Component {
     return (
       <div className="container">
         <div className="has-text-centered is-size-2">
-          join at <strong>{window.location.host}</strong> by entering{" "}
-          <span className="tag is-info has-text-weight-bold is-size-2">
+          join at {window.location.host} by entering{" "}
+          <span className="tag is-warning has-text-weight-bold is-size-2">
             {this.props.roomCode}
           </span>
         </div>
@@ -21,7 +21,7 @@ export default class LobbyView extends Component {
         </div>
         <hr />
         {this.props.players && (
-          <h3 className="title has-text-centered">
+          <h3 className="is-size-3 has-text-centered">
             {this.props.players.length}/16 Players:
           </h3>
         )}

@@ -159,13 +159,13 @@ export default class HostView extends Component {
 
   render() {
     return (
-      <div>
+      <div className="host-view">
         {/* Admin Header */}
-        <div className="level">
+        <div className="host-header level">
           <div className="level-left">
             <div className="level-item is-size-5">
               <p>
-                <span className="tag is-info is-large has-text-weight-bold is-size-4">
+                <span className="tag is-warning is-large has-text-weight-bold is-size-4">
                   {this.state.roomCode}
                 </span>{" "}
                 join at {window.location.host}
@@ -181,7 +181,7 @@ export default class HostView extends Component {
         </div>
         {/* Debug View */}
         {this.state.debugDisplay && (
-          <div className="box level">
+          <div className="box level host-footer">
             <div className="level-left">
               <span className="level-item tag is-success is-medium">Admin</span>
               <span className="level-item tag is-warning is-medium">
@@ -193,58 +193,70 @@ export default class HostView extends Component {
         )}
         {/* Timer */}
         {this.state.timerIsVisible && (
-          <Timer
-            msRemaining={this.state.msRemaining}
-            msTotal={this.state.msTotal}
-            label={this.state.currentState}
-            showLabel="true"
-          ></Timer>
+          <div className="host-footer">
+            <Timer
+              msRemaining={this.state.msRemaining}
+              msTotal={this.state.msTotal}
+              label={this.state.currentState}
+              showLabel="true"
+            ></Timer>
+          </div>
         )}
         {/* Lobby View */}
         {this.state.currentState === "lobby" && (
           <>
-            <Options
-              loadCustomPromptSet={this.loadCustomPromptSet}
-              loadedCustomSetData={this.state.customSetData}
-            ></Options>
-            <LobbyView
-              players={this.state.players}
-              roomCode={this.state.roomCode}
-            ></LobbyView>
-            <PlayerList players={this.state.players}></PlayerList>
+            <div className="host-lower">
+              <Options
+                loadCustomPromptSet={this.loadCustomPromptSet}
+                loadedCustomSetData={this.state.customSetData}
+              ></Options>
+            </div>
+            <div className="host-top-main">
+              <LobbyView
+                players={this.state.players}
+                roomCode={this.state.roomCode}
+              ></LobbyView>
+              <PlayerList players={this.state.players}></PlayerList>
+            </div>
           </>
         )}
 
-        <hr />
         {this.state.currentState === "prompts" && (
-          <div>
-            <h1 className="has-text-centered is-size-2">
-              Answer prompts on your devices now!
-            </h1>
-            <hr />
-            <PlayerList
-              extraCssClasses="ld ld-bounce"
-              players={this.state.players.filter((player) => {
-                return this.state.yetToAnswer.includes(player.playerId);
-              })}
-            ></PlayerList>
-          </div>
+          <>
+            <div className="host-main">
+              <PlayerList
+                extraCssClasses="ld ld-bounce"
+                players={this.state.players.filter((player) => {
+                  return this.state.yetToAnswer.includes(player.playerId);
+                })}
+              ></PlayerList>
+            </div>
+            <div className="host-lower">
+              <h1 className="has-text-centered is-size-2">
+                Answer prompts on your devices now!
+              </h1>
+            </div>
+          </>
         )}
         {(this.state.currentState === "reading" ||
           this.state.currentState === "voting" ||
           this.state.currentState === "scoring") &&
           this.state.filledPrompt && (
-            <ReadingDisplay
-              prompt={this.state.filledPrompt}
-              votingResults={this.state.currentVotingResults}
-              scoringDetails={this.state.scoringDetails}
-              votingIsComplete={this.state.votingIsComplete}
-              getPlayerInfoById={this.getPlayerInfoById}
-            ></ReadingDisplay>
+            <div className="host-main">
+              <ReadingDisplay
+                prompt={this.state.filledPrompt}
+                votingResults={this.state.currentVotingResults}
+                scoringDetails={this.state.scoringDetails}
+                votingIsComplete={this.state.votingIsComplete}
+                getPlayerInfoById={this.getPlayerInfoById}
+              ></ReadingDisplay>
+            </div>
           )}
         {(this.state.currentState === "endOfRound" ||
           this.state.currentState === "finalScores") && (
-          <Scoreboard data={this.state.scoreboardData}></Scoreboard>
+          <div className="host-main">
+            <Scoreboard data={this.state.scoreboardData}></Scoreboard>
+          </div>
         )}
       </div>
     );

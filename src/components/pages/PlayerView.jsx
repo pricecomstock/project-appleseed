@@ -161,7 +161,7 @@ export default class PlayerView extends Component {
 
   render() {
     return (
-      <div>
+      <div className="section">
         {this.state.editingPlayerInfo &&
           this.state.currentState === "lobby" && (
             <PlayerInfoSet
