@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
 import "./mvp.css";
 import "./appleseed.scss";
 import "@loadingio/loading.css/dist/loading.css"; // TODO use min
@@ -23,7 +28,13 @@ function App() {
           <Route exact path="/host/:code" component={HostView}></Route>
           <Route exact path="/play/:code" component={PlayerView}></Route>
           <Route path="/customprompts" component={CustomPrompts}></Route>
-          <Route path="/test" component={TestView}></Route>
+          <Route path="/testpage" component={TestView}></Route>
+          <Route
+            path="/:code"
+            render={(routeProps) => (
+              <Redirect to={`/play/${routeProps.match.params.code}`}></Redirect>
+            )}
+          ></Route>
         </Switch>
       </div>
     </Router>
