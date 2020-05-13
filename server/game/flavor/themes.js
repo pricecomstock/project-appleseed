@@ -79,6 +79,8 @@ function isHighContrast(hexColor1, hexColor2) {
     averageDistance,
     isHighContrast ? "HIGH" : "LOW"
   );
+
+  return isHighContrast;
 }
 
 // Small patterns suitable for high contrast color pairs
@@ -86,9 +88,6 @@ const highContrastBackgroundClassNames = [
   "pattern-grid-lg",
   "pattern-grid-xl",
   "pattern-dots-sm",
-  "pattern-dots-md",
-  "pattern-dots-lg",
-  "pattern-dots-xl",
   "pattern-cross-dots-sm",
   "pattern-cross-dots-md",
   "pattern-cross-dots-lg",
@@ -109,6 +108,9 @@ const lowContrastBackgroundClassNames = [
   "pattern-checks-xl",
   "pattern-grid-sm",
   "pattern-grid-md",
+  "pattern-dots-md",
+  "pattern-dots-lg",
+  "pattern-dots-xl",
   "pattern-diagonal-lines-sm",
   "pattern-diagonal-lines-md",
   "pattern-horizontal-lines-sm",
@@ -168,13 +170,20 @@ function generateThemeFromColorset(colorSet) {
   };
 }
 
-colorSets.push(createColorSet("#9d0208", "#d00000"));
+// colorSets.push(createColorSet());
+// colorSets.push(createColorSet());
+colorSets.push(createColorSet("#577590", "#43aa8b"));
+colorSets.push(createColorSet("#5B0102", "#3C1518"));
 colorSets.push(createColorSet("#e56b6f", "#6d597a"));
 
+let testColorSet = createColorSet("#00a9e2", "#f7fff7", "#000");
+
 function getRandomTheme() {
-  let theme = generateThemeFromColorset(randomItemFromArray(colorSets));
+  let theme = generateThemeFromColorset(testColorSet); // TESTING
   console.log("Theme", theme);
   return theme;
+  // let theme = generateThemeFromColorset(randomItemFromArray(colorSets));
+  // return theme;
 }
 
 module.exports = { getRandomTheme };

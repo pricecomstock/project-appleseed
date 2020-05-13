@@ -51,7 +51,7 @@ export default class HostView extends Component {
       textColor: "white",
       // backgroundClasses: "pattern-diagonal-stripes-xl",
     },
-    debugDisplay: false,
+    debugDisplay: true,
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {
@@ -181,9 +181,9 @@ export default class HostView extends Component {
           style={{ color: this.state.theme.textColor }}
         >
           {/* Admin Header */}
-          <div className="host-header level">
-            <div className="level-left">
-              <div className="level-item is-size-5">
+          <div className="host-header">
+            <div className="game-panel">
+              <div className="is-size-5">
                 <p>
                   <span className="tag is-warning is-large has-text-weight-bold is-size-4">
                     {this.state.roomCode}
@@ -192,7 +192,7 @@ export default class HostView extends Component {
                 </p>
               </div>
             </div>
-            <div className="level-right">
+            <div className="game-panel">
               <ControlButtons
                 currentState={this.state.currentState}
                 socket={this.state.socket}
@@ -201,7 +201,7 @@ export default class HostView extends Component {
           </div>
           {/* Debug View */}
           {this.state.debugDisplay && (
-            <div className="box level host-footer">
+            <div className="game-panel level host-footer">
               <div className="level-left">
                 <span className="level-item tag is-success is-medium">
                   Admin
@@ -211,6 +211,9 @@ export default class HostView extends Component {
                 </span>
                 <div className="level-item">
                   state={this.state.currentState}
+                </div>
+                <div className="level-item">
+                  bg-pattern={this.state.theme.backgroundClasses}
                 </div>
               </div>
             </div>
@@ -229,18 +232,18 @@ export default class HostView extends Component {
           {/* Lobby View */}
           {this.state.currentState === "lobby" && (
             <>
-              <div className="host-lower">
-                <Options
-                  loadCustomPromptSet={this.loadCustomPromptSet}
-                  loadedCustomSetData={this.state.customSetData}
-                ></Options>
-              </div>
               <div className="host-top-main">
                 <LobbyView
                   players={this.state.players}
                   roomCode={this.state.roomCode}
                 ></LobbyView>
                 <PlayerList players={this.state.players}></PlayerList>
+              </div>
+              <div className="host-lower game-panel">
+                <Options
+                  loadCustomPromptSet={this.loadCustomPromptSet}
+                  loadedCustomSetData={this.state.customSetData}
+                ></Options>
               </div>
             </>
           )}

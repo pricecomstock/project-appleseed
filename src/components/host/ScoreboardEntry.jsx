@@ -18,9 +18,9 @@ export default class ScoreboardEntry extends Component {
         className={classNames([
           "level",
           {
-            "leaderboard-first-box": this.props.place === 1,
-            "leaderboard-second-box": this.props.place === 2,
-            "leaderboard-third-box": this.props.place === 3,
+            "leaderboard-first-box game-panel": this.props.place === 1,
+            "leaderboard-second-box game-panel": this.props.place === 2,
+            "leaderboard-third-box game-panel": this.props.place === 3,
             "leaderboard-low": this.props.place > 3,
             box: this.props.place <= 3,
           },

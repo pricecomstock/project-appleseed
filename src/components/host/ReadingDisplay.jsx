@@ -5,7 +5,7 @@ export default class ReadingDisplay extends Component {
   render() {
     return (
       <div>
-        <div className="container has-text-centered">
+        <div className="game-panel has-text-centered">
           <h1 className="is-size-2">{this.props.prompt.text}</h1>
         </div>
         <div className="reading-answers-view">
