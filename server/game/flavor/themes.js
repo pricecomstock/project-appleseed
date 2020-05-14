@@ -146,7 +146,11 @@ const allBackgroundClassNames = [
 
 const colorSets = [];
 
-function createColorSet(bgColor1, bgColor2, fgColor) {
+function createColorSet(bgColor1, bgColor2, accentColor, fgColor) {
+  if (!accentColor) {
+    // TODO calculate based on background colors
+    accentColor = "#ffdd57;";
+  }
   if (!fgColor) {
     // TODO calculate based on background colors
     fgColor = getFgColor(getAverageColor(bgColor1, bgColor2));
@@ -170,20 +174,26 @@ function generateThemeFromColorset(colorSet) {
   };
 }
 
-// colorSets.push(createColorSet());
-// colorSets.push(createColorSet());
 colorSets.push(createColorSet("#577590", "#43aa8b"));
 colorSets.push(createColorSet("#5B0102", "#3C1518"));
 colorSets.push(createColorSet("#e56b6f", "#6d597a"));
+colorSets.push(createColorSet("#00a9e2", "#f7fff7"));
+colorSets.push(createColorSet("#efc3e6", "#f0e6ef"));
+colorSets.push(createColorSet("#fca311", "#ffffff"));
+colorSets.push(createColorSet("#7209b7", "#4361ee"));
+colorSets.push(createColorSet("#ff686b", "#ffa69e"));
+colorSets.push(createColorSet("#1a936f", "#88d498"));
+colorSets.push(createColorSet("#f7b267", "#f79d65"));
+colorSets.push(createColorSet("#6a6b83", "#76949f"));
 
-let testColorSet = createColorSet("#00a9e2", "#f7fff7", "#000");
+// let testColorSet = createColorSet("#6a6b83", "#76949f");
 
 function getRandomTheme() {
-  let theme = generateThemeFromColorset(testColorSet); // TESTING
-  console.log("Theme", theme);
-  return theme;
-  // let theme = generateThemeFromColorset(randomItemFromArray(colorSets));
+  // let theme = generateThemeFromColorset(testColorSet); // TESTING
+  // console.log("Theme", theme);
   // return theme;
+  let theme = generateThemeFromColorset(randomItemFromArray(colorSets));
+  return theme;
 }
 
 module.exports = { getRandomTheme };

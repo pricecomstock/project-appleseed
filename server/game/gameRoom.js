@@ -210,8 +210,7 @@ class GameRoom {
         this.can("nextRound") &&
         this._currentRoundIndex < this._options.rounds.length - 1
       ) {
-        this._timer.cancel();
-        this.nextRound();
+        this._timer.finish();
       }
     });
 
@@ -482,7 +481,6 @@ StateMachine.factory(GameRoom, {
         } of prompts with options:`,
         this.currentRoundOptions
       );
-      this.newTheme();
       this.sendOptionsToAll();
       this.createPromptRound();
       this.sendPromptsToPlayers();
@@ -569,6 +567,7 @@ StateMachine.factory(GameRoom, {
       });
     },
     onBeforeNextRound: function () {
+      this.newTheme();
       this._currentRoundIndex++;
       this._pointTracker.nextRound();
     },
