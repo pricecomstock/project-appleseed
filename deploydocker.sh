@@ -15,7 +15,7 @@ function testcontainer {
   done
 }
 
-docker build --tag=bitwits .
+docker build --no-cache --tag=bitwits .
 echo ""
 echo "=============================="
 echo ""
