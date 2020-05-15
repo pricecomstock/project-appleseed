@@ -105,13 +105,15 @@ class GameRoom {
     });
 
     // Submit an answer to a prompt
-    playerSocket.on("answerprompt", (data) => {
+    playerSocket.on("answerprompt", (data, ack) => {
       // console.log(`Received answer to ${data.promptId}: ${data.answer}`);
       this._prompts.answer(
         playerSocket.playerData.playerId,
         data.promptId,
         data.answer.substring(0, C.MAX_ANSWER_CHARS)
       );
+
+      ack();
 
       this.emitYetToAnswer();
       // Double check state to narrow window of async issues
@@ -122,7 +124,7 @@ class GameRoom {
       }
     });
 
-    playerSocket.on("vote", (data) => {
+    playerSocket.on("vote", (data, ack) => {
       const votingMode = this.currentRoundOptions.votingMode;
       // don't count from players who answered this prompt!
 
@@ -139,6 +141,7 @@ class GameRoom {
           this._currentVotingMatchup.answers[data.index][0] !==
             playerSocket.playerData.playerId)
       ) {
+        ack();
         // console.log(`Counting vote from ${} for ${data.index}`);
         this._currentVotingResults[data.playerId] = data.index;
         // Check if everyone has voted

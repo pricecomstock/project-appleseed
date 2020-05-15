@@ -50,20 +50,32 @@ export default class PlayerView extends Component {
   };
 
   submitAnswer = (promptId, answer) => {
-    this.state.socket.emit("answerprompt", {
-      promptId,
-      answer,
-    });
+    this.state.socket.emit(
+      "answerprompt",
+      {
+        promptId,
+        answer,
+      },
 
-    this.setState({ promptIndex: this.state.promptIndex + 1 });
+      // Get acknowledgement from server before moving onto next prompt
+      // The client would previousy continue as normal
+      () => {
+        this.setState({ promptIndex: this.state.promptIndex + 1 });
+      }
+    );
   };
 
   submitVote = (index) => {
-    this.state.socket.emit("vote", {
-      index: index,
-      playerId: this.state.playerId,
-    });
-    this.setState({ showVotingOptions: false });
+    this.state.socket.emit(
+      "vote",
+      {
+        index: index,
+        playerId: this.state.playerId,
+      },
+      () => {
+        this.setState({ showVotingOptions: false });
+      }
+    );
   };
 
   startTimer(msTotal, msRemaining) {
@@ -213,6 +225,17 @@ export default class PlayerView extends Component {
             submitAnswer={this.submitAnswer}
           ></Prompt>
         )}
+        {this.state.currentState === "prompts" &&
+          this.state.promptIndex >= this.state.prompts.length && (
+            <p className="has-text-centered is-size-4">
+              Waiting on other players to finish answering...
+            </p>
+          )}
+        {this.state.currentState === "lobby" && (
+          <p className="has-text-centered is-size-4">
+            Waiting on all players to join and for host to start the game...
+          </p>
+        )}
         {this.state.currentState === "voting" &&
           this.state.showVotingOptions === true && (
             <PlayerVote
@@ -228,7 +251,7 @@ export default class PlayerView extends Component {
         {this.state.currentState === "voting" &&
           this.state.showVotingOptions === false && (
             <p className="has-text-centered is-size-4">
-              Waiting on other players to vote!
+              Waiting on other players to vote...
             </p>
           )}
       </div>

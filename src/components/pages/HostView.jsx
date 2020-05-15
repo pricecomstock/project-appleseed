@@ -51,7 +51,7 @@ export default class HostView extends Component {
       textColor: "white",
       // backgroundClasses: "pattern-diagonal-stripes-xl",
     },
-    debugDisplay: true,
+    debugDisplay: false,
   };
 
   joinRoomAsAdmin = (roomCode, adminKey) => {

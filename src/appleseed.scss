@@ -110,9 +110,9 @@ $family-sans-serif: "Nunito", sans-serif;
   > p.answer-text {
     flex: 0 0 100%;
     text-align: center;
-    font-size: 1.5vw;
+    font-size: 1.75vw;
     @media (min-aspect-ratio: 2/1) {
-      font-size: 3vh;
+      font-size: 3.5vh;
     }
   }
 }
