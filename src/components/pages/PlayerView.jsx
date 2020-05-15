@@ -34,6 +34,8 @@ export default class PlayerView extends Component {
     msTotal: 1000,
     timerIsVisible: false,
     timerIntervalId: null,
+
+    connected: true,
   };
 
   joinRoom = (roomCode) => {
@@ -101,7 +103,10 @@ export default class PlayerView extends Component {
 
   componentDidMount() {
     console.log(this.state);
-    this.state.socket.on("connection", () => console.log("Connected!"));
+    this.state.socket.on("connection", () => {
+      console.log("Connected!");
+      this.setState({ connected: true });
+    });
 
     this.state.socket.on("state", (newGameState) => {
       console.log("Game state updated", newGameState);
@@ -164,6 +169,14 @@ export default class PlayerView extends Component {
       this.startTimer(data.msTotal, data.msRemaining);
     });
 
+    this.state.socket.on("disconnect", () => {
+      this.setState({ connected: false });
+    });
+
+    this.state.socket.on("reconnect", () => {
+      this.setState({ connected: true });
+    });
+
     this.joinThisRoom();
   }
 
@@ -219,6 +232,11 @@ export default class PlayerView extends Component {
           ></Timer>
         )}
         <hr />
+        {!this.state.connected && (
+          <p className="has-text-centered is-size-4 has-text-danger">
+            Disconnected!
+          </p>
+        )}
         {this.state.prompts.length > this.state.promptIndex && (
           <Prompt
             prompt={this.state.prompts[this.state.promptIndex]}

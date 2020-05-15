@@ -504,20 +504,25 @@ StateMachine.factory(GameRoom, {
     },
     onVoting: function () {
       this._currentVotingResults = {};
-      this.sendNextFilledPromptToAdmin();
-      this.sendVotingOptionsToPlayers();
-      this.createAndSendTimer(
-        options.calculateVotingTimeLimitForAnswers(
-          this._options,
-          this._currentVotingMatchup.answers.length
-        ),
-        () => {
-          if (this.can("closeVoting")) {
-            this.closeVoting();
+      if (this._finalizedMatchupsToSend.length > 0) {
+        this.sendNextFilledPromptToAdmin();
+        this.sendVotingOptionsToPlayers();
+        this.createAndSendTimer(
+          options.calculateVotingTimeLimitForAnswers(
+            this._options,
+            this._currentVotingMatchup.answers.length
+          ),
+          () => {
+            if (this.can("closeVoting")) {
+              this.closeVoting();
+            }
           }
-        }
-      );
-      console.log("initiateVoting");
+        );
+        console.log("initiateVoting");
+      } else {
+        this.closeVoting();
+        this.endGame();
+      }
     },
     onCloseVoting: function () {
       // TODO Implement
