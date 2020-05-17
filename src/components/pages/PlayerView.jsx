@@ -6,7 +6,11 @@ import PlayerVote from "../player/PlayerVote";
 import Prompt from "../player/Prompt";
 import Timer from "../Timer";
 
-import createSocketClient from "../../createSocketClient";
+import createSocketClient from "../../shared/createSocketClient";
+import {
+  sharedOnMountInit,
+  sharedInitialState,
+} from "../../shared/sharedViewInit";
 
 // https://www.valentinog.com/blog/socket-react/
 
@@ -14,28 +18,17 @@ import C from "../../constants";
 
 export default class PlayerView extends Component {
   state = {
-    roomCode: this.props.match.params.code,
-    // players: [],
-    currentState: "lobby",
-    gameOptions: {},
-    currentRoundIndex: 0,
+    ...sharedInitialState(this.props),
+    socket: createSocketClient(),
+
     prompts: [],
     promptIndex: 0,
-    socket: createSocketClient(),
     playerId: "",
     playerInfo: { emoji: "😾", nickname: "player" },
     editingPlayerInfo: false,
 
     currentVotingMatchup: {},
     showVotingOptions: false,
-
-    clientTimerCalculatedEndTime: 0,
-    msRemaining: 0,
-    msTotal: 1000,
-    timerIsVisible: false,
-    timerIntervalId: null,
-
-    connected: true,
   };
 
   joinRoom = (roomCode) => {
@@ -80,53 +73,18 @@ export default class PlayerView extends Component {
     );
   };
 
-  startTimer(msTotal, msRemaining) {
-    this.setState({
-      clientTimerCalculatedEndTime:
-        Date.now() + msRemaining - C.TIMER_SAFETY_BUFFER,
-      msTotal: msTotal,
-      // Safety buffer to err on giving players extra time
-      msRemaining: msRemaining - C.TIMER_SAFETY_BUFFER,
-      timerIsVisible:
-        this.state.currentState === "voting" ||
-        this.state.currentState === "prompts",
-    });
-
-    this.setState({
-      timerIntervalId: setInterval(() => {
-        this.setState({
-          msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
-        });
-      }, C.TIMER_COUNTDOWN_INTERVAL),
-    });
-  }
-
   componentDidMount() {
-    console.log(this.state);
-    this.state.socket.on("connection", () => {
-      console.log("Connected!");
-      this.setState({ connected: true });
-    });
-
-    this.state.socket.on("state", (newGameState) => {
-      console.log("Game state updated", newGameState);
-      this.setState({
-        currentState: newGameState.currentState,
-      });
-    });
+    sharedOnMountInit(this);
+    // this.state.socket.on("connection", () => {
+    //   console.log("Connected!");
+    //   this.setState({ connected: true });
+    // });
 
     this.state.socket.on("players", (data) => {
       this.setState({
         playerInfo: data.players.find((player) => {
           return player.playerId === this.state.playerId;
         }),
-      });
-    });
-
-    this.state.socket.on("gameoptions", (data) => {
-      this.setState({
-        gameOptions: data.options,
-        currentRoundIndex: data.currentRoundIndex,
       });
     });
 
@@ -164,17 +122,7 @@ export default class PlayerView extends Component {
     });
 
     this.state.socket.on("timer", (data) => {
-      // console.log("Date.now()", Date.now());
-      console.log("Timer", data);
       this.startTimer(data.msTotal, data.msRemaining);
-    });
-
-    this.state.socket.on("disconnect", () => {
-      this.setState({ connected: false });
-    });
-
-    this.state.socket.on("reconnect", () => {
-      this.setState({ connected: true });
     });
 
     this.joinThisRoom();

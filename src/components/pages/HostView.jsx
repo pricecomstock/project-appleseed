@@ -9,7 +9,11 @@ import Timer from "../Timer";
 import PlayerList from "../host/PlayerList";
 import Options from "../host/Options";
 
-import createSocketClient from "../../createSocketClient";
+import createSocketClient from "../../shared/createSocketClient";
+import {
+  sharedOnMountInit,
+  sharedInitialState,
+} from "../../shared/sharedViewInit";
 
 // https://www.valentinog.com/blog/socket-react/
 
@@ -17,16 +21,13 @@ import C from "../../constants";
 
 export default class HostView extends Component {
   state = {
-    roomCode: this.props.match.params.code,
-    players: [],
-    currentState: "lobby",
-    adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
+    ...sharedInitialState(this.props),
     socket: createSocketClient(),
 
-    customSetData: {},
+    players: [],
+    adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
 
-    gameOptions: {},
-    currentRoundIndex: 0,
+    customSetData: {},
 
     yetToAnswer: [],
 
@@ -36,21 +37,6 @@ export default class HostView extends Component {
 
     scoringDetails: {}, // For each vote
     scoreboardData: [], // For end of round/game
-
-    clientTimerCalculatedEndTime: 0,
-    msRemaining: 0,
-    msTotal: 1000,
-    timerIsVisible: false,
-    timerIntervalId: null,
-
-    theme: {
-      backgroundStyles: {
-        "background-color": "#777",
-        color: "#666",
-      },
-      textColor: "white",
-      // backgroundClasses: "pattern-diagonal-stripes-xl",
-    },
     debugDisplay: false,
   };
 
@@ -77,44 +63,13 @@ export default class HostView extends Component {
     });
   };
 
-  startTimer(msTotal, msRemaining) {
-    this.setState({
-      clientTimerCalculatedEndTime:
-        Date.now() + msRemaining - C.TIMER_SAFETY_BUFFER,
-      msTotal: msTotal,
-      // Safety buffer to err on giving players extra time
-      msRemaining: msRemaining - C.TIMER_SAFETY_BUFFER,
-      timerIsVisible:
-        this.state.currentState === "voting" ||
-        this.state.currentState === "prompts",
-    });
-
-    this.setState({
-      timerIntervalId: setInterval(() => {
-        this.setState({
-          msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
-        });
-      }, C.TIMER_COUNTDOWN_INTERVAL),
-    });
-  }
-
   componentDidMount() {
-    this.state.socket.on("connection", () => console.log("Connected!"));
+    sharedOnMountInit(this);
+    // this.state.socket.on("connection", () => console.log("Connected!"));
 
-    this.state.socket.on("state", (newGameState) => {
-      console.log("Game state updated", newGameState);
-      this.setState({ currentState: newGameState.currentState });
-    });
     this.state.socket.on("players", (data) => {
       console.log("Players", data);
       this.setState({ players: data.players });
-    });
-
-    this.state.socket.on("gameoptions", (data) => {
-      this.setState({
-        gameOptions: data.options,
-        currentRoundIndex: data.currentRoundIndex,
-      });
     });
 
     this.state.socket.on("adminkeyerror", (data) => {
@@ -148,7 +103,6 @@ export default class HostView extends Component {
     });
 
     this.state.socket.on("timer", (data) => {
-      // console.log("Timer", data);
       this.startTimer(data.msTotal, data.msRemaining);
     });
 
@@ -157,10 +111,6 @@ export default class HostView extends Component {
       this.setState({
         customSetData: data,
       });
-    });
-
-    this.state.socket.on("theme", (theme) => {
-      this.setState({ theme });
     });
 
     this.joinThisRoomAsAdmin();
