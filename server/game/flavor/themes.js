@@ -61,7 +61,7 @@ function getAverageColor(hexColor1, hexColor2) {
 
 // Also questionable color science
 function isHighContrast(hexColor1, hexColor2) {
-  const THRESHOLD = 25;
+  const THRESHOLD = 30;
 
   let rgb1 = hexToRgb(hexColor1);
   let rgb2 = hexToRgb(hexColor2);
@@ -73,12 +73,12 @@ function isHighContrast(hexColor1, hexColor2) {
     3;
 
   let isHighContrast = averageDistance >= THRESHOLD;
-  console.log(
-    hexColor1,
-    hexColor2,
-    averageDistance,
-    isHighContrast ? "HIGH" : "LOW"
-  );
+  // console.log(
+  //   hexColor1,
+  //   hexColor2,
+  //   averageDistance,
+  //   isHighContrast ? "HIGH" : "LOW"
+  // );
 
   return isHighContrast;
 }
@@ -88,7 +88,6 @@ const highContrastBackgroundClassNames = [
   "pattern-grid-lg",
   "pattern-grid-xl",
   "pattern-dots-sm",
-  "pattern-cross-dots-sm",
   "pattern-cross-dots-md",
   "pattern-cross-dots-lg",
   "pattern-cross-dots-xl",
@@ -169,7 +168,7 @@ function generateThemeFromColorset(colorSet) {
     backgroundClasses: randomItemFromArray(
       isBgHighContrast
         ? highContrastBackgroundClassNames
-        : allBackgroundClassNames
+        : lowContrastBackgroundClassNames
     ),
   };
 }
@@ -185,8 +184,35 @@ colorSets.push(createColorSet("#ff686b", "#ffa69e"));
 colorSets.push(createColorSet("#1a936f", "#88d498"));
 colorSets.push(createColorSet("#f7b267", "#f79d65"));
 colorSets.push(createColorSet("#6a6b83", "#76949f"));
+colorSets.push(createColorSet("#048243", "#CAFFFB"));
+colorSets.push(createColorSet("#247AFD", "#FE46A5"));
+colorSets.push(createColorSet("#343837", "#03719C"));
+colorSets.push(createColorSet("#CEA2FD", "#9900FA"));
+colorSets.push(createColorSet("#FCB005", "#FF0789"));
+colorSets.push(createColorSet("#000133", "#FC86AA"));
+colorSets.push(createColorSet("#000000", "#FB5681"));
+colorSets.push(createColorSet("#FF7E6B", "#FF907C"));
+colorSets.push(createColorSet("#C5C3C6", "#DCDCDD"));
+colorSets.push(createColorSet("#4F4E50", "#3C3B3D"));
+colorSets.push(createColorSet("#7FC6A4", "#72B494"));
+colorSets.push(createColorSet("#5D737E", "#7A8F98"));
+colorSets.push(createColorSet("#AA1155", "#950E44"));
+colorSets.push(createColorSet("#DD1155", "#E02363"));
+colorSets.push(createColorSet("#541388", "#470F7C"));
+colorSets.push(createColorSet("#CE8147", "#AF6739"));
+colorSets.push(createColorSet("#0CCE6B", "#0AAB56"));
+colorSets.push(createColorSet("#DCED31", "#F9FD51"));
+colorSets.push(createColorSet("#363537", "#2B2A2C"));
+colorSets.push(createColorSet("#F25757", "#D04646"));
+colorSets.push(createColorSet("#61E8E1", "#57D3CC"));
+colorSets.push(createColorSet("#423E37", "#E3B23C"));
+colorSets.push(createColorSet("#29335C", "#3E476C"));
+colorSets.push(createColorSet("#E4572E", "#F3A712"));
+colorSets.push(createColorSet("#293F14", "#3D5227"));
+colorSets.push(createColorSet("#2B50AA", "#5172BB"));
+colorSets.push(createColorSet("#52489C", "#EBEBEB"));
 
-// let testColorSet = createColorSet("#6a6b83", "#76949f");
+// let testColorSet = createColorSet("#52489C", "#EBEBEB");
 
 function getRandomTheme() {
   // let theme = generateThemeFromColorset(testColorSet); // TESTING
