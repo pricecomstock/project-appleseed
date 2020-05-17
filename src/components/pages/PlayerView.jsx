@@ -6,6 +6,8 @@ import PlayerVote from "../player/PlayerVote";
 import Prompt from "../player/Prompt";
 import Timer from "../Timer";
 
+import classNames from "classnames";
+
 import createSocketClient from "../../shared/createSocketClient";
 import {
   sharedOnMountInit,
@@ -130,7 +132,10 @@ export default class PlayerView extends Component {
 
   render() {
     return (
-      <div className="section">
+      <div
+        className={classNames("fun-bg", this.state.theme.backgroundClasses)}
+        style={this.state.theme.backgroundStyles}
+      >
         {this.state.editingPlayerInfo &&
           this.state.currentState === "lobby" && (
             <PlayerInfoSet

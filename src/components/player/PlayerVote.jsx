@@ -24,7 +24,7 @@ export default class PlayerVote extends Component {
                 let answerIndex = answer[2];
                 return (
                   <button
-                    className="button is-medium is-fullwidth is-outlined wrapped-text"
+                    className="game-panel wrapped-text vote-button"
                     onClick={() => {
                       this.props.submitVote(answerIndex);
                     }}
