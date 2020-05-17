@@ -161,7 +161,7 @@ function generateThemeFromColorset(colorSet) {
   let isBgHighContrast = isHighContrast(colorSet.bgColor1, colorSet.bgColor2);
   return {
     backgroundStyles: {
-      "background-color": colorSet.bgColor1,
+      backgroundColor: colorSet.bgColor1,
       color: colorSet.bgColor2,
     },
     textColor: colorSet.fgColor,
