@@ -121,10 +121,6 @@ export default class PlayerView extends Component {
       });
     });
 
-    this.state.socket.on("timer", (data) => {
-      this.startTimer(data.msTotal, data.msRemaining);
-    });
-
     this.joinThisRoom();
   }
 

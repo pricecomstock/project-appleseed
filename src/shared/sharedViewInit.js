@@ -55,6 +55,10 @@ function bindableSocketInitialization() {
   this.state.socket.on("theme", (theme) => {
     this.setState({ theme });
   });
+
+  this.state.socket.on("timer", (data) => {
+    this.startTimer(data.msTotal, data.msRemaining);
+  });
 }
 
 function bindableSharedMethodInit() {

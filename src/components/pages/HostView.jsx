@@ -102,10 +102,6 @@ export default class HostView extends Component {
       this.setState({ scoreboardData: data.scoreboardData });
     });
 
-    this.state.socket.on("timer", (data) => {
-      this.startTimer(data.msTotal, data.msRemaining);
-    });
-
     this.state.socket.on("custompromptstatus", (data) => {
       console.log("Custom Prompt Status", data);
       this.setState({
