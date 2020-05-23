@@ -10,6 +10,7 @@ export default class LobbyView extends Component {
           <a
             className="tag is-warning has-text-weight-bold is-size-2"
             href={`/play/${this.props.roomCode}`}
+            rel="noopener noreferrer"
             target="_blank"
           >
             {this.props.roomCode}

@@ -17,8 +17,6 @@ import {
 
 // https://www.valentinog.com/blog/socket-react/
 
-import C from "../../constants";
-
 export default class HostView extends Component {
   state = {
     ...sharedInitialState(this.props),

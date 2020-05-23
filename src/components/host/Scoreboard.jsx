@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import classNames from "classnames";
 import ScoreboardEntry from "./ScoreboardEntry";
 
 export default class Scoreboard extends Component {
