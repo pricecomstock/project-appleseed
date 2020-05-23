@@ -585,11 +585,11 @@ StateMachine.factory(GameRoom, {
       });
       console.log("endGame");
     },
-    onNewGameSamePlayers: function () {
+    onBeforeNewGameSamePlayers: function () {
       this._currentRoundIndex = 0;
       this.sendCustomPromptStatus();
     },
-    onNewGameNewPlayers: function () {
+    onBeforeNewGameNewPlayers: function () {
       this._currentRoundIndex = 0;
       this.sendCustomPromptStatus();
     },
