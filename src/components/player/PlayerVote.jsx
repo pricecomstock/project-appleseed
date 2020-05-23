@@ -3,11 +3,13 @@ import React, { Component } from "react";
 export default class PlayerVote extends Component {
   render() {
     return (
-      <div className="container">
-        <div className="has-text-centered is-size-4">
-          {this.props.currentVotingMatchup.text}
+      <div className="game-panel">
+        <div>
+          <p className="player-prompt-text">
+            {this.props.currentVotingMatchup.text}
+          </p>
         </div>
-        <div className="buttons">
+        <div className="voting-options">
           {this.props.currentVotingMatchup.answers &&
             this.props.currentVotingMatchup.answers
               .map((answer, index) => {
@@ -24,7 +26,7 @@ export default class PlayerVote extends Component {
                 let answerIndex = answer[2];
                 return (
                   <button
-                    className="game-panel wrapped-text vote-button"
+                    className="wrapped-text vote-button"
                     onClick={() => {
                       this.props.submitVote(answerIndex);
                     }}

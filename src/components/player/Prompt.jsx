@@ -12,8 +12,10 @@ export default function Prompt(props) {
   };
 
   return (
-    <div>
-      <p className="is-size-4">{props.prompt.text}</p>
+    <div className="game-panel">
+      <div>
+        <p className="player-prompt-text">{props.prompt.text}</p>
+      </div>
 
       <div className="field">
         <label className="label">Answer</label>

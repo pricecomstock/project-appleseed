@@ -3,18 +3,15 @@ import React, { Component } from "react";
 export default class PlayerInfoView extends Component {
   render() {
     return (
-      <div className="tags has-addons are-medium">
-        <span className="tag is-light is-info">
+      <div className="">
+        <span className="">
           {this.props.playerInfo.emoji}&nbsp;
           {this.props.playerInfo.nickname}
         </span>
         {this.props.canEdit && (
-          <span
-            className="tag is-light is-warning"
-            onClick={this.props.onEdit}
-            style={{ cursor: "pointer" }}
-          >
-            Edit
+          <span onClick={this.props.onEdit} style={{ cursor: "pointer" }}>
+            {" "}
+            <span className="mini-button">Edit</span>
           </span>
         )}
       </div>
