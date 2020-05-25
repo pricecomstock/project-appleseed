@@ -16,7 +16,6 @@
     "lodash": "^4.17.15",
     "node-sass": "^4.14.1",
     "pattern.css": "^1.0.0",
-    "pizzicato": "^0.6.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
@@ -25,7 +24,8 @@
     "sequelize": "^5.21.7",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
-    "sqlite3": "^4.2.0"
+    "sqlite3": "^4.2.0",
+    "uifx": "^2.0.7"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,6 +37,7 @@
     "prod-server": "NODE_ENV=production nodemon ./server/server.js",
     "test-server": "NODE_ENV=production CORS=allow nodemon ./server/server.js",
     "dev-server": "NODE_ENV=development nodemon ./server/server.js",
+    "dev-server-no-restart": "NODE_ENV=development node ./server/server.js",
     "deploy": "./deploydocker.sh"
   },
   "eslintConfig": {
