@@ -17,6 +17,10 @@ import {
 
 // https://www.valentinog.com/blog/socket-react/
 
+import UIfx from "uifx";
+import tickTickSound from "../../audio/samples/ticktick.mp3";
+const tick = new UIfx(tickTickSound);
+
 export default class HostView extends Component {
   state = {
     ...sharedInitialState(this.props),
@@ -125,7 +129,7 @@ export default class HostView extends Component {
           style={{ color: this.state.theme.textColor }}
         >
           {/* Admin Header */}
-          <div className="host-header">
+          <div className="host-header" onClick={() => tick.play(0.3)}>
             <div className="game-panel">
               <div className="is-size-5">
                 <p>
