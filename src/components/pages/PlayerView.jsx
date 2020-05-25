@@ -6,6 +6,7 @@ import PlayerVote from "../player/PlayerVote";
 import PlayerStatusDisplay from "../player/PlayerStatusDisplay";
 import Prompt from "../player/Prompt";
 import Timer from "../Timer";
+import Volume from "../Volume";
 
 import classNames from "classnames";
 
@@ -15,6 +16,7 @@ import {
   sharedInitialState,
 } from "../../shared/sharedViewInit";
 
+import audio from "../../audio/audio";
 // https://www.valentinog.com/blog/socket-react/
 
 import C from "../../constants";
@@ -58,6 +60,7 @@ export default class PlayerView extends Component {
       // Get acknowledgement from server before moving onto next prompt
       // The client would previousy continue as normal
       () => {
+        audio.playTada(this.state.volume);
         this.setState({ promptIndex: this.state.promptIndex + 1 });
       }
     );
@@ -71,6 +74,7 @@ export default class PlayerView extends Component {
         playerId: this.state.playerId,
       },
       () => {
+        audio.playCheck(this.state.volume);
         this.setState({ showVotingOptions: false });
       }
     );
@@ -157,6 +161,11 @@ export default class PlayerView extends Component {
             ) : (
               <div>{this.state.roomCode}</div>
             )}
+
+            <Volume
+              muted={this.state.volume == 0}
+              toggleMute={this.toggleMute}
+            ></Volume>
             {this.state.playerInfo && (
               <PlayerInfoView
                 playerInfo={this.state.playerInfo}

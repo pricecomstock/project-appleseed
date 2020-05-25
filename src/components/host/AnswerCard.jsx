@@ -5,7 +5,6 @@ import "../../transitions.css";
 
 export default class AnswerCard extends Component {
   render() {
-    console.log("voters", this.props.voters);
     return (
       <div className="answer-card-container">
         <div className="answer-card flex-center-text">

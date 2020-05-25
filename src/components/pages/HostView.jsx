@@ -8,6 +8,7 @@ import ControlButtons from "../host/ControlButtons";
 import Timer from "../Timer";
 import PlayerList from "../host/PlayerList";
 import Options from "../host/Options";
+import Volume from "../Volume";
 
 import createSocketClient from "../../shared/createSocketClient";
 import {
@@ -17,9 +18,7 @@ import {
 
 // https://www.valentinog.com/blog/socket-react/
 
-import UIfx from "uifx";
-import tickTickSound from "../../audio/samples/ticktick.mp3";
-const tick = new UIfx(tickTickSound);
+import audio from "../../audio/audio";
 
 export default class HostView extends Component {
   state = {
@@ -71,6 +70,10 @@ export default class HostView extends Component {
 
     this.state.socket.on("players", (data) => {
       console.log("Players", data);
+      if (data.players.length > this.state.players.length) {
+        // New player
+        audio.playCheck(this.state.volume);
+      }
       this.setState({ players: data.players });
     });
 
@@ -101,6 +104,7 @@ export default class HostView extends Component {
     });
 
     this.state.socket.on("scoreboarddata", (data) => {
+      audio.playWow(this.state.volume);
       this.setState({ scoreboardData: data.scoreboardData });
     });
 
@@ -129,7 +133,7 @@ export default class HostView extends Component {
           style={{ color: this.state.theme.textColor }}
         >
           {/* Admin Header */}
-          <div className="host-header" onClick={() => tick.play(0.3)}>
+          <div className="host-header">
             <div className="game-panel">
               <div className="is-size-5">
                 <p>
@@ -140,6 +144,11 @@ export default class HostView extends Component {
                 </p>
               </div>
             </div>
+
+            <Volume
+              muted={this.state.volume == 0}
+              toggleMute={this.toggleMute}
+            ></Volume>
             <div className="game-panel">
               <ControlButtons
                 currentState={this.state.currentState}

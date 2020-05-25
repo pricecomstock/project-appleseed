@@ -1,4 +1,5 @@
 import C from "../constants";
+import audio from "../audio/audio";
 
 export function sharedInitialState(props) {
   return {
@@ -23,6 +24,8 @@ export function sharedInitialState(props) {
       textColor: "white",
       backgroundClasses: "pattern-diagonal-stripes-xl",
     },
+
+    volume: C.DEFAULT_VOLUME,
   };
 }
 
@@ -57,12 +60,14 @@ function bindableSocketInitialization() {
   });
 
   this.state.socket.on("timer", (data) => {
-    this.startTimer(data.msTotal, data.msRemaining);
+    const audioWarningEnabled = this.state.currentState === "prompts";
+    console.log("starting timer with warning", audioWarningEnabled);
+    this.startTimer(data.msTotal, data.msRemaining, audioWarningEnabled);
   });
 }
 
 function bindableSharedMethodInit() {
-  this.startTimer = (msTotal, msRemaining) => {
+  this.startTimer = (msTotal, msRemaining, audioWarning) => {
     this.setState({
       clientTimerCalculatedEndTime:
         Date.now() + msRemaining - C.TIMER_SAFETY_BUFFER,
@@ -74,13 +79,40 @@ function bindableSharedMethodInit() {
         this.state.currentState === "prompts",
     });
 
-    this.setState({
-      timerIntervalId: setInterval(() => {
+    let intervalFn = () => {};
+
+    if (audioWarning) {
+      const WARNING_THRESHOLD_MS = 10000;
+      let warningHasPlayed = false;
+
+      intervalFn = () => {
+        let msRemaining = this.state.clientTimerCalculatedEndTime - Date.now();
+        if (!warningHasPlayed && msRemaining < WARNING_THRESHOLD_MS) {
+          warningHasPlayed = true;
+          audio.playTickTick(this.state.volume);
+        }
+        this.setState({
+          msRemaining: msRemaining,
+        });
+      };
+    } else {
+      intervalFn = () => {
         this.setState({
           msRemaining: this.state.clientTimerCalculatedEndTime - Date.now(),
         });
-      }, C.TIMER_COUNTDOWN_INTERVAL),
+      };
+    }
+    this.setState({
+      timerIntervalId: setInterval(intervalFn, C.TIMER_COUNTDOWN_INTERVAL),
     });
+  };
+
+  this.clearTimer = () => {
+    clearInterval(this.state.timerIntervalId);
+  };
+
+  this.toggleMute = () => {
+    this.setState({ volume: this.state.volume > 0 ? 0 : C.DEFAULT_VOLUME });
   };
 }
 

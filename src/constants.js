@@ -16,6 +16,8 @@ const C = {
     NOT_OWN_ANSWER: "not own answer", // can vote for other answers on own prompts
     ANY: "any", // can vote for any answer
   },
+
+  DEFAULT_VOLUME: 0.6,
 };
 
 module.exports = C;
