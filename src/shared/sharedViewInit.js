@@ -67,6 +67,9 @@ function bindableSocketInitialization() {
 }
 
 function bindableSharedMethodInit() {
+  // clearing could probably moved somewhere else
+  // It is relying there always being another timer after any timers with audio that will cause a clear
+  this.clearTimer(); // only one timer at a time
   this.startTimer = (msTotal, msRemaining, audioWarning) => {
     this.setState({
       clientTimerCalculatedEndTime:
