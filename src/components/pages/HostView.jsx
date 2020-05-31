@@ -119,6 +119,7 @@ export default class HostView extends Component {
   }
 
   componentWillUnmount() {
+    this.clearTimer();
     this.state.socket.removeAllListeners();
   }
 

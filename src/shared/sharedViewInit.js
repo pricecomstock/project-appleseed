@@ -37,6 +37,9 @@ function bindableSocketInitialization() {
 
   this.state.socket.on("state", (newGameState) => {
     console.log("Game state updated", newGameState);
+    if (newGameState.currentState === "prompts") {
+      audio.playDaDaPling();
+    }
     this.setState({ currentState: newGameState.currentState });
   });
 
