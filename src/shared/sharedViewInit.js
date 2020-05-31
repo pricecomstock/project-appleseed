@@ -16,14 +16,7 @@ export function sharedInitialState(props) {
     timerIsVisible: false,
     timerIntervalId: null,
 
-    theme: {
-      backgroundStyles: {
-        backgroundColor: "#777",
-        color: "#666",
-      },
-      textColor: "white",
-      backgroundClasses: "pattern-diagonal-stripes-xl",
-    },
+    theme: C.DEFAULT_THEME,
 
     volume: C.DEFAULT_VOLUME,
   };

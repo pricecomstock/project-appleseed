@@ -18,6 +18,15 @@ const C = {
   },
 
   DEFAULT_VOLUME: 0.6,
+
+  DEFAULT_THEME: {
+    backgroundStyles: {
+      backgroundColor: "#777",
+      color: "#666",
+    },
+    textColor: "white",
+    backgroundClasses: "pattern-diagonal-stripes-xl",
+  },
 };
 
 module.exports = C;

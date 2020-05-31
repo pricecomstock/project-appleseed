@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import axios from "../../axios-backend";
 import { Link } from "react-router-dom";
+import classNames from "classnames";
+
+const homeTheme = {
+  backgroundStyles: {
+    backgroundColor: "#f3722c",
+    color: "#f8961e",
+  },
+  textColor: "#000",
+  backgroundClasses: "pattern-diagonal-stripes-xl",
+};
 
 export default class Home extends Component {
   state = { enteredCode: "" };
@@ -55,52 +65,43 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="section container has-text-centered">
-        <header>
-          <h1 className="title">bitwits!</h1>
-        </header>
-        <div className="columns is-centered">
-          <div className="column is-one-third-tablet">
-            <h2 className="subtitle">Enter a room code to join!</h2>
-            <div
-              className="field has-addons is-grouped-centered"
+      <div
+        className={classNames("fun-bg", homeTheme.backgroundClasses)}
+        style={homeTheme.backgroundStyles}
+      >
+        <div className="homepage">
+          <div>
+            <h1 className="bitwits-text-title">bitwits!</h1>
+          </div>
+          <div className="game-panel home-form">
+            <h1>Enter a room code to join!</h1>
+            <input
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   this.joinGame();
                 }
               }}
-            >
-              <div className="control is-expanded">
-                <input
-                  className="input is-large is-uppercase"
-                  type="text"
-                  placeholder="CODE"
-                  value={this.state.enteredCode}
-                  onChange={this.handleCodeChange}
-                />
-              </div>
-              <div className="control">
-                <button
-                  className="button is-large is-primary"
-                  onClick={this.joinGame}
-                >
-                  Join
-                </button>
-              </div>
-            </div>
+              className=""
+              type="text"
+              placeholder="CODE"
+              value={this.state.enteredCode}
+              onChange={this.handleCodeChange}
+            />
+            <button className="game-button success" onClick={this.joinGame}>
+              Join
+            </button>
             {this.state.isJoinError && (
               <p className="has-text-danger">{this.state.joinErrorMessage}</p>
             )}
             <hr />
-            <p>Or create a new one!</p>
-            <div className="field">
-              <button
-                onClick={this.createGame}
-                className="button is-primary is-outlined is-large"
-              >
-                Create Game
-              </button>
-            </div>
+            <p>
+              Or{" "}
+              <button onClick={this.createGame} className="mini-button">
+                Create
+              </button>{" "}
+              a new one!
+            </p>
+            <div className="field"></div>
             <hr />
             Or <Link to="/customprompts">create your own set of prompts!</Link>
           </div>

@@ -8,6 +8,16 @@ $family-sans-serif: "Nunito", sans-serif;
 
 @import "../node_modules/bulma/bulma.sass";
 
+:root {
+  --p-red: #f94144;
+  --p-orange-red: #f3722c;
+  --p-orange-yellow: #f8961e;
+  --p-yellow: #f9c74f;
+  --p-green: #90be6d;
+  --p-teal: #43aa8b;
+  --p-blue: #577590;
+}
+
 // Fix for last child of box elements looking different
 .prompt-box:not(:last-child) {
   margin-bottom: 0;
@@ -348,13 +358,31 @@ div.fun-bg {
   justify-self: center;
 }
 
-.player-button {
+.game-button {
   border-radius: 8px;
   border: 3px solid black;
   background-color: $white-ter;
   color: $black-ter;
   overflow: hidden;
   padding: 0.5rem 0.5rem;
+  cursor: pointer;
+
+  &.primary {
+    background-color: var(--p-teal);
+    color: $white-ter;
+  }
+
+  &.success {
+    background-color: var(--p-green);
+  }
+
+  &.warn {
+    background-color: var(--p-orange-yellow);
+  }
+
+  &.danger {
+    background-color: var(--p-red);
+  }
 }
 
 .player-status-container {
@@ -392,15 +420,53 @@ div.fun-bg {
 }
 
 .mini-button {
-  // border: 1.5px solid black;
+  border: 2px solid black;
   border-radius: 4px;
   padding: 0.125em 0.25em;
-  background-color: $primary;
+  background-color: var(--p-orange-yellow);
   color: $white-ter;
   font-size: 0.75em;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .on-top {
   z-index: 10;
+}
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.home-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  padding: 2em;
+  margin: 0em 0.5em;
+
+  input {
+    color: $black-ter;
+    border: 3px solid black;
+  }
+}
+
+.home-form > input {
+  width: 50%;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  margin: 0.5em 0em;
+}
+
+.bitwits-text-title {
+  font-size: 4em;
+  font-weight: bold;
+  color: $white-ter;
 }
