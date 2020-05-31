@@ -7,8 +7,10 @@ export default function Prompt(props) {
   const [answer, setAnswer] = useState("");
 
   let submit = () => {
-    props.submitAnswer(props.prompt.id, answer);
-    setAnswer("");
+    if (answer.length > 0) {
+      props.submitAnswer(props.prompt.id, answer);
+      setAnswer("");
+    }
   };
 
   return (
