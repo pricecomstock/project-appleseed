@@ -145,10 +145,12 @@ export default class HostView extends Component {
               </div>
             </div>
 
-            <Volume
-              muted={this.state.volume == 0}
-              toggleMute={this.toggleMute}
-            ></Volume>
+            <div className="game-panel push-left flex-center-text">
+              <Volume
+                muted={this.state.volume == 0}
+                toggleMute={this.toggleMute}
+              ></Volume>
+            </div>
             <div className="game-panel">
               <ControlButtons
                 currentState={this.state.currentState}
