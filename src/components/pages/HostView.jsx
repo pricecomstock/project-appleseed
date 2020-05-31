@@ -190,11 +190,11 @@ export default class HostView extends Component {
           {this.state.currentState === "lobby" && (
             <>
               <div className="host-top-main">
-                <LobbyView
+                <LobbyView roomCode={this.state.roomCode}></LobbyView>
+                <PlayerList
+                  title={`${this.state.players.length}/16 players have joined`}
                   players={this.state.players}
-                  roomCode={this.state.roomCode}
-                ></LobbyView>
-                <PlayerList players={this.state.players}></PlayerList>
+                ></PlayerList>
               </div>
               <div className="host-lower game-panel">
                 <Options
@@ -209,13 +209,14 @@ export default class HostView extends Component {
             <>
               <div className="host-main">
                 <PlayerList
+                  title="Waiting on these players to answer their prompts!"
                   extraCssClasses="ld ld-bounce"
                   players={this.state.players.filter((player) => {
                     return this.state.yetToAnswer.includes(player.playerId);
                   })}
                 ></PlayerList>
               </div>
-              <div className="host-lower">
+              <div className="host-lower game-panel">
                 <h1 className="has-text-centered is-size-2">
                   Answer prompts on your devices now!
                 </h1>

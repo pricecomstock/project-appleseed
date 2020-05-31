@@ -54,7 +54,7 @@ $family-sans-serif: "Nunito", sans-serif;
   padding: 0.5rem 0.5rem;
 }
 
-.lobby-player-view {
+.lobby-player-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -63,6 +63,14 @@ $family-sans-serif: "Nunito", sans-serif;
 
   > div {
     flex: 0 1 20%;
+  }
+}
+
+.lobby-player-list-title {
+  margin-bottom: 1em;
+  > p {
+    text-align: center;
+    font-size: 2em;
   }
 }
 
@@ -119,10 +127,10 @@ $family-sans-serif: "Nunito", sans-serif;
   > p.answer-text {
     flex: 0 0 100%;
     text-align: center;
-    font-size: 1.75vw;
-    @media (min-aspect-ratio: 2/1) {
-      font-size: 3.5vh;
-    }
+    font-size: 1.5em;
+    // @media (min-aspect-ratio: 2/1) {
+    //   font-size: 3.7vh;
+    // }
   }
 }
 

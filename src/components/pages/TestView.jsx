@@ -139,10 +139,14 @@ export default class TestView extends Component {
         <hr />
         <h1 className="title">PlayerList</h1>
         <PlayerList
+          title="Test playerlist title 1"
           players={this.state.testData.players}
           extraCssClasses="ld ld-bounce"
         ></PlayerList>
-        <PlayerList players={this.state.testData.players}></PlayerList>
+        <PlayerList
+          players={this.state.testData.players}
+          title="Test playerlist title 2"
+        ></PlayerList>
         <hr />
         <h1 className="title">Timer</h1>
         <Timer

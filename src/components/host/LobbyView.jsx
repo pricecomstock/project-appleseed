@@ -15,11 +15,6 @@ export default class LobbyView extends Component {
           >
             {this.props.roomCode}
           </a>
-          {this.props.players && (
-            <div className="is-size-3 has-text-centered">
-              {this.props.players.length}/16 Players
-            </div>
-          )}
         </div>
       </div>
     );

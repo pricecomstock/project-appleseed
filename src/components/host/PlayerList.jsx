@@ -5,7 +5,10 @@ export default class PlayerList extends Component {
   render() {
     return (
       <div>
-        <div className="lobby-player-view">
+        <div className="lobby-player-list-title">
+          <p>{this.props.title}</p>
+        </div>
+        <div className="lobby-player-list">
           {this.props.players.map((player, index) => (
             <div
               className={classNames(
