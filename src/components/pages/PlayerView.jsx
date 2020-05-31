@@ -60,7 +60,6 @@ export default class PlayerView extends Component {
       // Get acknowledgement from server before moving onto next prompt
       // The client would previousy continue as normal
       () => {
-        audio.playTada(this.state.volume);
         this.setState({ promptIndex: this.state.promptIndex + 1 });
       }
     );

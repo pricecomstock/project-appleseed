@@ -60,17 +60,23 @@ function bindableSocketInitialization() {
   });
 
   this.state.socket.on("timer", (data) => {
-    const audioWarningEnabled = this.state.currentState === "prompts";
-    console.log("starting timer with warning", audioWarningEnabled);
-    this.startTimer(data.msTotal, data.msRemaining, audioWarningEnabled);
+    let audioWarningMs = 0; // no warning
+    if (this.state.currentState === "prompts") {
+      audioWarningMs = 10000;
+    }
+    this.startTimer(data.msTotal, data.msRemaining, audioWarningMs);
   });
 }
 
 function bindableSharedMethodInit() {
+  this.clearTimer = () => {
+    clearInterval(this.state.timerIntervalId);
+  };
+
   // clearing could probably moved somewhere else
   // It is relying there always being another timer after any timers with audio that will cause a clear
-  this.clearTimer(); // only one timer at a time
-  this.startTimer = (msTotal, msRemaining, audioWarning) => {
+  this.startTimer = (msTotal, msRemaining, audioWarningMs) => {
+    this.clearTimer(); // only one timer at a time
     this.setState({
       clientTimerCalculatedEndTime:
         Date.now() + msRemaining - C.TIMER_SAFETY_BUFFER,
@@ -83,14 +89,18 @@ function bindableSharedMethodInit() {
     });
 
     let intervalFn = () => {};
-
-    if (audioWarning) {
-      const WARNING_THRESHOLD_MS = 10000;
+    if (audioWarningMs > 0) {
       let warningHasPlayed = false;
 
       intervalFn = () => {
         let msRemaining = this.state.clientTimerCalculatedEndTime - Date.now();
-        if (!warningHasPlayed && msRemaining < WARNING_THRESHOLD_MS) {
+        if (!warningHasPlayed && msRemaining < audioWarningMs) {
+          console.log(
+            "Playing audio warning!",
+            warningHasPlayed,
+            msRemaining,
+            audioWarningMs
+          );
           warningHasPlayed = true;
           audio.playTickTick(this.state.volume);
         }
@@ -108,10 +118,6 @@ function bindableSharedMethodInit() {
     this.setState({
       timerIntervalId: setInterval(intervalFn, C.TIMER_COUNTDOWN_INTERVAL),
     });
-  };
-
-  this.clearTimer = () => {
-    clearInterval(this.state.timerIntervalId);
   };
 
   this.toggleMute = () => {

@@ -7,7 +7,7 @@ export default class Timer extends Component {
         <span
           style={{
             width: `${(this.props.msRemaining / this.props.msTotal) * 100}%`,
-            "background-color":
+            backgroundColor:
               this.props.msRemaining > 10000
                 ? "#b0db43"
                 : this.props.msRemaining > 3000

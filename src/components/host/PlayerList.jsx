@@ -16,7 +16,7 @@ export default class PlayerList extends Component {
                 this.props.extraCssClasses
               )}
               key={index}
-              style={{ "animation-duration": "1.5s" }}
+              style={{ animationDuration: "1.5s" }}
             >
               <span className="is-size-2">{player.emoji}</span>{" "}
               <span>{player.nickname}</span>
