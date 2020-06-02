@@ -22,7 +22,14 @@ class GameRoom {
     this._playerSockets = [];
     this._adminSockets = [];
 
-    this._promptPicker = new PromptPicker(); // default prompts
+    PromptPicker.CreateDefaultOnly()
+      .then((promptPicker) => {
+        this._promptPicker = promptPicker;
+      })
+      .catch((err) => {
+        console.error("Prompt Picker Error");
+      });
+
     this._prompts = {};
     this._finalizedMatchupsToSend = [];
 
@@ -241,12 +248,10 @@ class GameRoom {
       console.log("Loading custom set", data.code);
       if (this.state === "lobby") {
         try {
-          this._promptPicker = PromptPicker.CreateForCustomSet(
-            data.code,
-            () => {
-              this.sendCustomPromptStatus();
-            }
-          );
+          PromptPicker.CreateForCustomSet(data.code).then((promptPicker) => {
+            this._promptPicker = promptPicker;
+            this.sendCustomPromptStatus();
+          });
         } catch (error) {
           console.error("Custom set doesn't exist");
         }
@@ -357,6 +362,19 @@ class GameRoom {
 
   emitToAdmins(event, data) {
     this._io.in(adminRoom(this._code)).emit(event, data);
+  }
+
+  closeRoom(reason) {
+    this.emitToAll("closedRoom", {
+      reason: reason,
+    });
+    this._playerSockets.forEach((socket) => {
+      socket.disconnect(true); // true also closes underlying connection
+    });
+    this._adminSockets.forEach((socket) => {
+      socket.disconnect(true);
+    });
+    this._timer.cancel();
   }
 
   // Relevant parts of state and data combined for sending to clients
@@ -525,7 +543,6 @@ StateMachine.factory(GameRoom, {
       }
     },
     onCloseVoting: function () {
-      // TODO Implement
       console.log("closeVoting");
     },
     onScoring: function () {
@@ -560,7 +577,6 @@ StateMachine.factory(GameRoom, {
       }
     },
     onNextSet: function () {
-      // TODO Implement
       console.log("nextSet");
     },
     onEndOfRound: function () {

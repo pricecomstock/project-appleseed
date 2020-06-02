@@ -9,36 +9,21 @@ const {
   popRandomItemFromArray,
 } = require("../util");
 
-var defaultPrompts = [];
-
-getAllDefaultPrompts()
-  .then((prompts) => {
-    defaultPrompts = prompts;
-    console.log(`Loaded ${prompts.length} default prompts`);
-  })
-  .catch((err) => {
-    console.error("Uh oh, something went wrong loading the prompt DB");
-  });
-
-function getRandomDefaultPrompts(count) {
-  return randomItemsFromArrayWithoutRepeats(defaultPrompts);
-}
-
-function getRandomDefaultPrompt() {
-  return randomItemFromArray(defaultPrompts);
-}
+// FIX WITH THIS
+// https://stackoverflow.com/questions/20315434/node-js-asynchronous-module-loading
+/* or maybe
+if you export default prompts to its own module and access it through a function instead
+but that still won't fix the fact that the real DB gets loaded after unit tests */
+var defaultPromptsPromise = getAllDefaultPrompts();
 
 class PromptPicker {
-  constructor(useCustomSet, customSetCode, customSetLoadedCallback) {
-    if (useCustomSet) {
-      this._customSetCode = customSetCode;
-      getCustomSet(this._customSetCode)
-        .then((customSet) => {
-          this._customPrompts = customSet.prompts;
-          this._customPromptSetData = customSet.metadata;
-          customSetLoadedCallback();
-        })
-        .catch((err) => console.error(err));
+  constructor(defaultPrompts, customSet) {
+    this._defaultPrompts = defaultPrompts;
+
+    if (customSet) {
+      this._customSetCode = customSet.metadata.id;
+      this._customPrompts = customSet.prompts;
+      this._customPromptSetData = customSet.metadata;
     } else {
       this._customSetCode = null;
       this._customPrompts = [];
@@ -46,8 +31,18 @@ class PromptPicker {
     }
   }
 
-  static CreateForCustomSet(customSetCode, customSetLoadedCallback) {
-    return new PromptPicker(true, customSetCode, customSetLoadedCallback);
+  static async CreateForCustomSet(customSetCode) {
+    // Default set promise should resolve instantly after loading once
+    let customSetPromise = getCustomSet(customSetCode);
+    return new PromptPicker(
+      await defaultPromptsPromise,
+      await customSetPromise
+    );
+  }
+
+  static async CreateDefaultOnly() {
+    // Default set promise should resolve instantly after loading once
+    return new PromptPicker(await defaultPromptsPromise, null);
   }
 
   get customSetSummary() {
@@ -57,6 +52,14 @@ class PromptPicker {
       description: this._customPromptSetData.description,
       code: this._customSetCode,
     };
+  }
+
+  getRandomDefaultPrompts(count) {
+    return randomItemsFromArrayWithoutRepeats(this._defaultPrompts);
+  }
+
+  getRandomDefaultPrompt() {
+    return randomItemFromArray(this._defaultPrompts);
   }
 
   getPrompts(count) {
@@ -73,7 +76,7 @@ class PromptPicker {
       // fill the rest with default prompts
       selected = [
         ...selected,
-        ...getRandomDefaultPrompts(count - selected.length),
+        ...this.getRandomDefaultPrompts(count - selected.length),
       ];
     }
     return selected;
@@ -83,13 +86,11 @@ class PromptPicker {
     if (this._customPrompts.length > 0) {
       return popRandomItemFromArray(this._customPrompts);
     } else {
-      return getRandomDefaultPrompt();
+      return this.getRandomDefaultPrompt();
     }
   }
 }
 
 module.exports = {
-  getRandomDefaultPrompt,
-  getRandomDefaultPrompts,
   PromptPicker,
 };
