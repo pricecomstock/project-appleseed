@@ -1,6 +1,7 @@
 // var Room = require("./room");
 var GameRoom = require("./gameRoom");
 const { generateBase64Id, adminRoom } = require("./util");
+const C = require("../../src/constants");
 const PlayerData = require("./playerData");
 
 // TODO: implement namespace "garbage collection"
@@ -146,11 +147,21 @@ class RoomManager {
   createNewRoom() {
     let newRoom = new GameRoom(this.randomAvailableRoomCode(), this._io);
     this._rooms.push(newRoom);
+
+    // let newRoom = await GameRoom.CreateAsync(
+    //   this.randomAvailableRoomCode(),
+    //   this._io
+    // );
     // console.log(this._rooms);
     return {
       roomCode: newRoom.code,
       adminKey: newRoom.adminKey,
     };
+  }
+
+  deleteRoom(roomCode, reason) {
+    this.getRoomWithCode(room).closeRoom(reason);
+    this._rooms = this._rooms.filter((room) => room.code !== roomCode);
   }
 
   randomAvailableRoomCode() {

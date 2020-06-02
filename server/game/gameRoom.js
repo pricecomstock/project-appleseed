@@ -11,7 +11,7 @@ const lodash = require("lodash");
 const C = require("../../src/constants");
 
 class GameRoom {
-  constructor(code, io) {
+  constructor(code, io, preResolvedPromptPicker) {
     //TODO: Add game options
     this._code = code;
     this._io = io;
@@ -22,13 +22,17 @@ class GameRoom {
     this._playerSockets = [];
     this._adminSockets = [];
 
-    PromptPicker.CreateDefaultOnly()
-      .then((promptPicker) => {
-        this._promptPicker = promptPicker;
-      })
-      .catch((err) => {
-        console.error("Prompt Picker Error");
-      });
+    if (preResolvedPromptPicker) {
+      this._promptPicker = preResolvedPromptPicker;
+    } else {
+      PromptPicker.CreateDefaultOnly()
+        .then((promptPicker) => {
+          this._promptPicker = promptPicker;
+        })
+        .catch((err) => {
+          console.error("Prompt Picker Error");
+        });
+    }
 
     this._prompts = {};
     this._finalizedMatchupsToSend = [];
@@ -45,6 +49,10 @@ class GameRoom {
     this._currentTheme = getRandomTheme();
     // Game state
     this._fsm();
+  }
+
+  static async CreateAsync(code, io) {
+    return new GameRoom(code, io, await PromptPicker.CreateDefaultOnly());
   }
 
   initializePointTracker() {
