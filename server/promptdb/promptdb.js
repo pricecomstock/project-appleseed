@@ -4,6 +4,7 @@ const Model = Sequelize.Model;
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: __dirname + "/../../db/promptdb.sqlite",
+  logging: false,
 });
 
 sequelize
