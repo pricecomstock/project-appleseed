@@ -1,4 +1,4 @@
-const getPrompt = require("./sheetyPrompts");
+// const getPrompt = require("./sheetyPrompts");
 const {
   getShuffledCopyOfArray,
   randomItemFromArray,
