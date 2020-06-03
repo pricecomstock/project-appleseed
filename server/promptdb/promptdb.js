@@ -7,14 +7,11 @@ const sequelize = new Sequelize({
   logging: false,
 });
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log("DB connection established");
-  })
-  .catch((err) => {
-    console.error("Unable to connect to DB", err);
-  });
+async function initializeDB() {
+  await sequelize.authenticate();
+  console.log("DB connection established");
+  return true;
+}
 
 // Models
 class CustomSet extends Model {}
@@ -214,6 +211,7 @@ async function insertDefaultPrompts(promptObjects) {
 }
 
 module.exports = {
+  initializeDB,
   createCustomSet,
   replaceCustomSet,
   getAllPromptsFromCustomSet,
