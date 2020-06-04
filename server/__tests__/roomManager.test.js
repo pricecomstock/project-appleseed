@@ -28,7 +28,3 @@ test("room manager deletes room", () => {
     expect(rm.checkRoomExists(room.code)).toBe(false);
   });
 });
-
-test("ez", () => {
-  expect(1 + 2).toBe(3);
-});
