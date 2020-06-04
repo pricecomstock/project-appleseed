@@ -158,13 +158,11 @@ class RoomManager {
     return newRoom;
   }
 
-  deleteRooms(roomCodesToDelete, reason) {
-    roomCodesToDelete.forEach((code) => {
-      this.getRoomWithCode(code).closeRoom(reason);
+  deleteRooms(roomCodesToDelete) {
+    console.log("Deleting rooms:", roomCodesToDelete);
+    this._rooms = this._rooms.filter((room) => {
+      !roomCodesToDelete.includes(room.code);
     });
-    this._rooms = this._rooms.filter(
-      (room) => !roomCodesToDelete.includes(room.code)
-    );
   }
 
   purgeInactiveRooms() {
@@ -175,7 +173,9 @@ class RoomManager {
       .map((room) => {
         return room.code;
       });
-    this.deleteRooms(roomCodesToDelete);
+    if (roomCodesToDelete.length > 0) {
+      this.deleteRooms(roomCodesToDelete);
+    }
   }
 
   randomAvailableRoomCode() {

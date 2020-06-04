@@ -31,18 +31,18 @@ test("room manager deletes room", () => {
   });
 });
 
-test("room manager purges room after inactive for 11 minutes but not 9 minutes", () => {
+test("room closes and gets purged after 12 minutes but not 9 minutes", () => {
   return rm.createNewRoom().then((room) => {
     jest.advanceTimersByTime(9 * 60 * 1000);
     expect(rm.checkRoomExists(room.code)).toBe(true);
-    jest.advanceTimersByTime(11 * 60 * 1000);
+    jest.advanceTimersByTime(12 * 60 * 1000);
     expect(rm.checkRoomExists(room.code)).toBe(false);
   });
 });
 
-test("room manager purges inactive room after 2 minutes", () => {
+test("room manager purges inactive room after 2 minutes of being inactive", () => {
   return rm.createNewRoom().then((room) => {
-    room.setInactive();
+    room.closeRoom();
     expect(rm.checkRoomExists(room.code)).toBe(true);
     jest.advanceTimersByTime(2 * 60 * 1000);
     expect(rm.checkRoomExists(room.code)).toBe(false);

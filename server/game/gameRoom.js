@@ -482,14 +482,10 @@ class GameRoom {
     this.sendThemeToAll();
   }
 
-  setInactive() {
-    this.isActive = false;
-  }
-
   resetInactiveTimer() {
     clearTimeout(this._inactiveTimeout);
     this._inactiveTimeout = setTimeout(() => {
-      this.isActive = false;
+      this.closeRoom("timeout for inactivity");
     }, C.ROOM_PURGE_ACTIVITY_TIMEOUT_MS);
   }
 }
