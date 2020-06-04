@@ -14,6 +14,7 @@ class GameRoom {
   constructor(code, io, preResolvedPromptPicker) {
     //TODO: Add game options
     this._code = code;
+    this.isActive = true;
     this._io = io;
     // this._manager = manager;
 
@@ -49,6 +50,8 @@ class GameRoom {
     this._currentTheme = getRandomTheme();
 
     this._timer = Timer.createDummy();
+    this._inactiveTimeout = null;
+    this.resetInactiveTimer();
     // Game state
     this._fsm();
   }
@@ -375,6 +378,7 @@ class GameRoom {
   }
 
   closeRoom(reason) {
+    this.isActive = false;
     this.emitToAll("closedRoom", {
       reason: reason,
     });
@@ -477,6 +481,17 @@ class GameRoom {
     this._currentTheme = getRandomTheme();
     this.sendThemeToAll();
   }
+
+  setInactive() {
+    this.isActive = false;
+  }
+
+  resetInactiveTimer() {
+    clearTimeout(this._inactiveTimeout);
+    this._inactiveTimeout = setTimeout(() => {
+      this.isActive = false;
+    }, C.ROOM_PURGE_ACTIVITY_TIMEOUT_MS);
+  }
 }
 
 StateMachine.factory(GameRoom, {
@@ -494,6 +509,7 @@ StateMachine.factory(GameRoom, {
   ],
   methods: {
     onEnterState: function () {
+      this.resetInactiveTimer();
       this.sendStateToAll();
     },
     onStartGame: function () {

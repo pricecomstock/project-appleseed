@@ -25,6 +25,10 @@ class RoomManager {
   constructor(io) {
     this._rooms = [];
 
+    this._purgeIntervalId = setInterval(() => {
+      this.purgeInactiveRooms();
+    }, C.ROOM_PURGE_INTERVAL_MS);
+
     this._io = io;
     this._io.on("connection", (socket) => {
       // io is the server
@@ -154,9 +158,24 @@ class RoomManager {
     return newRoom;
   }
 
-  deleteRoom(roomCode, reason) {
-    this.getRoomWithCode(roomCode).closeRoom(reason);
-    this._rooms = this._rooms.filter((room) => room.code !== roomCode);
+  deleteRooms(roomCodesToDelete, reason) {
+    roomCodesToDelete.forEach((code) => {
+      this.getRoomWithCode(code).closeRoom(reason);
+    });
+    this._rooms = this._rooms.filter(
+      (room) => !roomCodesToDelete.includes(room.code)
+    );
+  }
+
+  purgeInactiveRooms() {
+    let roomCodesToDelete = this._rooms
+      .filter((room) => {
+        return !room.isActive;
+      })
+      .map((room) => {
+        return room.code;
+      });
+    this.deleteRooms(roomCodesToDelete);
   }
 
   randomAvailableRoomCode() {

@@ -4,6 +4,8 @@ const socketIo = require("socket.io");
 var io = null;
 var rm = null;
 
+jest.useFakeTimers();
+
 beforeEach(() => {
   // NOTE anything in this function must be saved into global scope for access by test
   io = new socketIo();
@@ -24,7 +26,25 @@ test("room manager creates room", () => {
 test("room manager deletes room", () => {
   return rm.createNewRoom().then((room) => {
     expect(rm.checkRoomExists(room.code)).toBe(true);
-    rm.deleteRoom(room.code, "test");
+    rm.deleteRooms([room.code], "test");
+    expect(rm.checkRoomExists(room.code)).toBe(false);
+  });
+});
+
+test("room manager purges room after inactive for 11 minutes but not 9 minutes", () => {
+  return rm.createNewRoom().then((room) => {
+    jest.advanceTimersByTime(9 * 60 * 1000);
+    expect(rm.checkRoomExists(room.code)).toBe(true);
+    jest.advanceTimersByTime(11 * 60 * 1000);
+    expect(rm.checkRoomExists(room.code)).toBe(false);
+  });
+});
+
+test("room manager purges inactive room after 2 minutes", () => {
+  return rm.createNewRoom().then((room) => {
+    room.setInactive();
+    expect(rm.checkRoomExists(room.code)).toBe(true);
+    jest.advanceTimersByTime(2 * 60 * 1000);
     expect(rm.checkRoomExists(room.code)).toBe(false);
   });
 });
