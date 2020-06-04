@@ -47,6 +47,8 @@ class GameRoom {
     this._pointTracker = null;
 
     this._currentTheme = getRandomTheme();
+
+    this._timer = Timer.createDummy();
     // Game state
     this._fsm();
   }

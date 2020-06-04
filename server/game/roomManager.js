@@ -144,23 +144,18 @@ class RoomManager {
     return this._rooms;
   }
 
-  createNewRoom() {
-    let newRoom = new GameRoom(this.randomAvailableRoomCode(), this._io);
+  async createNewRoom() {
+    let newRoom = await GameRoom.CreateAsync(
+      this.randomAvailableRoomCode(),
+      this._io
+    );
     this._rooms.push(newRoom);
 
-    // let newRoom = await GameRoom.CreateAsync(
-    //   this.randomAvailableRoomCode(),
-    //   this._io
-    // );
-    // console.log(this._rooms);
-    return {
-      roomCode: newRoom.code,
-      adminKey: newRoom.adminKey,
-    };
+    return newRoom;
   }
 
   deleteRoom(roomCode, reason) {
-    this.getRoomWithCode(room).closeRoom(reason);
+    this.getRoomWithCode(roomCode).closeRoom(reason);
     this._rooms = this._rooms.filter((room) => room.code !== roomCode);
   }
 

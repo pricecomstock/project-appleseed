@@ -27,6 +27,12 @@ class Timer {
     return new Timer(seconds * 1000, onCompleteFunction);
   }
 
+  static createDummy() {
+    let timer = new Timer(10000);
+    timer.cancel();
+    return timer;
+  }
+
   setCheckTimeout(ms) {
     this._checkTimeoutId = setTimeout(() => {
       this.checkTimer();
@@ -72,10 +78,5 @@ class Timer {
     this._onComplete();
   }
 }
-
-test = () => {
-  let timer = new Timer(5000, () => console.log("Test Done!"));
-};
-// test();
 
 module.exports = Timer;
