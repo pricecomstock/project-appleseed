@@ -110,6 +110,7 @@ class GameRoom {
   }
 
   addPlayer(playerSocket) {
+    this.resetInactiveTimer();
     this.sendThemeToIndividual(playerSocket);
     // Add to Player Sockets list
     this._playerSockets.push(playerSocket);

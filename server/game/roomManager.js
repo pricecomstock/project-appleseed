@@ -4,8 +4,6 @@ const { generateBase64Id, adminRoom } = require("./util");
 const C = require("../../src/constants");
 const PlayerData = require("./playerData");
 
-// TODO: implement namespace "garbage collection"
-
 function generateRoomCode() {
   const codeLength = 4;
   // const validCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -23,7 +21,7 @@ function generateRoomCode() {
 
 class RoomManager {
   constructor(io) {
-    this._rooms = [];
+    this._rooms = new Map();
 
     this._purgeIntervalId = setInterval(() => {
       this.purgeInactiveRooms();
@@ -153,20 +151,22 @@ class RoomManager {
       this.randomAvailableRoomCode(),
       this._io
     );
-    this._rooms.push(newRoom);
+    this._rooms.set(newRoom.code, newRoom);
 
     return newRoom;
   }
 
   deleteRooms(roomCodesToDelete) {
     console.log("Deleting rooms:", roomCodesToDelete);
-    this._rooms = this._rooms.filter((room) => {
-      !roomCodesToDelete.includes(room.code);
+    roomCodesToDelete.forEach((code) => {
+      this._rooms.delete(code);
     });
   }
 
   purgeInactiveRooms() {
-    let roomCodesToDelete = this._rooms
+    if (this._rooms.size === 0) return;
+
+    let roomCodesToDelete = [...this._rooms.values()]
       .filter((room) => {
         return !room.isActive;
       })
@@ -190,15 +190,7 @@ class RoomManager {
   }
 
   checkRoomExists(code) {
-    return (
-      this._rooms
-        // Create array of room codes
-        .map((room) => {
-          return room.code;
-        })
-        // true if this array has our code in it
-        .includes(code)
-    );
+    return this._rooms.has(code);
   }
 
   checkRoomJoinability(code) {
@@ -211,9 +203,7 @@ class RoomManager {
   }
 
   getRoomWithCode(code) {
-    return this._rooms.find((room) => {
-      return room.code === code;
-    });
+    return this._rooms.get(code);
   }
 }
 

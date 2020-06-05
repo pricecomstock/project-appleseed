@@ -62,6 +62,10 @@ function bindableSocketInitialization() {
     }
     this.startTimer(data.msTotal, data.msRemaining, audioWarningMs);
   });
+
+  this.state.socket.on("closedRoom", (data) => {
+    this.props.history.push("/");
+  });
 }
 
 function bindableSharedMethodInit() {

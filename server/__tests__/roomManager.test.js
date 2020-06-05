@@ -48,3 +48,9 @@ test("room manager purges inactive room after 2 minutes of being inactive", () =
     expect(rm.checkRoomExists(room.code)).toBe(false);
   });
 });
+
+test("purge inactive rooms doesn't fail if there are zero rooms", () => {
+  expect(() => {
+    rm.purgeInactiveRooms;
+  }).not.toThrow(Error);
+});
