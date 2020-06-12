@@ -187,7 +187,7 @@ class GameRoom {
   }
 
   addAdmin(adminSocket) {
-    this.sendThemeToIndividual(adminSocket);
+    this.giveAdminCurrentInfo(adminSocket);
     adminSocket.on("startGame", (data) => {
       if (this.can("startGame")) {
         this.startGame();
@@ -290,6 +290,16 @@ class GameRoom {
     });
   }
 
+  giveAdminCurrentInfo(adminSocket) {
+    // For reconnects
+    this.sendOptionsToIndividual(adminSocket);
+    this.sendThemeToIndividual(adminSocket);
+
+    this.sendStateToIndividual(adminSocket);
+    this.sendTimerToIndividual(adminSocket);
+    this.sendCurrentMatchupToAdmins();
+  }
+
   givePlayerCurrentInfo(playerSocket) {
     // For reconnects
     this.sendOptionsToIndividual(playerSocket);
@@ -299,10 +309,10 @@ class GameRoom {
       this.sendStateToIndividual(playerSocket);
       if (this.state === "prompts") {
         this.sendUnansweredPromptsToPlayer(playerSocket);
-        this.sendTimerToIndividualPlayer(playerSocket);
+        this.sendTimerToIndividual(playerSocket);
       } else if (this.state === "voting") {
         this.sendVotingOptionsToIndividualPlayer(playerSocket);
-        this.sendTimerToIndividualPlayer(playerSocket);
+        this.sendTimerToIndividual(playerSocket);
       }
     }
   }
@@ -334,8 +344,8 @@ class GameRoom {
     });
   }
 
-  sendOptionsToIndividual(playerSocket) {
-    playerSocket.emit("gameoptions", {
+  sendOptionsToIndividual(socket) {
+    socket.emit("gameoptions", {
       options: this._options,
       currentRoundIndex: this._currentRoundIndex,
     });
@@ -413,6 +423,10 @@ class GameRoom {
       throw Error("no prompts left!");
     }
     this._currentVotingMatchup = this._finalizedMatchupsToSend.pop();
+    this.sendCurrentMatchupToAdmins();
+  }
+
+  sendCurrentMatchupToAdmins() {
     this.emitToAdmins("nextfilledprompt", {
       prompt: this._currentVotingMatchup,
     });
@@ -435,9 +449,9 @@ class GameRoom {
     this.emitToAll("timer", this._timer.summary());
   }
 
-  sendTimerToIndividualPlayer(playerSocket) {
+  sendTimerToIndividual(socket) {
     try {
-      playerSocket.emit("timer", this._timer.summary());
+      socket.emit("timer", this._timer.summary());
     } catch (error) {
       console.log(error);
     }
