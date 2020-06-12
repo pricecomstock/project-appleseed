@@ -49,18 +49,18 @@ export default class ControlButtons extends Component {
       <div className="buttons are-medium">
         {this.props.currentState === "lobby" && (
           <button
-            className="button is-rounded is-warning is-inverted"
-            onClick={this.startGame}
+            className="button is-rounded is-danger is-small is-outlined"
+            onClick={this.closeRoom}
           >
-            Start Game
+            Close Room
           </button>
         )}
         {this.props.currentState === "lobby" && (
           <button
-            className="button is-rounded is-danger"
-            onClick={this.closeRoom}
+            className="button is-rounded is-warning is-inverted"
+            onClick={this.startGame}
           >
-            Close Room
+            Start Game
           </button>
         )}
         {this.props.currentState === "prompts" && (
