@@ -87,7 +87,10 @@ export default class Home extends Component {
               value={this.state.enteredCode}
               onChange={this.handleCodeChange}
             />
-            <button className="game-button success" onClick={this.joinGame}>
+            <button
+              className="join-button game-button success"
+              onClick={this.joinGame}
+            >
               Join
             </button>
             {this.state.isJoinError && (
