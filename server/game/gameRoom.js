@@ -194,6 +194,10 @@ class GameRoom {
       }
     });
 
+    adminSocket.on("closeRoom", (data) => {
+      this.closeRoom("closed by host");
+    });
+
     adminSocket.on("closePrompts", (data) => {
       if (this.can("closePrompts")) {
         this._timer.cancel();
@@ -379,6 +383,7 @@ class GameRoom {
   }
 
   closeRoom(reason) {
+    this._timer.cancel();
     this.isActive = false;
     this.emitToAll("closedRoom", {
       reason: reason,
@@ -389,7 +394,6 @@ class GameRoom {
     this._adminSockets.forEach((socket) => {
       socket.disconnect(true);
     });
-    this._timer.cancel();
   }
 
   // Relevant parts of state and data combined for sending to clients

@@ -5,6 +5,10 @@ export default class ControlButtons extends Component {
     this.props.socket.emit("startGame");
   };
 
+  closeRoom = () => {
+    this.props.socket.emit("closeRoom");
+  };
+
   skip = () => {
     this.props.socket.emit("skip");
   };
@@ -49,6 +53,14 @@ export default class ControlButtons extends Component {
             onClick={this.startGame}
           >
             Start Game
+          </button>
+        )}
+        {this.props.currentState === "lobby" && (
+          <button
+            className="button is-rounded is-danger"
+            onClick={this.closeRoom}
+          >
+            Close Room
           </button>
         )}
         {this.props.currentState === "prompts" && (

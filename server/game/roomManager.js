@@ -157,7 +157,6 @@ class RoomManager {
   }
 
   deleteRooms(roomCodesToDelete) {
-    console.log("Deleting rooms:", roomCodesToDelete);
     roomCodesToDelete.forEach((code) => {
       this._rooms.delete(code);
     });
