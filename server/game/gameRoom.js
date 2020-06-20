@@ -14,6 +14,7 @@ class GameRoom {
   constructor(code, io, preResolvedPromptPicker) {
     //TODO: Add game options
     this._code = code;
+    this.createdTime = Date.now();
     this.isActive = true;
     this._io = io;
     // this._manager = manager;
@@ -62,6 +63,14 @@ class GameRoom {
 
   initializePointTracker() {
     this._pointTracker = new PointTracker(this.playerData, this._options);
+  }
+
+  get summaryForStats() {
+    return {
+      state: this.state,
+      playerCount: this._playerSockets.length,
+      age: (Date.now() - this.createdTime) / 1000,
+    };
   }
 
   get adminKey() {

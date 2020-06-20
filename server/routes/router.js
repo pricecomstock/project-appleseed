@@ -31,6 +31,10 @@ function createRouter(io) {
       });
   });
 
+  router.get("/stats", function (req, res) {
+    res.json(roomManager.stats());
+  });
+
   //------//
   // POST //
   //------//

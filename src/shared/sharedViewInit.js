@@ -67,6 +67,11 @@ function bindableSocketInitialization() {
     this.state.socket.close();
     this.props.history.push("/");
   });
+
+  this.state.socket.on("roomdoesnotexisterror", (data) => {
+    this.state.socket.close();
+    this.props.history.push("/");
+  });
 }
 
 function bindableSharedMethodInit() {
