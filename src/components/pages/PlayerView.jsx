@@ -162,7 +162,7 @@ export default class PlayerView extends Component {
             )}
 
             <Volume
-              muted={this.state.volume == 0}
+              muted={this.state.volume === 0}
               toggleMute={this.toggleMute}
             ></Volume>
             {this.state.playerInfo && (
