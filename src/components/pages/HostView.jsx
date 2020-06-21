@@ -8,6 +8,7 @@ import ControlButtons from "../host/ControlButtons";
 import Timer from "../Timer";
 import PlayerList from "../host/PlayerList";
 import Options from "../host/Options";
+import OptionsHUD from "../host/OptionsHUD";
 import Volume from "../Volume";
 
 import createSocketClient from "../../shared/createSocketClient";
@@ -135,28 +136,37 @@ export default class HostView extends Component {
         >
           {/* Admin Header */}
           <div className="host-header">
-            <div className="game-panel">
-              <div className="is-size-5">
-                <p>
-                  <span className="tag is-warning is-large has-text-weight-bold is-size-4">
-                    {this.state.roomCode}
-                  </span>{" "}
-                  join at {window.location.host}
-                </p>
+            <div className="inline-flex push-left">
+              <div className="game-panel">
+                <div className="is-size-5">
+                  <p>
+                    <span className="tag is-warning is-large has-text-weight-bold is-size-4">
+                      {this.state.roomCode}
+                    </span>{" "}
+                    join at {window.location.host}
+                  </p>
+                </div>
               </div>
-            </div>
-
-            <div className="game-panel push-left flex-center-text">
-              <Volume
-                muted={this.state.volume === 0}
-                toggleMute={this.toggleMute}
-              ></Volume>
-            </div>
-            <div className="game-panel">
-              <ControlButtons
+              <div className="game-panel flex-center-text">
+                <Volume
+                  muted={this.state.volume === 0}
+                  toggleMute={this.toggleMute}
+                ></Volume>
+              </div>
+              <OptionsHUD
+                options={this.state.gameOptions}
+                currentRoundIndex={this.state.currentRoundIndex}
                 currentState={this.state.currentState}
-                socket={this.state.socket}
-              ></ControlButtons>
+              ></OptionsHUD>
+            </div>
+            {/* Right */}
+            <div className="inline-flex">
+              <div className="game-panel">
+                <ControlButtons
+                  currentState={this.state.currentState}
+                  socket={this.state.socket}
+                ></ControlButtons>
+              </div>
             </div>
           </div>
           {/* Debug View */}

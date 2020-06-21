@@ -82,7 +82,11 @@ class GameRoom {
   }
 
   get currentRoundOptions() {
-    return this._options.rounds[this._currentRoundIndex];
+    try {
+      return this._options.rounds[this._currentRoundIndex];
+    } catch (Error) {
+      return this._options.rounds[0]; // this is a bad bug fix
+    }
   }
 
   getPlayerDataWithId(playerId) {

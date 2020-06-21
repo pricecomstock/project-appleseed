@@ -19,6 +19,11 @@ const C = {
     ANY: "any", // can vote for any answer
   },
 
+  ANSWERS_PER_PROMPT_OPTIONS: {
+    TWO: 2,
+    ALL: "all",
+  },
+
   DEFAULT_VOLUME: 0.6,
 
   DEFAULT_THEME: {

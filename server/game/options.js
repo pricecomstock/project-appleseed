@@ -26,19 +26,19 @@ const defaultOptions = {
   rounds: [
     {
       promptsPerPlayer: 2,
-      answersPerPrompt: answersPerPromptOptions.TWO,
+      answersPerPrompt: C.ANSWERS_PER_PROMPT_OPTIONS.TWO,
       pointMultiplier: 1,
       votingMode: votingModes.NOT_OWN_QUESTIONS,
     },
     {
       promptsPerPlayer: 2,
-      answersPerPrompt: answersPerPromptOptions.TWO,
+      answersPerPrompt: C.ANSWERS_PER_PROMPT_OPTIONS.TWO,
       pointMultiplier: 2,
       votingMode: votingModes.NOT_OWN_QUESTIONS,
     },
     {
       promptsPerPlayer: 1,
-      answersPerPrompt: answersPerPromptOptions.ALL,
+      answersPerPrompt: C.ANSWERS_PER_PROMPT_OPTIONS.ALL,
       pointMultiplier: 4,
       votingMode: votingModes.NOT_OWN_ANSWER,
     },
