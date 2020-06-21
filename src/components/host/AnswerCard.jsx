@@ -44,9 +44,14 @@ export default class AnswerCard extends Component {
           </div>
         )}
         {this.props.votingIsComplete && this.props.voters.length > 0 && (
-          <div className="voters answer-badge answer-badge-emoji">
+          <div className="voters answer-badge">
             {this.props.voters.map((playerData, voterIndex) => {
-              return <span key={voterIndex}>{playerData.emoji}</span>;
+              return (
+                <span className="voter-icon" key={voterIndex}>
+                  <div className="answer-badge-emoji">{playerData.emoji}</div>
+                  <p>{playerData.nickname.substring(0, 3)}</p>
+                </span>
+              );
             })}
           </div>
         )}
