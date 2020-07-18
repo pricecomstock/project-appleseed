@@ -13,6 +13,8 @@ const C = require("../../../src/constants");
 const stateMachineSpec = require("./stateMachineSpec");
 const stateMachineMethods = require("./stateMachineMethods");
 
+const themeMethods = require("./theme");
+
 class GameRoom {
   constructor(code, io, preResolvedPromptPicker) {
     //TODO: Add game options
@@ -58,6 +60,9 @@ class GameRoom {
     this.resetInactiveTimer();
     // Game state
     this._fsm();
+
+    // Import methods from other files
+    this.newTheme = themeMethods.newTheme.bind(this);
   }
 
   static async CreateAsync(code, io) {
@@ -512,10 +517,7 @@ class GameRoom {
     return scoreboardData;
   }
 
-  newTheme() {
-    this._currentTheme = getRandomTheme();
-    this.sendThemeToAll();
-  }
+  newTheme = "x";
 
   resetInactiveTimer() {
     clearTimeout(this._inactiveTimeout);

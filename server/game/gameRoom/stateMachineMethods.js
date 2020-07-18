@@ -1,3 +1,5 @@
+const options = require("../options");
+
 module.exports = {
   onEnterState: function () {
     this.resetInactiveTimer();
