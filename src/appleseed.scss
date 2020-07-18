@@ -18,6 +18,10 @@ $family-sans-serif: "Nunito", sans-serif;
   --p-blue: #577590;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 // Fix for last child of box elements looking different
 .prompt-box:not(:last-child) {
   margin-bottom: 0;
@@ -47,8 +51,8 @@ $family-sans-serif: "Nunito", sans-serif;
 }
 
 .game-panel {
-  border-radius: 8px;
-  border: 3px solid black;
+  border-radius: 0.5rem;
+  border: 0.2rem solid black;
   background-color: $white-ter;
   color: $black-ter;
   overflow: hidden;
@@ -56,8 +60,8 @@ $family-sans-serif: "Nunito", sans-serif;
 }
 
 .game-panel.static {
-  border-radius: 8px;
-  border: 2px solid #aaa;
+  border-radius: 0.5rem;
+  border: 0.125rem solid #aaa;
   background-color: $white-ter;
   color: $black-ter;
   overflow: hidden;
@@ -85,9 +89,9 @@ $family-sans-serif: "Nunito", sans-serif;
 }
 
 .lobby-player-list-item {
-  border: 3px solid black;
+  border: 0.2rem solid black;
   color: $black-ter;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   margin: 0.25rem;
   text-align: center;
   background-color: $white-ter;
@@ -127,12 +131,12 @@ $family-sans-serif: "Nunito", sans-serif;
   grid-column: 1 / 5;
   grid-row: 1 / 4;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   margin: 0.75rem;
   padding: 0.5rem;
   background-color: white;
   z-index: 0;
-  border: 3px solid black;
+  border: 0.2rem solid black;
 
   > p.answer-text {
     flex: 0 0 100%;
@@ -151,7 +155,7 @@ $family-sans-serif: "Nunito", sans-serif;
   grid-column: 1 / 3;
   grid-row: 1 / 2;
   z-index: 1;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   background-color: $info;
   text-align: center;
   font-size: 1.25rem;
@@ -194,8 +198,8 @@ $family-sans-serif: "Nunito", sans-serif;
 }
 
 .answer-badge {
-  border-radius: 8px;
-  border: 2px solid black;
+  border-radius: 0.5rem;
+  border: 0.125rem solid black;
   overflow: hidden;
   padding: 0.25rem 0.5rem;
   font-weight: bold;
@@ -240,8 +244,8 @@ $family-sans-serif: "Nunito", sans-serif;
   overflow: hidden;
   height: 4vh;
   margin: 0.2vh 0;
-  border-radius: 8px;
-  border: 3px solid black;
+  border-radius: 0.5rem;
+  border: 0.2rem solid black;
   width: 100%;
 
   > .timer-label {
@@ -342,7 +346,7 @@ div.fun-bg {
   justify-items: stretch;
 
   grid-template-columns: 1fr 85% 1fr;
-  grid-template-rows: 1fr 1fr 80% 1fr;
+  grid-template-rows: 3rem 1fr 80% 1fr;
   grid-column-gap: 3px;
   grid-row-gap: 3px;
 }
@@ -351,7 +355,7 @@ div.fun-bg {
 }
 .player-top-header {
   grid-area: 1 / 1 / 2 / 4;
-  font-size: 0.75em;
+  font-size: 1em;
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -377,8 +381,8 @@ div.fun-bg {
 }
 
 .game-button {
-  border-radius: 8px;
-  border: 3px solid black;
+  border-radius: 0.5rem;
+  border: 0.2rem solid black;
   background-color: $white-ter;
   color: $black-ter;
   overflow: hidden;
@@ -420,7 +424,7 @@ div.fun-bg {
 
 .player-view input {
   color: $black-ter;
-  border: 3px solid black;
+  border: 0.2rem solid black;
 }
 
 .voting-options {
@@ -430,16 +434,16 @@ div.fun-bg {
 
 .vote-button {
   width: 100%;
-  border: 3px solid black;
+  border: 0.2rem solid black;
   background-color: $white-ter;
   color: $black-ter;
-  margin: 3px 0px;
+  margin: 0.2rem 0px;
   padding: 0.5em 0.5em;
 }
 
 .mini-button {
-  border: 2px solid black;
-  border-radius: 4px;
+  border: 0.125rem solid black;
+  border-radius: 0.25rem;
   padding: 0.125em 0.25em;
   background-color: var(--p-orange-yellow);
   color: $white-ter;
@@ -472,8 +476,8 @@ div.fun-bg {
 
   input {
     color: $black-ter;
-    border-radius: 5px;
-    border: 3px solid black;
+    border-radius: 0.3rem;
+    border: 0.2rem solid black;
     width: 30%;
     min-width: 130px;
     font-size: 1.5em;
