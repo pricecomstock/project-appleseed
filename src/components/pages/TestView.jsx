@@ -22,6 +22,8 @@ const randomPlayerData = (_id) => {
 const generateTestData = (numPlayers) => {
   const generateAnswer = () => {
     const words = [
+      "",
+      " ",
       "a",
       "ok",
       "the",
