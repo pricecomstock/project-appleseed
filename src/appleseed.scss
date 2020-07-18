@@ -109,9 +109,6 @@ $family-sans-serif: "Nunito", sans-serif;
 
   margin-top: 2rem;
 
-  overflow-wrap: anywhere;
-  hyphens: auto;
-
   > div {
     flex: 0 1 24%;
   }
@@ -140,6 +137,9 @@ $family-sans-serif: "Nunito", sans-serif;
 
   > p.answer-text {
     flex: 0 0 100%;
+
+    overflow-wrap: normal;
+    hyphens: manual;
     text-align: center;
     font-size: 1.7em;
     // @media (min-aspect-ratio: 2/1) {

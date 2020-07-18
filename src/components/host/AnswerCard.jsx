@@ -2,13 +2,22 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import { CSSTransition } from "react-transition-group";
 import "../../transitions.css";
+import { words } from "lodash";
+import { addInvisibleHyphens } from "../../util/stringFilter";
+
+const CHARACTERS_FOR_WORD_BREAK = 20;
 
 export default class AnswerCard extends Component {
   render() {
+    // console.log(this.props.text.match(BREAK_WORD_REGEX));
+    const breakableText = addInvisibleHyphens(
+      this.props.text,
+      CHARACTERS_FOR_WORD_BREAK
+    );
     return (
       <div className="answer-card-container">
         <div className="answer-card flex-center-text">
-          <p className="answer-text">{this.props.text}</p>
+          <p className="answer-text">{breakableText}</p>
         </div>
         {this.props.votingIsComplete && (
           <CSSTransition
@@ -29,7 +38,7 @@ export default class AnswerCard extends Component {
             {this.props.isShutout && (
               <div
                 className="shutout answer-badge ld ld-tick"
-                style={{ "animation-duration": "1.5s" }}
+                style={{ animationDuration: "1.5s" }}
               >
                 + {this.props.shutoutPoints} shutout
               </div>
