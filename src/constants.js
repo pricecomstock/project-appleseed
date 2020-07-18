@@ -34,6 +34,28 @@ const C = {
     textColor: "white",
     backgroundClasses: "pattern-diagonal-stripes-xl",
   },
+
+  STATE_MACHINE: {
+    STATES: {
+      LOBBY: "lobby",
+      PROMPTS: "prompts",
+      VOTING: "voting",
+      SCORING: "scoring",
+      END_OF_ROUND: "endOfRound",
+      FINAL_SCORES: "finalScores",
+    },
+    TRANSITIONS: {
+      START_GAME: "startGame",
+      CLOSE_PROMPTS: "closePrompts",
+      CLOSE_VOTING: "closeVoting",
+      NEXT_SET: "nextSet",
+      END_ROUND: "endRound",
+      END_GAME: "endGame",
+      NEXT_ROUND: "nextRound",
+      NEW_GAME_NEW_PLAYERS: "newGameNewPlayers",
+      NEW_GAME_SAME_PLAYERS: "newGameSamePlayers",
+    },
+  },
 };
 
 module.exports = C;
