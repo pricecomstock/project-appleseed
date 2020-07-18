@@ -17,14 +17,18 @@ export default class AnswerCard extends Component {
     return (
       <div
         className={classNames("answer-card-container", {
-          "winning-answer-card-container": this.props.winner,
-          "losing-answer-card-container": !this.props.winner,
+          "winning-answer-card-container":
+            this.props.votingIsComplete && this.props.isWinner,
+          "losing-answer-card-container":
+            this.props.votingIsComplete && !this.props.isWinner,
         })}
       >
         <div
           className={classNames("answer-card flex-center-text", {
-            "winning-answer-card": this.props.winner,
-            "losing-answer-card": !this.props.winner,
+            "winning-answer-card":
+              this.props.votingIsComplete && this.props.winner,
+            "losing-answer-card":
+              this.props.votingIsComplete && !this.props.winner,
           })}
         >
           <p className="answer-text">{breakableText}</p>
