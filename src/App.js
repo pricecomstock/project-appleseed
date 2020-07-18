@@ -5,7 +5,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
-import "./appleseed.scss";
+import "./scss/bitwits.scss";
 import "@loadingio/loading.css/dist/loading.css"; // TODO use min
 import "@loadingio/transition.css/dist/transition.css"; // TODO use min
 import "pattern.css";

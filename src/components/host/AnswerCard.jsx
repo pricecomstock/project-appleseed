@@ -2,14 +2,12 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import { CSSTransition } from "react-transition-group";
 import "../../transitions.css";
-import { words } from "lodash";
 import { addInvisibleHyphens } from "../../util/stringFilter";
 
 const CHARACTERS_FOR_WORD_BREAK = 20;
 
 export default class AnswerCard extends Component {
   render() {
-    // console.log(this.props.text.match(BREAK_WORD_REGEX));
     const breakableText = addInvisibleHyphens(
       this.props.text,
       CHARACTERS_FOR_WORD_BREAK

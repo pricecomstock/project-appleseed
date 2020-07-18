@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+// Import a Google Font
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+
+// Update Bulma's global variables
+$family-sans-serif: "Nunito", sans-serif;
+
+* {
+  box-sizing: border-box;
+}
+
+// Load these first
+@import "./pieces/variables.scss";
+@import "./pieces/animations.scss";
+@import "node_modules/bulma/bulma.sass";
+
+// Then load all the other pieces
+@import "./pieces/util.scss";
+@import "./pieces/theme.scss";
+@import "./pieces/leaderboard.scss";
+@import "./pieces/lobby-player-list.scss";
+@import "./pieces/reading-view.scss";
+@import "./pieces/timer.scss";
+@import "./pieces/host-view.scss";
+@import "./pieces/player-view.scss";
+@import "./pieces/homepage.scss";
