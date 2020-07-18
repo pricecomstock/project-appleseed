@@ -64,7 +64,7 @@
     font-weight: bold;
     margin: 0.25rem;
 
-    animation: border-color-spin 1.2s infinite alternate-reverse,
+    animation: border-color-spin 1.2s linear infinite alternate,
       margin-pop 0.3s ease-in-out infinite alternate;
   }
 
