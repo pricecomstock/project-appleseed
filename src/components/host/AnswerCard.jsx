@@ -15,8 +15,18 @@ export default class AnswerCard extends Component {
       CHARACTERS_FOR_WORD_BREAK
     );
     return (
-      <div className="answer-card-container">
-        <div className="answer-card flex-center-text">
+      <div
+        className={classNames("answer-card-container", {
+          "winning-answer-card-container": this.props.winner,
+          "losing-answer-card-container": !this.props.winner,
+        })}
+      >
+        <div
+          className={classNames("answer-card flex-center-text", {
+            "winning-answer-card": this.props.winner,
+            "losing-answer-card": !this.props.winner,
+          })}
+        >
           <p className="answer-text">{breakableText}</p>
         </div>
         {this.props.votingIsComplete && (
