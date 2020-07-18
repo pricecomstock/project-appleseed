@@ -22,6 +22,8 @@ const randomPlayerData = (_id) => {
 const generateTestData = (numPlayers) => {
   const generateAnswer = () => {
     const words = [
+      "",
+      " ",
       "a",
       "ok",
       "the",
@@ -141,7 +143,7 @@ export default class TestView extends Component {
         <PlayerList
           title="Test playerlist title 1"
           players={this.state.testData.players}
-          extraCssClasses="ld ld-bounce"
+          extraCssClasses="ld ld-shake-v"
         ></PlayerList>
         <PlayerList
           players={this.state.testData.players}

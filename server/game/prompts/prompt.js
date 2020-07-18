@@ -6,11 +6,7 @@ const {
   generateBase64Id,
 } = require("../util");
 // stackoverflow.com/questions/21295162/javascript-randomly-pair-items-from-array-without-repeats
-
-const answersPerPromptOptions = {
-  TWO: 2,
-  ALL: "all",
-};
+const C = require("../../../src/constants");
 
 class PromptMatchup {
   constructor(answeringPlayers, prompt) {
@@ -106,7 +102,9 @@ class PromptRound {
   }
 
   createPromptMatchups() {
-    if (this._roundOptions.answersPerPrompt === answersPerPromptOptions.ALL) {
+    if (
+      this._roundOptions.answersPerPrompt === C.ANSWERS_PER_PROMPT_OPTIONS.ALL
+    ) {
       this.createNewPromptForPlayers(this._playerIds); // All players
     } else {
       // An array where each index is the number of prompts still needed for each player
@@ -263,4 +261,4 @@ class PromptRound {
   }
 }
 
-module.exports = { PromptRound, answersPerPromptOptions };
+module.exports = { PromptRound };

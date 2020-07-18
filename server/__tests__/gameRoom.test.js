@@ -1,4 +1,4 @@
-const GameRoom = require("../game/gameRoom");
+const GameRoom = require("../game/gameRoom/index");
 const socketIo = require("socket.io");
 
 var io = null;
@@ -15,13 +15,19 @@ beforeEach(() => {
   // return io;
 });
 
-test("room is created and starts in lobby, allowed to join", () => {
-  expect(room).toBeDefined();
-  expect(room.state).toBe("lobby");
-  expect(room.allowedToJoin).toBe(true);
-});
+describe("gameRoom", () => {
+  it("should start in lobby state", () => {
+    expect(room).toBeDefined();
+    expect(room.state).toBe("lobby");
+  });
 
-test("game room shuts self down", () => {
-  room.closeRoom();
-  expect(room.isActive).toBe(false);
+  it("should start allowed to join", () => {
+    expect(room).toBeDefined();
+    expect(room.allowedToJoin).toBe(true);
+  });
+
+  it("should not be active after closing", () => {
+    room.closeRoom();
+    expect(room.isActive).toBe(false);
+  });
 });

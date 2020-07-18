@@ -19,6 +19,11 @@ const C = {
     ANY: "any", // can vote for any answer
   },
 
+  ANSWERS_PER_PROMPT_OPTIONS: {
+    TWO: 2,
+    ALL: "all",
+  },
+
   DEFAULT_VOLUME: 0.6,
 
   DEFAULT_THEME: {
@@ -28,6 +33,28 @@ const C = {
     },
     textColor: "white",
     backgroundClasses: "pattern-diagonal-stripes-xl",
+  },
+
+  STATE_MACHINE: {
+    STATES: {
+      LOBBY: "lobby",
+      PROMPTS: "prompts",
+      VOTING: "voting",
+      SCORING: "scoring",
+      END_OF_ROUND: "endOfRound",
+      FINAL_SCORES: "finalScores",
+    },
+    TRANSITIONS: {
+      START_GAME: "startGame",
+      CLOSE_PROMPTS: "closePrompts",
+      CLOSE_VOTING: "closeVoting",
+      NEXT_SET: "nextSet",
+      END_ROUND: "endRound",
+      END_GAME: "endGame",
+      NEXT_ROUND: "nextRound",
+      NEW_GAME_NEW_PLAYERS: "newGameNewPlayers",
+      NEW_GAME_SAME_PLAYERS: "newGameSamePlayers",
+    },
   },
 };
 

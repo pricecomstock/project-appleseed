@@ -1,0 +1,29 @@
+@keyframes margin-pop {
+  from {
+    margin: 0.1rem;
+  }
+  to {
+    margin: 0.4rem;
+  }
+}
+
+@keyframes border-color-spin {
+  0% {
+    border-color: var(--p-red);
+  }
+  20% {
+    border-color: var(--p-orange-yellow);
+  }
+  40% {
+    border-color: var(--p-yellow);
+  }
+  60% {
+    border-color: var(--p-green);
+  }
+  80% {
+    border-color: var(--p-teal);
+  }
+  100% {
+    border-color: var(--p-blue);
+  }
+}

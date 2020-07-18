@@ -92,11 +92,12 @@ export default class PlayerView extends Component {
           return player.playerId === this.state.playerId;
         }),
       });
+      this.setState({ editingPlayerInfo: true });
     });
 
     this.state.socket.on("playerIdAssigned", (assignedId) => {
       console.log("player ID assigned: ", assignedId);
-      this.setState({ playerId: assignedId, editingPlayerInfo: true });
+      this.setState({ playerId: assignedId });
       localStorage.setItem(this.state.roomCode, this.state.playerId);
     });
 
@@ -162,7 +163,7 @@ export default class PlayerView extends Component {
             )}
 
             <Volume
-              muted={this.state.volume == 0}
+              muted={this.state.volume === 0}
               toggleMute={this.toggleMute}
             ></Volume>
             {this.state.playerInfo && (

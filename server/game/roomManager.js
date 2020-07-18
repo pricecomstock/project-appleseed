@@ -31,6 +31,7 @@ class RoomManager {
     this._io.on("connection", (socket) => {
       // io is the server
       // socket is the client connection
+      // console.log("a socket connected", socket.handshake);
 
       let sendRoomUpdates = (roomCode) => {
         let roomToUpdate = this.getRoomWithCode(roomCode);
@@ -41,7 +42,6 @@ class RoomManager {
       };
 
       // Startup tasks
-      // console.log(code, "a user connected");
 
       // client will use this to join a room
       socket.on("joinroom", (data) => {
@@ -90,6 +90,9 @@ class RoomManager {
           socket.emit("playerIdAssigned", socket.playerData.playerId);
           sendRoomUpdates(roomCode);
           joinedRoom.givePlayerCurrentInfo(socket);
+        } else {
+          socket.emit("roomdoesnotexisterror", {});
+          socket.disconnect(true);
         }
       });
 
@@ -119,6 +122,7 @@ class RoomManager {
           } else {
             socket.emit("roomdoesnotexisterror", {});
           }
+          socket.disconnect(true);
         }
       });
 
@@ -157,7 +161,6 @@ class RoomManager {
   }
 
   deleteRooms(roomCodesToDelete) {
-    console.log("Deleting rooms:", roomCodesToDelete);
     roomCodesToDelete.forEach((code) => {
       this._rooms.delete(code);
     });
@@ -204,6 +207,28 @@ class RoomManager {
 
   getRoomWithCode(code) {
     return this._rooms.get(code);
+  }
+
+  stats() {
+    // let socketsConnected = Object.keys(this._io.sockets.connected);
+    let currentTime = Date.now();
+    let socketsConnected = Object.entries(this._io.sockets.connected).map(
+      ([key, val]) => {
+        return {
+          id: key.substring(0, 4),
+          userAgent: val.handshake["user-agent"],
+          age: (currentTime - val.handshake.issued) / 1000,
+        };
+      }
+    );
+    return {
+      roomsOpen: this._rooms.size,
+      socketsConnectedCount: socketsConnected.length,
+      socketsConnected: socketsConnected,
+      roomStatsList: [...this._rooms.values()].map((room) => {
+        return room.summaryForStats;
+      }),
+    };
   }
 }
 

@@ -30,7 +30,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test-all": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "sheety": "node server/game/prompts/syncFromSheety.js",
     "initializeDb": "node server/promptdb/initializeDb.js",

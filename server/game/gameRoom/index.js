@@ -1,19 +1,25 @@
-const { generateBase64Id, adminRoom } = require("./util");
+const { generateBase64Id, adminRoom } = require("../util");
 const StateMachine = require("javascript-state-machine");
-const { PromptRound } = require("./prompts/prompt");
-const { PromptPicker } = require("./prompts/promptPicker");
-const { getRandomTheme } = require("./flavor/themes");
-const options = require("./options");
-const PointTracker = require("./pointTracker");
-const Timer = require("./timer");
+const { PromptRound } = require("../prompts/prompt");
+const { PromptPicker } = require("../prompts/promptPicker");
+const { getRandomTheme } = require("../flavor/themes");
+const options = require("../options");
+const PointTracker = require("../pointTracker");
+const Timer = require("../timer");
 const lodash = require("lodash");
 
-const C = require("../../src/constants");
+const C = require("../../../src/constants");
+
+const stateMachineSpec = require("./stateMachineSpec");
+const stateMachineMethods = require("./stateMachineMethods");
+
+const themeMethods = require("./theme");
 
 class GameRoom {
   constructor(code, io, preResolvedPromptPicker) {
     //TODO: Add game options
     this._code = code;
+    this.createdTime = Date.now();
     this.isActive = true;
     this._io = io;
     // this._manager = manager;
@@ -54,6 +60,9 @@ class GameRoom {
     this.resetInactiveTimer();
     // Game state
     this._fsm();
+
+    // Import methods from other files
+    this.newTheme = themeMethods.newTheme.bind(this);
   }
 
   static async CreateAsync(code, io) {
@@ -62,6 +71,14 @@ class GameRoom {
 
   initializePointTracker() {
     this._pointTracker = new PointTracker(this.playerData, this._options);
+  }
+
+  get summaryForStats() {
+    return {
+      state: this.state,
+      playerCount: this._playerSockets.length,
+      age: (Date.now() - this.createdTime) / 1000,
+    };
   }
 
   get adminKey() {
@@ -73,7 +90,11 @@ class GameRoom {
   }
 
   get currentRoundOptions() {
-    return this._options.rounds[this._currentRoundIndex];
+    try {
+      return this._options.rounds[this._currentRoundIndex];
+    } catch (Error) {
+      return this._options.rounds[0]; // this is a bad bug fix
+    }
   }
 
   getPlayerDataWithId(playerId) {
@@ -187,11 +208,15 @@ class GameRoom {
   }
 
   addAdmin(adminSocket) {
-    this.sendThemeToIndividual(adminSocket);
+    this.giveAdminCurrentInfo(adminSocket);
     adminSocket.on("startGame", (data) => {
       if (this.can("startGame")) {
         this.startGame();
       }
+    });
+
+    adminSocket.on("closeRoom", (data) => {
+      this.closeRoom("closed by host");
     });
 
     adminSocket.on("closePrompts", (data) => {
@@ -286,6 +311,16 @@ class GameRoom {
     });
   }
 
+  giveAdminCurrentInfo(adminSocket) {
+    // For reconnects
+    this.sendOptionsToIndividual(adminSocket);
+    this.sendThemeToIndividual(adminSocket);
+
+    this.sendStateToIndividual(adminSocket);
+    this.sendTimerToIndividual(adminSocket);
+    this.sendCurrentMatchupToAdmins();
+  }
+
   givePlayerCurrentInfo(playerSocket) {
     // For reconnects
     this.sendOptionsToIndividual(playerSocket);
@@ -295,10 +330,10 @@ class GameRoom {
       this.sendStateToIndividual(playerSocket);
       if (this.state === "prompts") {
         this.sendUnansweredPromptsToPlayer(playerSocket);
-        this.sendTimerToIndividualPlayer(playerSocket);
+        this.sendTimerToIndividual(playerSocket);
       } else if (this.state === "voting") {
         this.sendVotingOptionsToIndividualPlayer(playerSocket);
-        this.sendTimerToIndividualPlayer(playerSocket);
+        this.sendTimerToIndividual(playerSocket);
       }
     }
   }
@@ -330,8 +365,8 @@ class GameRoom {
     });
   }
 
-  sendOptionsToIndividual(playerSocket) {
-    playerSocket.emit("gameoptions", {
+  sendOptionsToIndividual(socket) {
+    socket.emit("gameoptions", {
       options: this._options,
       currentRoundIndex: this._currentRoundIndex,
     });
@@ -379,6 +414,7 @@ class GameRoom {
   }
 
   closeRoom(reason) {
+    this._timer.cancel();
     this.isActive = false;
     this.emitToAll("closedRoom", {
       reason: reason,
@@ -389,7 +425,6 @@ class GameRoom {
     this._adminSockets.forEach((socket) => {
       socket.disconnect(true);
     });
-    this._timer.cancel();
   }
 
   // Relevant parts of state and data combined for sending to clients
@@ -409,6 +444,10 @@ class GameRoom {
       throw Error("no prompts left!");
     }
     this._currentVotingMatchup = this._finalizedMatchupsToSend.pop();
+    this.sendCurrentMatchupToAdmins();
+  }
+
+  sendCurrentMatchupToAdmins() {
     this.emitToAdmins("nextfilledprompt", {
       prompt: this._currentVotingMatchup,
     });
@@ -431,9 +470,9 @@ class GameRoom {
     this.emitToAll("timer", this._timer.summary());
   }
 
-  sendTimerToIndividualPlayer(playerSocket) {
+  sendTimerToIndividual(socket) {
     try {
-      playerSocket.emit("timer", this._timer.summary());
+      socket.emit("timer", this._timer.summary());
     } catch (error) {
       console.log(error);
     }
@@ -478,10 +517,7 @@ class GameRoom {
     return scoreboardData;
   }
 
-  newTheme() {
-    this._currentTheme = getRandomTheme();
-    this.sendThemeToAll();
-  }
+  newTheme = "x";
 
   resetInactiveTimer() {
     clearTimeout(this._inactiveTimeout);
@@ -492,147 +528,8 @@ class GameRoom {
 }
 
 StateMachine.factory(GameRoom, {
-  init: "lobby",
-  transitions: [
-    { name: "startGame", from: "lobby", to: "prompts" },
-    { name: "closePrompts", from: "prompts", to: "voting" },
-    { name: "closeVoting", from: "voting", to: "scoring" },
-    { name: "nextSet", from: "scoring", to: "voting" },
-    { name: "endRound", from: "scoring", to: "endOfRound" },
-    { name: "endGame", from: "scoring", to: "finalScores" },
-    { name: "nextRound", from: "endOfRound", to: "prompts" },
-    { name: "newGameNewPlayers", from: "finalScores", to: "lobby" },
-    { name: "newGameSamePlayers", from: "finalScores", to: "prompts" },
-  ],
-  methods: {
-    onEnterState: function () {
-      this.resetInactiveTimer();
-      this.sendStateToAll();
-    },
-    onStartGame: function () {
-      this._currentRoundIndex = 0;
-      this.initializePointTracker();
-      console.log("Game Started");
-    },
-    onBeforeClosePrompts: function () {
-      this.prepareFinalizedMatchupsToSend();
-      console.log("closePrompts");
-    },
-    onPrompts: function () {
-      console.log(
-        `Starting round ${
-          this._currentRoundIndex + 1
-        } of prompts with options:`,
-        this.currentRoundOptions
-      );
-      this.sendOptionsToAll();
-      this.createPromptRound();
-      this.sendPromptsToPlayers();
-      this.emitYetToAnswer();
-
-      // Time Limits
-      this.createAndSendTimer(
-        options.calculatePromptTimeForRound(
-          this._options,
-          this._currentRoundIndex
-        ),
-        () => {
-          if (this.can("closePrompts")) {
-            this.closePrompts();
-          }
-        }
-      );
-    },
-    onVoting: function () {
-      this._currentVotingResults = {};
-      if (this._finalizedMatchupsToSend.length > 0) {
-        this.sendNextFilledPromptToAdmin();
-        this.sendVotingOptionsToPlayers();
-        this.createAndSendTimer(
-          options.calculateVotingTimeLimitForAnswers(
-            this._options,
-            this._currentVotingMatchup.answers.length
-          ),
-          () => {
-            if (this.can("closeVoting")) {
-              this.closeVoting();
-            }
-          }
-        );
-        console.log("initiateVoting");
-      } else {
-        this.closeVoting();
-        this.endGame();
-      }
-    },
-    onCloseVoting: function () {
-      console.log("closeVoting");
-    },
-    onScoring: function () {
-      console.log("Scoring!");
-      this.processVotingPoints();
-      this.emitToAdmins("votingresults", {
-        votingResults: this._currentVotingResults,
-        scoringDetails: this._currentScoringDetails,
-      });
-
-      if (this._finalizedMatchupsToSend.length > 0) {
-        // More answers to read
-        this.createAndSendTimer(this._options.promptResultDelay, () => {
-          if (this.can("nextSet")) {
-            this.nextSet();
-          }
-        });
-      } else if (this._currentRoundIndex >= this._options.rounds.length - 1) {
-        // No more answers, no more rounds
-        this.createAndSendTimer(this._options.roundDelay, () => {
-          if (this.can("endGame")) {
-            this.endGame();
-          }
-        });
-      } else {
-        // No more answers, but anther round
-        this.createAndSendTimer(this._options.roundDelay, () => {
-          if (this.can("endRound")) {
-            this.endRound();
-          }
-        });
-      }
-    },
-    onNextSet: function () {
-      console.log("nextSet");
-    },
-    onEndOfRound: function () {
-      // on enter the state
-      this.createAndSendTimer(this._options.roundDelay, () => {
-        if (this.can("nextRound")) {
-          this.nextRound();
-        }
-      });
-      this.emitToAdmins("scoreboarddata", {
-        scoreboardData: this.calculateScoreboardData(),
-      });
-    },
-    onBeforeNextRound: function () {
-      this.newTheme();
-      this._currentRoundIndex++;
-      this._pointTracker.nextRound();
-    },
-    onEndGame: function () {
-      this.emitToAdmins("scoreboarddata", {
-        scoreboardData: this.calculateScoreboardData(),
-      });
-      console.log("endGame");
-    },
-    onBeforeNewGameSamePlayers: function () {
-      this._currentRoundIndex = 0;
-      this.sendCustomPromptStatus();
-    },
-    onBeforeNewGameNewPlayers: function () {
-      this._currentRoundIndex = 0;
-      this.sendCustomPromptStatus();
-    },
-  },
+  ...stateMachineSpec,
+  methods: stateMachineMethods,
 });
 
 module.exports = GameRoom;

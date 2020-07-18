@@ -64,6 +64,12 @@ function bindableSocketInitialization() {
   });
 
   this.state.socket.on("closedRoom", (data) => {
+    this.state.socket.close();
+    this.props.history.push("/");
+  });
+
+  this.state.socket.on("roomdoesnotexisterror", (data) => {
+    this.state.socket.close();
     this.props.history.push("/");
   });
 }

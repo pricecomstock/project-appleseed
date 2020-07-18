@@ -5,8 +5,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
-import "./mvp.css";
-import "./appleseed.scss";
+import "./scss/bitwits.scss";
 import "@loadingio/loading.css/dist/loading.css"; // TODO use min
 import "@loadingio/transition.css/dist/transition.css"; // TODO use min
 import "pattern.css";
@@ -16,6 +15,7 @@ import HostView from "./components/pages/HostView";
 import PlayerView from "./components/pages/PlayerView";
 import CustomPrompts from "./components/pages/CustomPromptsView";
 import TestView from "./components/pages/TestView";
+import AdminPanel from "./components/pages/AdminPanel";
 
 function App() {
   return (
@@ -28,6 +28,7 @@ function App() {
           <Route exact path="/host/:code" component={HostView}></Route>
           <Route exact path="/play/:code" component={PlayerView}></Route>
           <Route path="/customprompts" component={CustomPrompts}></Route>
+          <Route path="/stats" component={AdminPanel}></Route>
           <Route path="/testpage" component={TestView}></Route>
           <Route
             path="/:code"

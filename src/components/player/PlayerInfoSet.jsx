@@ -25,7 +25,7 @@ export default class PlayerInfoSet extends Component {
 
   render() {
     return (
-      <div className="game-panel on-top">
+      <div className="game-panel on-top player-info-edit">
         Enter a name and emoji!
         <div className="field">
           <label className="label">Name</label>

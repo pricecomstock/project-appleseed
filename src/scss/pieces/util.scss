@@ -1,0 +1,27 @@
+.wrapped-text {
+  white-space: normal;
+  height: auto;
+  overflow: wrap;
+}
+
+.flex-center-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.push-left {
+  margin-right: auto;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.on-top {
+  z-index: 10;
+}
