@@ -24,9 +24,9 @@ export default class AnswerCard extends Component {
         <div
           className={classNames("answer-card flex-center-text", {
             "winning-answer-card":
-              this.props.votingIsComplete && this.props.winner,
+              this.props.votingIsComplete && this.props.isWinner,
             "losing-answer-card":
-              this.props.votingIsComplete && !this.props.winner,
+              this.props.votingIsComplete && !this.props.isWinner,
           })}
         >
           <p className="answer-text">{breakableText}</p>
