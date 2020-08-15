@@ -29,11 +29,18 @@ div.fun-bg {
 .game-button {
   border-radius: 0.5rem;
   border: 0.2rem solid black;
+  box-shadow: 3px 3px 0px black;
   background-color: $white-ter;
   color: $black-ter;
   overflow: hidden;
   padding: 0.5rem 0.5rem;
   cursor: pointer;
+
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0px 0px 0px black;
+  }
 
   &.primary {
     background-color: var(--p-teal);
@@ -57,6 +64,7 @@ div.fun-bg {
   border: 0.125rem solid black;
   border-radius: 0.25rem;
   padding: 0.125em 0.25em;
+  box-shadow: 2px 2px 0px black;
   background-color: var(--p-orange-yellow);
   color: $white-ter;
   font-size: 0.75em;
