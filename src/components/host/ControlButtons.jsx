@@ -46,7 +46,7 @@ export default class ControlButtons extends Component {
 
   render() {
     return (
-      <div className="">
+      <div className="admin-control-buttons">
         {(this.props.currentState === "lobby" ||
           this.props.currentState === "finalScores") && (
           <button className="game-button red" onClick={this.closeRoom}>

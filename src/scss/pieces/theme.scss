@@ -109,6 +109,7 @@ div.fun-bg {
   cursor: pointer;
   color: var(--white-ter);
   align-self: center;
+  display: inline-block;
 
   @include theme-colorable(background-color, color);
 
