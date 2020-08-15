@@ -100,6 +100,7 @@ div.fun-bg {
   background-color: $white-ter;
   color: $black-ter;
   font-weight: bold;
+  font-size: 1.1rem;
   overflow: hidden;
   padding: 0.5rem 0.5rem;
   cursor: pointer;
@@ -110,6 +111,10 @@ div.fun-bg {
   &.inverted {
     @include theme-colorable(color, background-color);
   }
+
+  &.full-width {
+    width: 100%;
+  }
 }
 
 .mini-button {
@@ -118,5 +123,9 @@ div.fun-bg {
   border: 0.125rem solid black;
   border-radius: 0.25rem;
   padding: 0.125em 0.25em;
-  font-size: 0.75em;
+  font-size: 0.8rem;
+
+  &.inline {
+    margin-bottom: -0.3rem;
+  }
 }

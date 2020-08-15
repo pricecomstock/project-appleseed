@@ -99,14 +99,26 @@ export default class Home extends Component {
             <hr />
             <p>
               Or{" "}
-              <button onClick={this.createGame} className="mini-button yellow">
+              <a
+                onClick={this.createGame}
+                className="mini-button yellow inline"
+              >
                 Create
-              </button>{" "}
+              </a>{" "}
               a new one!
             </p>
             <div className="field"></div>
             <hr />
-            Or <Link to="/customprompts">create your own set of prompts!</Link>
+            <p>
+              Or create your own set of{" "}
+              <Link
+                el="button"
+                to="/customprompts"
+                className="mini-button violet inline"
+              >
+                custom prompts!
+              </Link>
+            </p>
           </div>
         </div>
       </div>

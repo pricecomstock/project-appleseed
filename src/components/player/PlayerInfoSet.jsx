@@ -53,16 +53,12 @@ export default class PlayerInfoSet extends Component {
             />
           </div>
         </div>
-        <button className="game-button primary" onClick={this.sendUpdatedInfo}>
+        <button className="game-button teal" onClick={this.sendUpdatedInfo}>
           Submit
-          </button>
-
-        <button
-          className="game-button danger"
-          onClick={this.props.hide}
-        >
+        </button>
+        <button className="game-button red" onClick={this.props.hide}>
           Close
-          </button>
+        </button>
       </div>
     );
   }

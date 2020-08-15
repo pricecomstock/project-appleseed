@@ -14,7 +14,7 @@ export default function Prompt(props) {
   };
 
   return (
-    <div className="game-panel">
+    <div className="game-panel player-interactive-panel">
       <div>
         <p className="player-prompt-text">{props.prompt.text}</p>
       </div>
@@ -37,7 +37,7 @@ export default function Prompt(props) {
           />
         </div>
       </div>
-      <button className="button is-primary" onClick={submit}>
+      <button className="game-button green" onClick={submit}>
         Submit
       </button>
     </div>

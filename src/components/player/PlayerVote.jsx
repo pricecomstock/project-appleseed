@@ -3,7 +3,7 @@ import React, { Component } from "react";
 export default class PlayerVote extends Component {
   render() {
     return (
-      <div className="game-panel">
+      <div className="game-panel player-interactive-panel">
         <div>
           <p className="player-prompt-text">
             {this.props.currentVotingMatchup.text}
@@ -26,7 +26,7 @@ export default class PlayerVote extends Component {
                 let answerIndex = answer[2];
                 return (
                   <button
-                    className="wrapped-text vote-button"
+                    className="wrapped-text game-button full-width vote-button"
                     onClick={() => {
                       this.props.submitVote(answerIndex);
                     }}

@@ -11,7 +11,7 @@ export default class PlayerInfoView extends Component {
         {this.props.canEdit && (
           <span onClick={this.props.onEdit} style={{ cursor: "pointer" }}>
             {" "}
-            <span className="mini-button primary">Edit</span>
+            <span className="mini-button yellow inline">Edit</span>
           </span>
         )}
       </div>
