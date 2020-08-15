@@ -18,7 +18,6 @@ export default function Prompt(props) {
       <div>
         <p className="player-prompt-text">{props.prompt.text}</p>
       </div>
-
       <div className="field">
         <label className="label">Answer</label>
         <div className="control">
@@ -40,6 +39,9 @@ export default function Prompt(props) {
       <button className="game-button green" onClick={submit}>
         Submit
       </button>
+      <span className="inline-info">
+        prompt {props.promptIndex + 1} of {props.totalPrompts}
+      </span>
     </div>
   );
 }

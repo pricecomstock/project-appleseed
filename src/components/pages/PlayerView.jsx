@@ -96,8 +96,8 @@ export default class PlayerView extends Component {
     });
 
     this.state.socket.on("openEditPlayerInfoForm", () => {
-      this.setState({editingPlayerInfo: true})
-    })
+      this.setState({ editingPlayerInfo: true });
+    });
 
     this.state.socket.on("prompts", (data) => {
       console.log("Received Prompts", data);
@@ -191,6 +191,8 @@ export default class PlayerView extends Component {
               <Prompt
                 prompt={this.state.prompts[this.state.promptIndex]}
                 submitAnswer={this.submitAnswer}
+                promptIndex={this.state.promptIndex}
+                totalPrompts={this.state.prompts.length}
               ></Prompt>
             </div>
           )}
