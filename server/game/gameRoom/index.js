@@ -138,9 +138,9 @@ class GameRoom {
     this._playerSockets.push(playerSocket);
 
     playerSocket.emit("playerIdAssigned", playerSocket.playerData);
-    this.givePlayerCurrentInfo(playerSocket)
+    this.givePlayerCurrentInfo(playerSocket);
     this.sendPlayerDataToAll();
-    this.sendStateToAll()
+    this.sendStateToAll();
     playerSocket.emit("openEditPlayerInfoForm");
 
     // Update Player Info
@@ -218,7 +218,11 @@ class GameRoom {
     this.giveAdminCurrentInfo(adminSocket);
     adminSocket.on("startGame", (data) => {
       if (this.can("startGame")) {
-        this.startGame();
+        try {
+          this.startGame();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
@@ -228,36 +232,56 @@ class GameRoom {
 
     adminSocket.on("closePrompts", (data) => {
       if (this.can("closePrompts")) {
-        this._timer.cancel();
-        this.closePrompts();
+        try {
+          this._timer.cancel();
+          this.closePrompts();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     adminSocket.on("closeVoting", (data) => {
       if (this.can("closeVoting")) {
-        this._timer.cancel();
-        this.closeVoting();
+        try {
+          this._timer.cancel();
+          this.closeVoting();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     adminSocket.on("nextSet", (data) => {
       if (this.can("nextSet") && this._finalizedMatchupsToSend.length > 0) {
-        this._timer.cancel();
-        this.nextSet();
+        try {
+          this._timer.cancel();
+          this.nextSet();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     adminSocket.on("endRound", (data) => {
       if (this.can("endRound")) {
-        this._timer.cancel();
-        this.endRound();
+        try {
+          this._timer.cancel();
+          this.endRound();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     adminSocket.on("endGame", (data) => {
       if (this.can("endGame")) {
-        this._timer.cancel();
-        this.endGame();
+        try {
+          this._timer.cancel();
+          this.endGame();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
@@ -266,27 +290,43 @@ class GameRoom {
         this.can("nextRound") &&
         this._currentRoundIndex < this._options.rounds.length - 1
       ) {
-        this._timer.finish();
+        try {
+          this._timer.finish();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     adminSocket.on("skip", (data) => {
       if (!this._timer.completed) {
-        this._timer.finish();
+        try {
+          this._timer.finish();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     adminSocket.on("newGameNewPlayers", (data) => {
       if (this.can("newGameNewPlayers")) {
-        this._timer.cancel();
-        this.newGameNewPlayers();
+        try {
+          this._timer.cancel();
+          this.newGameNewPlayers();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
     adminSocket.on("newGameSamePlayers", (data) => {
       if (this.can("newGameSamePlayers")) {
-        this._timer.cancel();
-        this.newGameSamePlayers();
+        try {
+          this._timer.cancel();
+          this.newGameSamePlayers();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
 
