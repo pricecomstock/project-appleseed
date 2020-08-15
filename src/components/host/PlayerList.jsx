@@ -12,7 +12,7 @@ export default class PlayerList extends Component {
           {this.props.players.map((player, index) => (
             <div
               className={classNames(
-                "lobby-player-list-item is-size-4 flex-center-text",
+                "lobby-player-list-item is-size-4 flex-center-text game-panel",
                 this.props.extraCssClasses
               )}
               key={index}

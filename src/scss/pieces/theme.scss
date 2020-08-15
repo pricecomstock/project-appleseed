@@ -8,39 +8,62 @@ div.fun-bg {
   width: 100%;
 }
 
+.cartoon-3d {
+  box-shadow: 3px 3px 0px black;
+}
+
+.cartoon-3d-mini {
+  box-shadow: 2px 2px 0px black;
+}
+
+.cartoon-3d-hoverable {
+  @extend .cartoon-3d;
+  display: inline-block;
+  position: relative;
+  top: 0;
+  left: 0;
+  transition: all 0.2s;
+
+  &:hover {
+    box-shadow: 0px 0px 0px black;
+    top: 3px;
+    left: 3px;
+  }
+}
+
+.cartoon-3d-mini-hoverable {
+  @extend .cartoon-3d-hoverable;
+  box-shadow: 2px 2px 0px black;
+
+  &:hover {
+    top: 2px;
+    left: 2px;
+  }
+}
+
 .game-panel {
+  @extend .cartoon-3d;
   border-radius: 0.5rem;
   border: 0.2rem solid black;
   background-color: $white-ter;
   color: $black-ter;
   overflow: hidden;
   padding: 0.5rem 0.5rem;
-}
 
-.game-panel.static {
-  border-radius: 0.5rem;
-  border: 0.125rem solid #aaa;
-  background-color: $white-ter;
-  color: $black-ter;
-  overflow: hidden;
-  padding: 0.5rem 0.5rem;
+  &.static {
+    color: var(--p-blue);
+  }
 }
 
 .game-button {
+  @extend .cartoon-3d-hoverable;
   border-radius: 0.5rem;
   border: 0.2rem solid black;
-  box-shadow: 3px 3px 0px black;
   background-color: $white-ter;
   color: $black-ter;
   overflow: hidden;
   padding: 0.5rem 0.5rem;
   cursor: pointer;
-
-  transition: box-shadow 0.2s;
-
-  &:hover {
-    box-shadow: 0px 0px 0px black;
-  }
 
   &.primary {
     background-color: var(--p-teal);
@@ -61,10 +84,10 @@ div.fun-bg {
 }
 
 .mini-button {
+  @extend .cartoon-3d-mini-hoverable;
   border: 0.125rem solid black;
   border-radius: 0.25rem;
   padding: 0.125em 0.25em;
-  box-shadow: 2px 2px 0px black;
   background-color: var(--p-orange-yellow);
   color: $white-ter;
   font-size: 0.75em;
