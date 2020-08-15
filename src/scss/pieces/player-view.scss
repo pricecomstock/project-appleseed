@@ -63,7 +63,7 @@
 }
 
 .player-view input {
-  color: $black-ter;
+  color: var(--black-ter);
   border: 0.2rem solid black;
 
   &:hover {

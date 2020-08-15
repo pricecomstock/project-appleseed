@@ -31,7 +31,7 @@
   font-size: 1.2em;
 
   input {
-    color: $black-ter;
+    color: var(--black-ter);
     border-radius: 0.3rem;
     border: 0.2rem solid black;
     width: 30%;
@@ -52,7 +52,7 @@
 .bitwits-text-title {
   font-size: 4em;
   font-weight: bold;
-  color: $white-ter;
+  color: var(--white-ter);
 }
 
 .home-logo-container {

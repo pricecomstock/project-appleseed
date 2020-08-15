@@ -1,3 +1,7 @@
+body {
+  font-family: $family-sans-serif;
+}
+
 div.fun-bg {
   z-index: -5;
   position: absolute;
@@ -83,8 +87,8 @@ div.fun-bg {
   @extend .cartoon-3d;
   border-radius: 0.5rem;
   border: 0.2rem solid black;
-  background-color: $white-ter;
-  color: $black-ter;
+  background-color: var(--white-ter);
+  color: var(--black-ter);
   overflow: hidden;
   padding: 0.5rem 0.5rem;
 
@@ -97,14 +101,14 @@ div.fun-bg {
   @extend .cartoon-3d-hoverable;
   border-radius: 0.5rem;
   border: 0.2rem solid black;
-  background-color: $white-ter;
-  color: $black-ter;
+  background-color: var(--white-ter);
+  color: var(--black-ter);
   font-weight: bold;
   font-size: 1.1rem;
   overflow: hidden;
   padding: 0.5rem 0.5rem;
   cursor: pointer;
-  color: $white-ter;
+  color: var(--white-ter);
 
   @include theme-colorable(background-color, color);
 
@@ -127,5 +131,14 @@ div.fun-bg {
 
   &.inline {
     margin-bottom: -0.3rem;
+  }
+}
+
+* input {
+  color: var(--black-ter);
+  border: 0.2rem solid black;
+
+  &:hover {
+    border-color: var(--p-teal);
   }
 }

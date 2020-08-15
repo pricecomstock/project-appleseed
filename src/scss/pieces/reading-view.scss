@@ -15,7 +15,7 @@
 }
 
 .answer-card-container {
-  color: $black;
+  color: var(--p-black);
   height: 14rem;
   display: grid;
   grid-template-columns: 1.5rem 1fr 1fr 1.5rem;
@@ -78,11 +78,11 @@
   grid-row: 1 / 2;
   z-index: 1;
   border-radius: 0.5rem;
-  background-color: $info;
+  background-color: var(--p-blue);
   text-align: center;
   font-size: 1.25rem;
   line-height: 1.1rem;
-  background-color: $white-ter;
+  background-color: var(--white-ter);
 }
 
 .answer-badge.voters {
@@ -90,7 +90,7 @@
   grid-row: 3 / 4;
   z-index: 1;
   margin: auto;
-  background-color: $white-ter;
+  background-color: var(--white-ter);
   overflow: break-word;
   text-align: center;
   padding-bottom: 0em;
@@ -132,13 +132,8 @@
   align-content: center;
   flex-wrap: wrap;
   font-size: 1.25rem;
-  // font-size: 1.75rem;
-  // background-color: $info;
-  // border-radius: 8px;
-  // margin: auto;
-  // padding: 0.25rem 0.5rem;
   > div {
-    background-color: $white-ter;
+    background-color: var(--white-ter);
   }
 
   > div.nonzero {

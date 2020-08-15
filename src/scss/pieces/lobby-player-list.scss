@@ -19,10 +19,10 @@
 }
 
 .lobby-player-list-item {
-  color: $black-ter;
+  color: var(--black-ter);
   margin: 0.25rem;
   padding: 0rem;
   text-align: center;
-  background-color: $white-ter;
+  background-color: var(--white-ter);
   font-weight: bold;
 }

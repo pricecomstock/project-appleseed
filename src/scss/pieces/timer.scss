@@ -1,5 +1,5 @@
 .timer-bar {
-  background-color: $white-ter;
+  background-color: var(--white-ter);
   position: relative;
   overflow: hidden;
   height: 4vh;
@@ -17,6 +17,6 @@
     height: 100%;
     font-size: 2.5vh;
     font-weight: bold;
-    color: $black-ter;
+    color: var(--black-ter);
   }
 }
