@@ -5,8 +5,8 @@ import classNames from "classnames";
 
 const homeTheme = {
   backgroundStyles: {
-    backgroundColor: "#f3722c",
-    color: "#f8961e",
+    backgroundColor: "#7272ac",
+    color: "#606092",
   },
   textColor: "#000",
   backgroundClasses: "pattern-diagonal-stripes-xl",
@@ -70,8 +70,8 @@ export default class Home extends Component {
         style={homeTheme.backgroundStyles}
       >
         <div className="homepage">
-          <div>
-            <h1 className="bitwits-text-title">bitwits!</h1>
+          <div className="home-logo-container">
+            <img src="logo.svg" alt="Bitwits!" />
           </div>
           <div className="game-panel home-form">
             <h1>Enter a room code to join!</h1>

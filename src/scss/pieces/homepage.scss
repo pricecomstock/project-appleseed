@@ -1,3 +1,16 @@
+.homepage-bg {
+  z-index: -5;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100vh;
+  width: 100%;
+
+  background-color: var(--p-red);
+  color: var(--p-violet);
+}
+
 .homepage {
   display: flex;
   flex-direction: column;
@@ -15,6 +28,7 @@
   text-align: center;
   padding: 2em;
   margin: 0em 0.5em;
+  font-size: 1.2em;
 
   input {
     color: $black-ter;
@@ -39,4 +53,16 @@
   font-size: 4em;
   font-weight: bold;
   color: $white-ter;
+}
+
+.home-logo-container {
+  max-width: 70%;
+  @media (min-height: 900px) {
+    max-width: 55%;
+    padding-bottom: 5vh;
+
+    @media (min-width: 1000px) {
+      max-width: 550px;
+    }
+  }
 }
