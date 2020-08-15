@@ -99,7 +99,7 @@ export default class Home extends Component {
             <hr />
             <p>
               Or{" "}
-              <button onClick={this.createGame} className="mini-button">
+              <button onClick={this.createGame} className="mini-button warn">
                 Create
               </button>{" "}
               a new one!

@@ -134,7 +134,14 @@ class GameRoom {
     this.resetInactiveTimer();
     this.sendThemeToIndividual(playerSocket);
     // Add to Player Sockets list
+
     this._playerSockets.push(playerSocket);
+
+    playerSocket.emit("playerIdAssigned", playerSocket.playerData);
+    this.givePlayerCurrentInfo(playerSocket)
+    this.sendPlayerDataToAll();
+    this.sendStateToAll()
+    playerSocket.emit("openEditPlayerInfoForm");
 
     // Update Player Info
     playerSocket.on("updateplayerinfo", (info) => {

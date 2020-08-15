@@ -59,6 +59,10 @@
 .player-view input {
   color: $black-ter;
   border: 0.2rem solid black;
+
+  &:hover {
+    border-color: var(--p-teal)
+  }
 }
 
 .vote-button {

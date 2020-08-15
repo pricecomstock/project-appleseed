@@ -81,25 +81,23 @@ export default class PlayerView extends Component {
 
   componentDidMount() {
     sharedOnMountInit(this);
-    // this.state.socket.on("connection", () => {
-    //   console.log("Connected!");
-    //   this.setState({ connected: true });
-    // });
-
     this.state.socket.on("players", (data) => {
       this.setState({
         playerInfo: data.players.find((player) => {
           return player.playerId === this.state.playerId;
         }),
       });
-      this.setState({ editingPlayerInfo: true });
     });
 
-    this.state.socket.on("playerIdAssigned", (assignedId) => {
-      console.log("player ID assigned: ", assignedId);
-      this.setState({ playerId: assignedId });
+    this.state.socket.on("playerIdAssigned", (playerData) => {
+      console.log("player ID assigned: ", playerData.playerId);
+      this.setState({ playerId: playerData.playerId });
       localStorage.setItem(this.state.roomCode, this.state.playerId);
     });
+
+    this.state.socket.on("openEditPlayerInfoForm", () => {
+      this.setState({editingPlayerInfo: true})
+    })
 
     this.state.socket.on("prompts", (data) => {
       console.log("Received Prompts", data);
@@ -155,7 +153,7 @@ export default class PlayerView extends Component {
               ></PlayerInfoSet>
             </div>
           )}
-          <div className="player-top-header game-panel static">
+          <div className="player-top-header game-panel">
             {this.state.timerIsVisible && this.state.msRemaining > 0 ? (
               <div>{Math.floor(this.state.msRemaining / 1000)}s</div>
             ) : (

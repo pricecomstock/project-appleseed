@@ -12,7 +12,7 @@ export default class PlayerStatusDisplay extends Component {
     return (
       <>
         {(showLobbyWaiting || showpromptWaiting || showVoteWaiting) && (
-          <div className="player-center game-panel static player-status-container">
+          <div className="player-center game-panel player-status-container">
             {showLobbyWaiting && (
               <p className="player-status-text">
                 Waiting on all players to join and for host to start the game...

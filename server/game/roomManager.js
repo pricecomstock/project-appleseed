@@ -86,10 +86,6 @@ class RoomManager {
             socket.playerData = new PlayerData();
             joinedRoom.addPlayer(socket);
           }
-
-          socket.emit("playerIdAssigned", socket.playerData.playerId);
-          sendRoomUpdates(roomCode);
-          joinedRoom.givePlayerCurrentInfo(socket);
         } else {
           socket.emit("roomdoesnotexisterror", {});
           socket.disconnect(true);

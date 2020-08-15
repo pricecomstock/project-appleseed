@@ -4,7 +4,7 @@ export default class Volume extends Component {
   render() {
     return (
       <button
-        className="button is-info is-rounded is-outlined is-small"
+        className="mini-button primary"
         onClick={this.props.toggleMute}
       >
         {this.props.muted ? "Muted" : "Mute"}

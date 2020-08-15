@@ -61,13 +61,14 @@ div.fun-bg {
   border: 0.2rem solid black;
   background-color: $white-ter;
   color: $black-ter;
+  font-weight: bold;
   overflow: hidden;
   padding: 0.5rem 0.5rem;
   cursor: pointer;
+  color: $white-ter;
 
   &.primary {
     background-color: var(--p-teal);
-    color: $white-ter;
   }
 
   &.success {
@@ -84,13 +85,10 @@ div.fun-bg {
 }
 
 .mini-button {
+  @extend .game-button;
   @extend .cartoon-3d-mini-hoverable;
   border: 0.125rem solid black;
   border-radius: 0.25rem;
   padding: 0.125em 0.25em;
-  background-color: var(--p-orange-yellow);
-  color: $white-ter;
   font-size: 0.75em;
-  font-weight: bold;
-  cursor: pointer;
 }
