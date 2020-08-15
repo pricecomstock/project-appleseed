@@ -1,9 +1,12 @@
 @keyframes margin-pop {
+  /* Change padding in opposite way so inner next doesn't change width */
   from {
     margin: 0.1rem;
+    padding: 0.5rem;
   }
   to {
-    margin: 0.4rem;
+    margin: 0.45rem;
+    padding: 0.15rem;
   }
 }
 
@@ -25,5 +28,14 @@
   }
   100% {
     border-color: var(--p-blue);
+  }
+}
+
+@keyframes score-color-shift {
+  from {
+    background-color: var(--p-green);
+  }
+  to {
+    background-color: var(--p-teal);
   }
 }

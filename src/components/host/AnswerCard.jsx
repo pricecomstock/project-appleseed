@@ -22,7 +22,7 @@ export default class AnswerCard extends Component {
         })}
       >
         <div
-          className={classNames("answer-card flex-center-text", {
+          className={classNames("game-panel answer-card flex-center-text", {
             "winning-answer-card":
               this.props.votingIsComplete && this.props.isWinner,
             "losing-answer-card":

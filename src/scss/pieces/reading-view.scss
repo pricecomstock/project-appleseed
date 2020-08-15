@@ -38,12 +38,8 @@
   grid-column: 1 / 5;
   grid-row: 1 / 4;
   overflow: hidden;
-  border-radius: 0.5rem;
   margin: 0.75rem;
-  padding: 0.5rem;
-  background-color: white;
   z-index: 0;
-  border: 0.2rem solid black;
 
   > p.answer-text {
     flex: 0 0 100%;
@@ -59,17 +55,17 @@
 
   &.winning-answer-card {
     border-color: var(--p-green);
-    border-width: 0.5rem;
+    border-width: 0.8rem;
     border-radius: 1rem;
     font-weight: bold;
-    margin: 0.25rem;
+    box-shadow: none;
+    // margin: 0.25rem;
 
     animation: border-color-spin 1.2s linear infinite alternate,
       margin-pop 0.3s ease-in-out infinite alternate;
   }
 
   &.losing-answer-card {
-    border-color: hsl(0, 0, 30);
     border-width: 0.15rem;
   }
 }
@@ -146,12 +142,12 @@
   }
 
   > div.nonzero {
-    background-color: $green;
+    background-color: var(--bright-green);
     color: white;
   }
 
   > div.shutout {
-    background-color: $green;
+    background-color: var(--bright-green);
     color: white;
     font-size: 1.5rem;
     z-index: 3;
