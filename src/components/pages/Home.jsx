@@ -88,7 +88,7 @@ export default class Home extends Component {
               onChange={this.handleCodeChange}
             />
             <button
-              className="join-button game-button success"
+              className="join-button game-button green"
               onClick={this.joinGame}
             >
               Join
@@ -99,7 +99,7 @@ export default class Home extends Component {
             <hr />
             <p>
               Or{" "}
-              <button onClick={this.createGame} className="mini-button warn">
+              <button onClick={this.createGame} className="mini-button yellow">
                 Create
               </button>{" "}
               a new one!

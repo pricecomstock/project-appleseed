@@ -46,82 +46,59 @@ export default class ControlButtons extends Component {
 
   render() {
     return (
-      <div className="buttons are-medium">
-        {this.props.currentState === "lobby" && (
-          <button
-            className="button is-rounded is-danger is-small is-outlined"
-            onClick={this.closeRoom}
-          >
+      <div className="">
+        {(this.props.currentState === "lobby" ||
+          this.props.currentState === "finalScores") && (
+          <button className="game-button red" onClick={this.closeRoom}>
             Close Room
           </button>
         )}
         {this.props.currentState === "lobby" && (
-          <button
-            className="button is-rounded is-warning is-inverted"
-            onClick={this.startGame}
-          >
+          <button className="game-button teal" onClick={this.startGame}>
             Start Game
           </button>
         )}
         {this.props.currentState === "prompts" && (
-          <button
-            className="button is-rounded is-link"
-            onClick={this.closePrompts}
-          >
+          <button className="game-button orange" onClick={this.closePrompts}>
             Close Prompts
           </button>
         )}
         {this.props.currentState === "voting" && (
-          <button
-            className="button is-rounded is-link"
-            onClick={this.closeVoting}
-          >
+          <button className="game-button orange" onClick={this.closeVoting}>
             Close Voting
           </button>
         )}
         {this.props.currentState === "scoring" && (
-          <button className="button is-rounded is-link" onClick={this.skip}>
+          <button className="game-button blue" onClick={this.skip}>
             Next
           </button>
         )}
         {this.props.currentState === "scoring" && (
-          <button
-            className="button is-rounded is-warning is-outlined is-small"
-            onClick={this.endRound}
-          >
+          <button className="game-button orange" onClick={this.endRound}>
             End Round
           </button>
         )}
         {this.props.currentState === "scoring" && (
-          <button
-            className="button is-rounded is-danger is-outlined is-small"
-            onClick={this.endGame}
-          >
+          <button className="game-button red" onClick={this.endGame}>
             End Game
           </button>
         )}
         {this.props.currentState === "endOfRound" && (
-          <button
-            className="button is-rounded is-warning"
-            onClick={this.nextRound}
-          >
+          <button className="game-button blue" onClick={this.nextRound}>
             Next Round
           </button>
         )}
         {this.props.currentState === "finalScores" && (
-          <button
-            className="button is-rounded is-warning"
-            onClick={this.newGameNewPlayers}
-          >
-            New Game, New Players
+          <button className="game-button teal" onClick={this.newGameNewPlayers}>
+            Back To Lobby
           </button>
         )}
         {this.props.currentState === "finalScores" && (
           <button
-            className="button is-rounded is-warning"
+            className="game-button yellow"
             onClick={this.newGameSamePlayers}
           >
-            New Game, Same Players
+            Another! (Same Players)
           </button>
         )}
       </div>

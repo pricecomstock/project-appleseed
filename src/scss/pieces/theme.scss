@@ -8,6 +8,44 @@ div.fun-bg {
   width: 100%;
 }
 
+@mixin theme-colorable($bgProperty, $fgProperty) {
+  #{$bgProperty}: var(--white-ter);
+  #{$fgProperty}: var(--black-ter);
+
+  &.red {
+    #{$bgProperty}: var(--p-red);
+    #{$fgProperty}: var(--white-ter);
+  }
+  &.orange {
+    #{$bgProperty}: var(--p-orange);
+    #{$fgProperty}: var(--white-ter);
+  }
+  &.yellow {
+    #{$bgProperty}: var(--p-yellow);
+    #{$fgProperty}: var(--black-ter);
+  }
+  &.green {
+    #{$bgProperty}: var(--p-green);
+    #{$fgProperty}: var(--white-ter);
+  }
+  &.teal {
+    #{$bgProperty}: var(--p-teal);
+    #{$fgProperty}: var(--white-ter);
+  }
+  &.blue {
+    #{$bgProperty}: var(--p-blue);
+    #{$fgProperty}: var(--white-ter);
+  }
+  &.violet {
+    #{$bgProperty}: var(--p-violet);
+    #{$fgProperty}: var(--white-ter);
+  }
+  &.black {
+    #{$bgProperty}: var(--black-ter);
+    #{$fgProperty}: var(--white-ter);
+  }
+}
+
 .cartoon-3d {
   box-shadow: 3px 3px 0px black;
 }
@@ -67,20 +105,10 @@ div.fun-bg {
   cursor: pointer;
   color: $white-ter;
 
-  &.primary {
-    background-color: var(--p-teal);
-  }
+  @include theme-colorable(background-color, color);
 
-  &.success {
-    background-color: var(--p-green);
-  }
-
-  &.warn {
-    background-color: var(--p-orange-yellow);
-  }
-
-  &.danger {
-    background-color: var(--p-red);
+  &.inverted {
+    @include theme-colorable(color, background-color);
   }
 }
 

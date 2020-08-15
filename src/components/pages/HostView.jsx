@@ -161,12 +161,10 @@ export default class HostView extends Component {
             </div>
             {/* Right */}
             <div className="inline-flex">
-              <div className="game-panel">
-                <ControlButtons
-                  currentState={this.state.currentState}
-                  socket={this.state.socket}
-                ></ControlButtons>
-              </div>
+              <ControlButtons
+                currentState={this.state.currentState}
+                socket={this.state.socket}
+              ></ControlButtons>
             </div>
           </div>
           {/* Debug View */}
