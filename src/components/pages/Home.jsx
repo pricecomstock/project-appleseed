@@ -88,7 +88,7 @@ export default class Home extends Component {
               onChange={this.handleCodeChange}
             />
             <button
-              className="join-button game-button green"
+              className="join-button game-button blue"
               onClick={this.joinGame}
             >
               Join
@@ -110,7 +110,7 @@ export default class Home extends Component {
             <div className="field"></div>
             <hr />
             <p>
-              Or create your own set of{" "}
+              Or make your own set of{" "}
               <Link
                 el="button"
                 to="/customprompts"
