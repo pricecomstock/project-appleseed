@@ -60,7 +60,6 @@ div.fun-bg {
 
 .cartoon-3d-hoverable {
   @extend .cartoon-3d;
-  display: inline-block;
   position: relative;
   top: 0;
   left: 0;
@@ -109,6 +108,7 @@ div.fun-bg {
   padding: 0.5rem 0.5rem;
   cursor: pointer;
   color: var(--white-ter);
+  align-self: center;
 
   @include theme-colorable(background-color, color);
 
@@ -119,6 +119,10 @@ div.fun-bg {
   &.full-width {
     width: 100%;
   }
+
+  &.inline {
+    align-self: baseline;
+  }
 }
 
 .mini-button {
@@ -127,11 +131,7 @@ div.fun-bg {
   border: 0.125rem solid black;
   border-radius: 0.25rem;
   padding: 0.125em 0.25em;
-  font-size: 0.8em;
-
-  &.inline {
-    margin-bottom: -0.3rem;
-  }
+  font-size: 0.8rem;
 }
 
 * input {
@@ -141,4 +141,9 @@ div.fun-bg {
   &:hover {
     border-color: var(--p-teal);
   }
+}
+
+.help-tip {
+  font-size: 0.65em;
+  // padding: 0.3rem 0rem;
 }

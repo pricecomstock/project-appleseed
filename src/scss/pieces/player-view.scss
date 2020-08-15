@@ -65,6 +65,7 @@
 .player-view input {
   color: var(--black-ter);
   border: 0.2rem solid black;
+  font-size: 1.2em;
 
   &:hover {
     border-color: var(--p-teal);
@@ -82,4 +83,9 @@
 
 .player-info-edit {
   font-size: 1.2em;
+}
+
+.player-info-edit-buttons {
+  display: flex;
+  justify-content: space-between;
 }

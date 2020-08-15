@@ -6,6 +6,7 @@ export default class PlayerInfoSet extends Component {
   state = {
     name: "",
     emoji: "😀",
+    showHelp: false,
   };
 
   sendUpdatedInfo = () => {
@@ -22,6 +23,10 @@ export default class PlayerInfoSet extends Component {
       emoji: this.props.previousEmoji,
     });
   }
+
+  toggleHelp = () => {
+    this.setState({ showHelp: !this.state.showHelp });
+  };
 
   render() {
     return (
@@ -53,12 +58,41 @@ export default class PlayerInfoSet extends Component {
             />
           </div>
         </div>
-        <button className="game-button teal" onClick={this.sendUpdatedInfo}>
-          Submit
-        </button>
-        <button className="game-button red" onClick={this.props.hide}>
-          Close
-        </button>
+        {this.state.showHelp && (
+          <div className="help-tip">
+            <p>type an emoji into the box!</p>
+            <ul>
+              <li>
+                <b>- mobile</b>: use your emoji keyboard
+              </li>
+              <li>
+                <b>- windows</b>: windows key + period
+              </li>
+              <li>
+                <b>- mac</b>: ctrl + cmd + space
+              </li>
+              <li>
+                <b>- idk lol:</b> copy & paste from{" "}
+                <a href="https://getemoji.com/" target="_blank">
+                  getemoji
+                </a>
+              </li>
+            </ul>
+          </div>
+        )}
+        <div className="player-info-edit-buttons">
+          <div>
+            <button className="game-button teal" onClick={this.sendUpdatedInfo}>
+              Submit
+            </button>
+            <button className="game-button red" onClick={this.props.hide}>
+              Close
+            </button>
+          </div>
+          <button className="mini-button blue" onClick={this.toggleHelp}>
+            emoji???
+          </button>
+        </div>
       </div>
     );
   }
