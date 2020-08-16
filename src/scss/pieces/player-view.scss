@@ -64,7 +64,7 @@
 
 .player-view input {
   color: var(--black-ter);
-  border: 0.2rem solid black;
+  border: 0.2rem solid var(--p-black);
   font-size: 1.2em;
 
   &:hover {

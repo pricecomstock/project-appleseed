@@ -20,20 +20,15 @@
 }
 
 .home-form {
-  // display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
   text-align: center;
-  padding: 2em;
-  margin: 0em 0.5em;
+  padding: 1em;
+  margin: 0.5em 0.5em;
   font-size: 1.2em;
 
   input {
     color: var(--black-ter);
     border-radius: 0.3rem;
-    border: 0.2rem solid black;
+    border: 0.2rem solid var(--p-black);
     width: 30%;
     min-width: 130px;
     font-size: 1.5em;
@@ -41,11 +36,16 @@
     text-transform: uppercase;
     padding: 0.25em;
     margin: 0.5em 0em;
+    border-color: var(--p-teal);
   }
   button.join-button {
     display: block;
     margin: auto;
     font-size: 1.25em;
+  }
+
+  p {
+    margin: 0.25em 0;
   }
 }
 
@@ -56,14 +56,10 @@
 }
 
 .home-logo-container {
-  max-width: 70%;
+  max-width: 50%;
   padding: 2vh 0;
-  @media (min-height: 900px) {
-    max-width: 55%;
+  @media (min-width: 700px) {
+    max-width: 350px;
     padding-bottom: 5vh;
-
-    @media (min-width: 1000px) {
-      max-width: 550px;
-    }
   }
 }

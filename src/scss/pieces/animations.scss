@@ -14,20 +14,23 @@
   0% {
     border-color: var(--p-red);
   }
-  20% {
+  17% {
     border-color: var(--p-orange);
   }
-  40% {
+  33% {
     border-color: var(--p-yellow);
   }
-  60% {
+  50% {
     border-color: var(--p-green);
   }
-  80% {
+  67% {
     border-color: var(--p-teal);
   }
-  100% {
+  83% {
     border-color: var(--p-blue);
+  }
+  100% {
+    border-color: var(--p-violet);
   }
 }
 

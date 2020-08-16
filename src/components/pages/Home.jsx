@@ -96,21 +96,19 @@ export default class Home extends Component {
             {this.state.isJoinError && (
               <p className="has-text-danger">{this.state.joinErrorMessage}</p>
             )}
-            <hr />
+          </div>
+          <div className="game-panel home-form">
             <p>
               Or{" "}
               <a
                 onClick={this.createGame}
                 className="mini-button yellow inline"
               >
-                Create
+                create a new room!
               </a>{" "}
-              a new one!
             </p>
-            <div className="field"></div>
-            <hr />
             <p>
-              Or make your own set of{" "}
+              Or make your own{" "}
               <Link
                 el="button"
                 to="/customprompts"
