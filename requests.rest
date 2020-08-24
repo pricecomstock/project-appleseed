@@ -1,0 +1,21 @@
+GET http://localhost:4001/api
+
+###
+
+POST http://localhost:4001/auth/register
+content-type: application/json
+
+{
+    "username": "pc2",
+    "email": "price.comstock@gmail.com",
+    "password": "asdfqwerty"
+}
+
+###
+POST http://localhost:4001/auth/login
+content-type: application/json
+
+{
+  "username": "pc",
+  "password": "asdfqwerty"
+}

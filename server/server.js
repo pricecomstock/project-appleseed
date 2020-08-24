@@ -3,6 +3,7 @@ const http = require("http");
 const cors = require("cors");
 const socketIo = require("socket.io");
 const createRouter = require("./routes/router.js");
+const auth = require("./routes/auth.js");
 const path = require("path");
 console.log("ENV:", process.env.NODE_ENV);
 
@@ -19,8 +20,10 @@ const api = createRouter(io);
 if (process.env.NODE_ENV === "development" || process.env.CORS === "allow") {
   app.options("*", cors());
   app.use("/api", cors(), api);
+  app.use("/auth", cors(), auth);
 } else {
   app.use("/api", api);
+  app.use("/auth", auth);
 }
 
 // Static serve of build folder
