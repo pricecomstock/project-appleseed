@@ -1,32 +1,25 @@
+require("dotenv").config();
 const express = require("express");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
+const passport = require("passport");
+const initializePassport = require("../util/passport-config");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+
+initializePassport(passport);
 
 const router = express.Router();
 router.use(express.json());
 
 const users = []; // TODO switch to DB
 
-console.log("ENV", process.env);
-
-router.post("/login", (req, res) => {
-  // TODO authenticate user
-
-  const username = "TEST_USER";
-  const expiresAt = Date.now() + 3600 * 24; // 24 hours for now
-  const promptAccess = true;
-  const user = {
-    username,
-    expiresAt,
-    promptAccess,
-  };
-
-  const accessToken = jwt.sign(user, process.env.JWT_SECRET_KEY);
-  res.json({ accessToken });
-});
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "login",
+  })
+);
 
 router.post("/register", async (req, res) => {
   const { email, username, password } = req.body;
