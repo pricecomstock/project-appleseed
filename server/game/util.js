@@ -72,6 +72,57 @@ function mapToObject(map) {
   return obj;
 }
 
+class DeckRandomizer {
+  constructor(items) {
+    this._unpickedItems = [...items];
+    this._pickedItems = [];
+  }
+
+  draw() {
+    if (this._unpickedItems.length === 0) {
+      this.switchDecks();
+    }
+    let item = popRandomItemFromArray(this._unpickedItems);
+    console.log(item);
+    this._pickedItems.push(item);
+    return item;
+  }
+
+  switchDecks() {
+    let tmp = this._pickedItems;
+    this._pickedItems = this._unpickedItems;
+    this._unpickedItems = tmp;
+  }
+}
+
+class Counter {
+  constructor() {
+    this._counts = new Map();
+  }
+
+  increment(item) {
+    let currentCount = this._counts.get(item) ?? 0;
+    currentCount += 1;
+    this._counts.set(item, currentCount);
+    return currentCount;
+  }
+
+  decrement(item) {
+    let currentCount = this._counts.get(item) ?? 0;
+    currentCount -= 1;
+    this._counts.set(item, currentCount);
+    return currentCount;
+  }
+
+  getCount(item) {
+    return this._counts.get(item);
+  }
+
+  counts() {
+    return this._counts;
+  }
+}
+
 module.exports = {
   generateBase64Id,
   adminRoom,
@@ -83,4 +134,6 @@ module.exports = {
   randomItemsFromArrayWithoutRepeats,
   popRandomItemsFromArrayWithoutRepeats,
   mapToObject,
+  DeckRandomizer,
+  Counter,
 };
