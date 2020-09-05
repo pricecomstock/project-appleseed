@@ -83,7 +83,6 @@ class DeckRandomizer {
       this.switchDecks();
     }
     let item = popRandomItemFromArray(this._unpickedItems);
-    console.log(item);
     this._pickedItems.push(item);
     return item;
   }

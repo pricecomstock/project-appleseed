@@ -4,6 +4,7 @@ const {
   randomItemFromArray,
   randomItemsFromArrayWithoutRepeats,
   generateBase64Id,
+  DeckRandomizer,
 } = require("../util");
 // stackoverflow.com/questions/21295162/javascript-randomly-pair-items-from-array-without-repeats
 const C = require("../../../src/constants");
@@ -58,9 +59,12 @@ class PromptRound {
   constructor(playerDatas, roundOptions, promptPicker) {
     this._roundOptions = roundOptions;
 
-    this._playerNames = playerDatas.map((pd) => {
-      return pd.emoji + pd.nickname;
-    });
+    this._playerNameDeckRandomizer = new DeckRandomizer(
+      playerDatas.map((pd) => {
+        return pd.emoji + pd.nickname;
+      })
+    );
+
     this._playerIds = playerDatas.map((pd) => pd.playerId);
 
     this._promptPicker = promptPicker;
@@ -207,7 +211,7 @@ class PromptRound {
       .getPrompt()
       .replace(/_+/g, "______") // normalize blanks
       .replace(/%p/g, (match, offset, string) => {
-        return `${randomItemFromArray(this._playerNames)}`;
+        return `${this._playerNameDeckRandomizer.draw()}`;
       });
     const promptMatchup = new PromptMatchup(selectedPlayers, prompt);
 
