@@ -20,6 +20,7 @@ const C = {
   },
 
   ANSWERS_PER_PROMPT_OPTIONS: {
+    THREE: 3,
     TWO: 2,
     ALL: "all",
   },
