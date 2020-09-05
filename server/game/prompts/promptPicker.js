@@ -7,6 +7,7 @@ const {
   popRandomItemsFromArrayWithoutRepeats,
   randomItemFromArray,
   popRandomItemFromArray,
+  DeckRandomizer,
 } = require("../util");
 
 // FIX WITH THIS
@@ -19,6 +20,18 @@ var defaultPromptsPromise = getAllDefaultPrompts();
 class PromptPicker {
   constructor(defaultPrompts, customSet) {
     this._defaultPrompts = defaultPrompts;
+
+    if (this._defaultPrompts.length > 2 ** 16) {
+      throw new Error("Too many prompts for 16 bits");
+    }
+
+    let defaultPromptIndices = new Uint16Array(
+      this._defaultPrompts.map((prompt, index) => index)
+    );
+
+    this._defaultPromptIndexDeckRandomizer = new DeckRandomizer(
+      defaultPromptIndices
+    );
 
     if (customSet) {
       this._customSetCode = customSet.metadata.id;
@@ -55,11 +68,13 @@ class PromptPicker {
   }
 
   getRandomDefaultPrompts(count) {
-    return randomItemsFromArrayWithoutRepeats(this._defaultPrompts);
+    let indices = this._defaultPromptIndexDeckRandomizer.drawMultiple(count);
+    return indices.map((i) => this._defaultPrompts[i]);
   }
 
   getRandomDefaultPrompt() {
-    return randomItemFromArray(this._defaultPrompts);
+    let index = this._defaultPromptIndexDeckRandomizer.draw();
+    return this._defaultPrompts[index];
   }
 
   getPrompts(count) {

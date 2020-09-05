@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const now = require("performance-now");
 
 function generateBase64Id(numCharacters) {
   // Synchronous
@@ -22,7 +23,12 @@ function audienceRoom(roomCode) {
 
 function getShuffledCopyOfArray(originalArray) {
   let array = [...originalArray];
-  let currentIndex = array.length;
+  shuffleArrayInPlace(array);
+  return array;
+}
+
+function shuffleArrayInPlace(arr) {
+  let currentIndex = arr.length;
   let temporaryValue, randomIndex;
 
   // While there remain elements to shuffle...
@@ -32,12 +38,12 @@ function getShuffledCopyOfArray(originalArray) {
     currentIndex -= 1;
 
     // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    temporaryValue = arr[currentIndex];
+    arr[currentIndex] = arr[randomIndex];
+    arr[randomIndex] = temporaryValue;
   }
 
-  return array;
+  return arr;
 }
 
 function randomItemFromArray(arr) {
@@ -73,24 +79,42 @@ function mapToObject(map) {
 }
 
 class DeckRandomizer {
-  constructor(items) {
-    this._unpickedItems = [...items];
-    this._pickedItems = [];
+  constructor(arr) {
+    // Sets directly to input array to allow for TypedArrays
+    this.items = arr;
+    shuffleArrayInPlace(this.items);
+
+    this._pointer = 0;
   }
 
   draw() {
-    if (this._unpickedItems.length === 0) {
-      this.switchDecks();
+    if (this._pointer >= this.items.length) {
+      this.reshuffleDeck();
     }
-    let item = popRandomItemFromArray(this._unpickedItems);
-    this._pickedItems.push(item);
+    let item = this.items[this._pointer];
+    this._pointer += 1;
     return item;
   }
 
-  switchDecks() {
-    let tmp = this._pickedItems;
-    this._pickedItems = this._unpickedItems;
-    this._unpickedItems = tmp;
+  drawMultiple(count) {
+    if (count > this.items.length) {
+      throw Error("cannot pick that many random items");
+    }
+
+    const itemsRemaining = this.items.length - this._pointer;
+    if (count > itemsRemaining) {
+      let initialItems = this.items.slice(this._pointer);
+      this.reshuffleDeck();
+      let nextSetOfItems = this.items.slice(0, count - initialItems.length);
+      return [...initialItems, ...nextSetOfItems];
+    } else {
+      return this.items.slice(this._pointer, this._pointer + count);
+    }
+  }
+
+  reshuffleDeck() {
+    this._pointer = 0;
+    shuffleArrayInPlace(this.items);
   }
 }
 
@@ -128,6 +152,7 @@ module.exports = {
   playerRoom,
   audienceRoom,
   getShuffledCopyOfArray,
+  shuffleArrayInPlace,
   randomItemFromArray,
   popRandomItemFromArray,
   randomItemsFromArrayWithoutRepeats,
@@ -136,3 +161,39 @@ module.exports = {
   DeckRandomizer,
   Counter,
 };
+
+// function speedTest(name, fn) {
+//   const start = now();
+//   fn();
+//   console.log(`${name}: took ${now() - start}s`);
+// }
+
+// let tenThousand = [];
+// for (let i = 0; i < 10000; i++) {
+//   tenThousand.push(i);
+// }
+// let tenThousandUint = new Uint16Array(tenThousand);
+
+// speedTest("uint16 DeckRandomizer 2000 single picks", () => {
+//   let dr = new DeckRandomizer(tenThousandUint);
+//   for (let i = 0; i < 2000; i++) {
+//     dr.draw();
+//   }
+// });
+
+// speedTest("uint16 DeckRandomizer pick 2000", () => {
+//   let dr = new DeckRandomizer(tenThousandUint);
+//   dr.drawMultiple(2000);
+// });
+
+// speedTest("plain array DeckRandomizer 2000 single picks", () => {
+//   let dr = new DeckRandomizer(tenThousand);
+//   for (let i = 0; i < 2000; i++) {
+//     dr.draw();
+//   }
+// });
+
+// speedTest("plain array DeckRandomizer pick 2000", () => {
+//   let dr = new DeckRandomizer(tenThousand);
+//   dr.drawMultiple(2000);
+// });
