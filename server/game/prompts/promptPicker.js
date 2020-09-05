@@ -3,9 +3,7 @@ const {
   getCustomSet,
 } = require("../../promptdb/promptdb");
 const {
-  randomItemsFromArrayWithoutRepeats,
   popRandomItemsFromArrayWithoutRepeats,
-  randomItemFromArray,
   popRandomItemFromArray,
   DeckRandomizer,
 } = require("../util");
