@@ -10,6 +10,10 @@ const lodash = require("lodash");
 
 const C = require("../../../src/constants");
 
+const {
+  STATE_MACHINE: { STATES, TRANSITIONS },
+} = C;
+
 const stateMachineSpec = require("./stateMachineSpec");
 const stateMachineMethods = require("./stateMachineMethods");
 
@@ -113,7 +117,7 @@ class GameRoom {
 
   get allowedToJoin() {
     return (
-      this.state === "lobby" &&
+      this.state === STATES.LOBBY &&
       this._playerSockets.length < this._options.maxPlayers
     );
   }
@@ -168,7 +172,7 @@ class GameRoom {
       // Double check state to narrow window of async issues
       // It might still be a problem
       // TODO add label to timer and check that when finishing
-      if (this.state === "prompts" && this._prompts.areAllAnswered) {
+      if (this.state === STATES.PROMPTS && this._prompts.areAllAnswered) {
         this._timer.finish();
       }
     });
@@ -199,7 +203,7 @@ class GameRoom {
           maxVotes -= this.currentRoundOptions.answersPerPrompt;
         }
         if (
-          this.state === "voting" &&
+          this.state === STATES.VOTING &&
           Object.keys(this._currentVotingResults).length === maxVotes
         ) {
           this._timer.finish();
@@ -216,8 +220,8 @@ class GameRoom {
 
   addAdmin(adminSocket) {
     this.giveAdminCurrentInfo(adminSocket);
-    adminSocket.on("startGame", (data) => {
-      if (this.can("startGame")) {
+    adminSocket.on(TRANSITIONS.START_GAME, (data) => {
+      if (this.can(TRANSITIONS.START_GAME)) {
         try {
           this.startGame();
         } catch (error) {
@@ -230,8 +234,8 @@ class GameRoom {
       this.closeRoom("closed by host");
     });
 
-    adminSocket.on("closePrompts", (data) => {
-      if (this.can("closePrompts")) {
+    adminSocket.on(TRANSITIONS.CLOSE_PROMPTS, (data) => {
+      if (this.can(TRANSITIONS.CLOSE_PROMPTS)) {
         try {
           this._timer.cancel();
           this.closePrompts();
@@ -241,8 +245,8 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("closeVoting", (data) => {
-      if (this.can("closeVoting")) {
+    adminSocket.on(TRANSITIONS.CLOSE_VOTING, (data) => {
+      if (this.can(TRANSITIONS.CLOSE_VOTING)) {
         try {
           this._timer.cancel();
           this.closeVoting();
@@ -252,8 +256,11 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("nextSet", (data) => {
-      if (this.can("nextSet") && this._finalizedMatchupsToSend.length > 0) {
+    adminSocket.on(TRANSITIONS.NEXT_SET, (data) => {
+      if (
+        this.can(TRANSITIONS.NEXT_SET) &&
+        this._finalizedMatchupsToSend.length > 0
+      ) {
         try {
           this._timer.cancel();
           this.nextSet();
@@ -263,8 +270,8 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("endRound", (data) => {
-      if (this.can("endRound")) {
+    adminSocket.on(TRANSITIONS.END_ROUND, (data) => {
+      if (this.can(TRANSITIONS.END_ROUND)) {
         try {
           this._timer.cancel();
           this.endRound();
@@ -274,8 +281,8 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("endGame", (data) => {
-      if (this.can("endGame")) {
+    adminSocket.on(TRANSITIONS.END_GAME, (data) => {
+      if (this.can(TRANSITIONS.END_GAME)) {
         try {
           this._timer.cancel();
           this.endGame();
@@ -285,9 +292,9 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("nextRound", (data) => {
+    adminSocket.on(TRANSITIONS.NEXT_ROUND, (data) => {
       if (
-        this.can("nextRound") &&
+        this.can(TRANSITIONS.NEXT_ROUND) &&
         this._currentRoundIndex < this._options.rounds.length - 1
       ) {
         try {
@@ -308,8 +315,8 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("newGameNewPlayers", (data) => {
-      if (this.can("newGameNewPlayers")) {
+    adminSocket.on(TRANSITIONS.NEW_GAME_NEW_PLAYERS, (data) => {
+      if (this.can(TRANSITIONS.NEW_GAME_NEW_PLAYERS)) {
         try {
           this._timer.cancel();
           this.newGameNewPlayers();
@@ -319,8 +326,8 @@ class GameRoom {
       }
     });
 
-    adminSocket.on("newGameSamePlayers", (data) => {
-      if (this.can("newGameSamePlayers")) {
+    adminSocket.on(TRANSITIONS.NEW_GAME_SAME_PLAYERS, (data) => {
+      if (this.can(TRANSITIONS.NEW_GAME_SAME_PLAYERS)) {
         try {
           this._timer.cancel();
           this.newGameSamePlayers();
@@ -332,7 +339,7 @@ class GameRoom {
 
     adminSocket.on("loadcustomset", (data) => {
       console.log("Loading custom set", data.code);
-      if (this.state === "lobby") {
+      if (this.state === STATES.LOBBY) {
         try {
           PromptPicker.CreateForCustomSet(data.code).then((promptPicker) => {
             this._promptPicker = promptPicker;
@@ -375,10 +382,10 @@ class GameRoom {
 
     if (playerSocket && playerSocket.playerData.playerId) {
       this.sendStateToIndividual(playerSocket);
-      if (this.state === "prompts") {
+      if (this.state === STATES.PROMPTS) {
         this.sendUnansweredPromptsToPlayer(playerSocket);
         this.sendTimerToIndividual(playerSocket);
-      } else if (this.state === "voting") {
+      } else if (this.state === STATES.VOTING) {
         this.sendVotingOptionsToIndividualPlayer(playerSocket);
         this.sendTimerToIndividual(playerSocket);
       }

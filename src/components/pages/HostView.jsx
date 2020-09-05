@@ -11,6 +11,11 @@ import Options from "../host/Options";
 import OptionsHUD from "../host/OptionsHUD";
 import Volume from "../Volume";
 
+import C from "../../constants";
+const {
+  STATE_MACHINE: { STATES },
+} = C;
+
 import createSocketClient from "../../shared/createSocketClient";
 import {
   sharedOnMountInit,
@@ -198,7 +203,7 @@ export default class HostView extends Component {
             </div>
           )}
           {/* Lobby View */}
-          {this.state.currentState === "lobby" && (
+          {this.state.currentState === STATES.LOBBY && (
             <>
               <div className="host-top-main">
                 <LobbyView roomCode={this.state.roomCode}></LobbyView>
@@ -216,7 +221,7 @@ export default class HostView extends Component {
             </>
           )}
 
-          {this.state.currentState === "prompts" && (
+          {this.state.currentState === STATES.PROMPTS && (
             <>
               <div className="host-main">
                 <PlayerList
@@ -234,9 +239,8 @@ export default class HostView extends Component {
               </div>
             </>
           )}
-          {(this.state.currentState === "reading" ||
-            this.state.currentState === "voting" ||
-            this.state.currentState === "scoring") &&
+          {(this.state.currentState === STATES.VOTING ||
+            this.state.currentState === STATES.SCORING) &&
             this.state.filledPrompt && (
               <div className="host-main">
                 <ReadingDisplay
@@ -248,8 +252,8 @@ export default class HostView extends Component {
                 ></ReadingDisplay>
               </div>
             )}
-          {(this.state.currentState === "endOfRound" ||
-            this.state.currentState === "finalScores") && (
+          {(this.state.currentState === STATES.END_OF_ROUND ||
+            this.state.currentState === STATES.FINAL_SCORES) && (
             <div className="host-main">
               <Scoreboard data={this.state.scoreboardData}></Scoreboard>
             </div>

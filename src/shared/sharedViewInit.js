@@ -1,11 +1,15 @@
 import C from "../constants";
 import audio from "../audio/audio";
 
+const {
+  STATE_MACHINE: { STATES },
+} = C;
+
 export function sharedInitialState(props) {
   return {
     connected: true,
 
-    currentState: "lobby",
+    currentState: STATES.LOBBY,
     roomCode: props.match.params.code,
     gameOptions: {},
     currentRoundIndex: 0,
@@ -30,7 +34,7 @@ function bindableSocketInitialization() {
 
   this.state.socket.on("state", (newGameState) => {
     console.log("Game state updated", newGameState);
-    if (newGameState.currentState === "prompts") {
+    if (newGameState.currentState === STATES.PROMPTS) {
       audio.playDaDaPling();
     }
     this.setState({ currentState: newGameState.currentState });
@@ -57,7 +61,7 @@ function bindableSocketInitialization() {
 
   this.state.socket.on("timer", (data) => {
     let audioWarningMs = 0; // no warning
-    if (this.state.currentState === "prompts") {
+    if (this.state.currentState === STATES.PROMPTS) {
       audioWarningMs = 10000;
     }
     this.startTimer(data.msTotal, data.msRemaining, audioWarningMs);
@@ -90,8 +94,8 @@ function bindableSharedMethodInit() {
       // Safety buffer to err on giving players extra time
       msRemaining: msRemaining - C.TIMER_SAFETY_BUFFER,
       timerIsVisible:
-        this.state.currentState === "voting" ||
-        this.state.currentState === "prompts",
+        this.state.currentState === STATES.VOTING ||
+        this.state.currentState === STATES.PROMPTS,
     });
 
     let intervalFn = () => {};

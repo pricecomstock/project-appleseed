@@ -10,6 +10,11 @@ import Volume from "../Volume";
 
 import classNames from "classnames";
 
+import C from "../../constants";
+const {
+  STATE_MACHINE: { STATES },
+} = C;
+
 import createSocketClient from "../../shared/createSocketClient";
 import {
   sharedOnMountInit,
@@ -143,16 +148,17 @@ export default class PlayerView extends Component {
           className="player-view"
           style={{ color: this.state.theme.textColor }}
         >
-          {this.state.editingPlayerInfo && this.state.currentState === "lobby" && (
-            <div className="player-center">
-              <PlayerInfoSet
-                socket={this.state.socket}
-                previousName={this.state.playerInfo.nickname}
-                previousEmoji={this.state.playerInfo.emoji}
-                hide={() => this.setState({ editingPlayerInfo: false })}
-              ></PlayerInfoSet>
-            </div>
-          )}
+          {this.state.editingPlayerInfo &&
+            this.state.currentState === STATES.LOBBY && (
+              <div className="player-center">
+                <PlayerInfoSet
+                  socket={this.state.socket}
+                  previousName={this.state.playerInfo.nickname}
+                  previousEmoji={this.state.playerInfo.emoji}
+                  hide={() => this.setState({ editingPlayerInfo: false })}
+                ></PlayerInfoSet>
+              </div>
+            )}
           <div className="player-top-header game-panel">
             {this.state.timerIsVisible && this.state.msRemaining > 0 ? (
               <div>{Math.floor(this.state.msRemaining / 1000)}s</div>
@@ -167,7 +173,7 @@ export default class PlayerView extends Component {
             {this.state.playerInfo && (
               <PlayerInfoView
                 playerInfo={this.state.playerInfo}
-                canEdit={this.state.currentState === "lobby"}
+                canEdit={this.state.currentState === STATES.LOBBY}
                 onEdit={() => this.setState({ editingPlayerInfo: true })}
               ></PlayerInfoView>
             )}
@@ -197,7 +203,7 @@ export default class PlayerView extends Component {
             </div>
           )}
           <PlayerStatusDisplay state={this.state}></PlayerStatusDisplay>
-          {this.state.currentState === "voting" &&
+          {this.state.currentState === STATES.VOTING &&
             this.state.showVotingOptions === true && (
               <div className="player-main">
                 <PlayerVote

@@ -1,3 +1,7 @@
+import C from "../../../src/constants";
+const {
+  STATE_MACHINE: { TRANSITIONS },
+} = C;
 const options = require("../options");
 
 module.exports = {
@@ -12,7 +16,6 @@ module.exports = {
   },
   onBeforeClosePrompts: function () {
     this.prepareFinalizedMatchupsToSend();
-    console.log("closePrompts");
   },
   onPrompts: function () {
     console.log(
@@ -31,7 +34,7 @@ module.exports = {
         this._currentRoundIndex
       ),
       () => {
-        if (this.can("closePrompts")) {
+        if (this.can(TRANSITIONS.CLOSE_PROMPTS)) {
           this.closePrompts();
         }
       }
@@ -48,22 +51,18 @@ module.exports = {
           this._currentVotingMatchup.answers.length
         ),
         () => {
-          if (this.can("closeVoting")) {
+          if (this.can(TRANSITIONS.CLOSE_VOTING)) {
             this.closeVoting();
           }
         }
       );
-      console.log("initiateVoting");
     } else {
       this.closeVoting();
       this.endGame();
     }
   },
-  onCloseVoting: function () {
-    console.log("closeVoting");
-  },
+  onCloseVoting: function () {},
   onScoring: function () {
-    console.log("Scoring!");
     this.processVotingPoints();
     this.emitToAdmins("votingresults", {
       votingResults: this._currentVotingResults,
@@ -73,33 +72,31 @@ module.exports = {
     if (this._finalizedMatchupsToSend.length > 0) {
       // More answers to read
       this.createAndSendTimer(this._options.promptResultDelay, () => {
-        if (this.can("nextSet")) {
+        if (this.can(TRANSITIONS.NEXT_SET)) {
           this.nextSet();
         }
       });
     } else if (this._currentRoundIndex >= this._options.rounds.length - 1) {
       // No more answers, no more rounds
       this.createAndSendTimer(this._options.roundDelay, () => {
-        if (this.can("endGame")) {
+        if (this.can(TRANSITIONS.END_GAME)) {
           this.endGame();
         }
       });
     } else {
       // No more answers, but anther round
       this.createAndSendTimer(this._options.roundDelay, () => {
-        if (this.can("endRound")) {
+        if (this.can(TRANSITIONS.END_ROUND)) {
           this.endRound();
         }
       });
     }
   },
-  onNextSet: function () {
-    console.log("nextSet");
-  },
+  onNextSet: function () {},
   onEndOfRound: function () {
     // on enter the state
     this.createAndSendTimer(this._options.roundDelay, () => {
-      if (this.can("nextRound")) {
+      if (this.can(TRANSITIONS.NEXT_ROUND)) {
         this.nextRound();
       }
     });
@@ -116,7 +113,6 @@ module.exports = {
     this.emitToAdmins("scoreboarddata", {
       scoreboardData: this.calculateScoreboardData(),
     });
-    console.log("endGame");
   },
   onBeforeNewGameSamePlayers: function () {
     this._currentRoundIndex = 0;

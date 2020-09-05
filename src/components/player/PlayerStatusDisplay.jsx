@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 
+import C from "../../constants";
+const {
+  STATE_MACHINE: { STATES },
+} = C;
+
 export default class PlayerStatusDisplay extends Component {
   render() {
-    const showLobbyWaiting = this.props.state.currentState === "lobby";
+    const showLobbyWaiting = this.props.state.currentState === STATES.LOBBY;
     const showpromptWaiting =
-      this.props.state.currentState === "prompts" &&
+      this.props.state.currentState === STATES.PROMPTS &&
       this.props.state.promptIndex >= this.props.state.prompts.length;
     const showVoteWaiting =
-      this.props.state.currentState === "voting" &&
+      this.props.state.currentState === STATES.VOTING &&
       this.props.state.showVotingOptions === false;
     return (
       <>
