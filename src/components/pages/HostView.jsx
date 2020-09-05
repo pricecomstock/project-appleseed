@@ -11,20 +11,18 @@ import Options from "../host/Options";
 import OptionsHUD from "../host/OptionsHUD";
 import Volume from "../Volume";
 
-import C from "../../constants";
-const {
-  STATE_MACHINE: { STATES },
-} = C;
-
 import createSocketClient from "../../shared/createSocketClient";
 import {
   sharedOnMountInit,
   sharedInitialState,
 } from "../../shared/sharedViewInit";
 
-// https://www.valentinog.com/blog/socket-react/
-
 import audio from "../../audio/audio";
+
+import C from "../../constants";
+const {
+  STATE_MACHINE: { STATES },
+} = C;
 
 export default class HostView extends Component {
   state = {

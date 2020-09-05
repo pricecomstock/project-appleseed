@@ -10,11 +10,6 @@ import Volume from "../Volume";
 
 import classNames from "classnames";
 
-import C from "../../constants";
-const {
-  STATE_MACHINE: { STATES },
-} = C;
-
 import createSocketClient from "../../shared/createSocketClient";
 import {
   sharedOnMountInit,
@@ -22,9 +17,11 @@ import {
 } from "../../shared/sharedViewInit";
 
 import audio from "../../audio/audio";
-// https://www.valentinog.com/blog/socket-react/
 
 import C from "../../constants";
+const {
+  STATE_MACHINE: { STATES },
+} = C;
 
 export default class PlayerView extends Component {
   state = {

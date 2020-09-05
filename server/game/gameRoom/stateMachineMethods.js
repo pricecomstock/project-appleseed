@@ -1,8 +1,8 @@
-import C from "../../../src/constants";
+const C = require("../../../src/constants");
+const options = require("../options");
 const {
   STATE_MACHINE: { TRANSITIONS },
 } = C;
-const options = require("../options");
 
 module.exports = {
   onEnterState: function () {
