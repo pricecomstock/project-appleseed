@@ -14,14 +14,19 @@ async function sync() {
   axios
     .get(sheetyUrl)
     .then((res) => {
-      let promptObjects = res.data.prompts.map((promptJson) => {
-        return {
-          text: promptJson["yourPrompt:"],
-          isFamilyFriendly:
-            promptJson["flags"] &&
-            promptJson["flags"].search(/NOT Family Friendly/g) != -1,
-        };
-      });
+      let promptObjects = res.data.prompts
+        .map((promptJson) => {
+          return {
+            text: promptJson["yourPrompt:"],
+            isFamilyFriendly:
+              promptJson["flags"] &&
+              promptJson["flags"].search(/NOT Family Friendly/g) != -1,
+          };
+        })
+        // Filter empty prompts
+        .filter((promptObject) => {
+          return promptObject.text.trim() !== "";
+        });
       replaceDefaultPrompts(promptObjects).then((result) =>
         console.log("Inserted prompts!")
       );
