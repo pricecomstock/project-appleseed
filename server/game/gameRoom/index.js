@@ -212,6 +212,17 @@ class GameRoom {
     });
   }
 
+  removePlayer(playerSocket) {
+    this.resetInactiveTimer();
+    let socketIndex = this._playerSockets.indexOf(playerSocket);
+    if (socketIndex !== -1) {
+      this._playerSockets.splice(socketIndex, 1);
+
+      playerSocket.emit("kick");
+      playerSocket.disconnect(true);
+    }
+  }
+
   emitYetToAnswer() {
     this.emitToAdmins("yettoanswer", {
       yetToAnswer: this._prompts.getUnfinishedPlayers(),
@@ -348,6 +359,15 @@ class GameRoom {
         } catch (error) {
           console.error("Custom set doesn't exist");
         }
+      }
+    });
+
+    adminSocket.on("kickplayer", (data) => {
+      if (this.state === STATES.LOBBY) {
+        const { playerId } = data;
+        const socketToRemove = this.getPlayerSocketWithId(playerId);
+
+        this.removePlayer(socketToRemove);
       }
     });
 

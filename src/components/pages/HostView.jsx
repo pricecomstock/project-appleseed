@@ -62,6 +62,12 @@ export default class HostView extends Component {
     });
   };
 
+  kickPlayer = (playerId) => {
+    this.state.socket.emit("kickplayer", {
+      playerId,
+    });
+  };
+
   loadCustomPromptSet = (code) => {
     this.state.socket.emit("loadcustomset", {
       code: code,
@@ -206,8 +212,10 @@ export default class HostView extends Component {
               <div className="host-top-main">
                 <LobbyView roomCode={this.state.roomCode}></LobbyView>
                 <PlayerList
-                  title={`${this.state.players.length}/16 players have joined`}
+                  title={`${this.state.players.length}/${this.state.gameOptions.maxPlayers} players have joined`}
                   players={this.state.players}
+                  kickable={true} // In lobby
+                  kickfn={this.kickPlayer}
                 ></PlayerList>
               </div>
               <div className="host-lower game-panel">

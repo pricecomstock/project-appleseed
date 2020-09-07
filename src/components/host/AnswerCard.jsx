@@ -31,7 +31,7 @@ export default class AnswerCard extends Component {
         >
           <p className="answer-text">{breakableText}</p>
         </div>
-        {this.props.votingIsComplete && (
+        {this.props.votingIsComplete && this.props.playerData && (
           <CSSTransition
             in={this.props.votingIsComplete}
             timeout={500}
@@ -45,7 +45,7 @@ export default class AnswerCard extends Component {
             </div>
           </CSSTransition>
         )}
-        {this.props.votingIsComplete && (
+        {this.props.votingIsComplete && this.props.playerData && (
           <div className="points">
             {this.props.isShutout && (
               <div

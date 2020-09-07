@@ -19,10 +19,30 @@
 }
 
 .lobby-player-list-item {
+  display: flex;
+  align-items: center;
+
+  padding: 0 0.8rem 0 0.3rem;
   color: var(--black-ter);
   margin: 0.25rem;
-  padding: 0rem;
-  text-align: center;
   background-color: var(--white-ter);
   font-weight: bold;
+
+  .nameplate-emoji {
+    margin: 0 1rem;
+    font-size: 3em;
+  }
+  .nameplate-name {
+    flex-grow: 1;
+    font-size: 1.6em;
+  }
+
+  .mini-button {
+    transition: opacity 0.25s;
+    opacity: 0;
+  }
+
+  &:hover .mini-button {
+    opacity: 1;
+  }
 }

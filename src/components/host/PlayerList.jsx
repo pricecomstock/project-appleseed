@@ -12,14 +12,24 @@ export default class PlayerList extends Component {
           {this.props.players.map((player, index) => (
             <div
               className={classNames(
-                "lobby-player-list-item is-size-4 flex-center-text game-panel",
+                "lobby-player-list-item game-panel",
                 this.props.extraCssClasses
               )}
               key={index}
               style={{ animationDuration: "1.5s" }}
             >
-              <span className="is-size-2">{player.emoji}</span>{" "}
-              <span>{player.nickname}</span>
+              <span className="nameplate-emoji">{player.emoji}</span>{" "}
+              <span className="nameplate-name">{player.nickname}</span>
+              {this.props.kickable && (
+                <button
+                  className="mini-button red"
+                  onClick={() => {
+                    this.props.kickfn(player.playerId);
+                  }}
+                >
+                  kick
+                </button>
+              )}
             </div>
           ))}
         </div>

@@ -128,6 +128,11 @@ export default class PlayerView extends Component {
       });
     });
 
+    this.state.socket.on("kick", () => {
+      this.state.socket.close();
+      this.props.history.push("/");
+    });
+
     this.joinThisRoom();
   }
 
