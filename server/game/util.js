@@ -124,14 +124,14 @@ class Counter {
   }
 
   increment(item) {
-    let currentCount = this._counts.get(item) ?? 0;
+    let currentCount = this._counts.get(item) || 0;
     currentCount += 1;
     this._counts.set(item, currentCount);
     return currentCount;
   }
 
   decrement(item) {
-    let currentCount = this._counts.get(item) ?? 0;
+    let currentCount = this._counts.get(item) || 0;
     currentCount -= 1;
     this._counts.set(item, currentCount);
     return currentCount;
