@@ -1,3 +1,7 @@
+:root {
+  box-sizing: border-box;
+}
+
 body {
   font-family: $family-sans-serif;
 }
@@ -139,6 +143,7 @@ div.fun-bg {
 * input {
   color: var(--black-ter);
   border: 0.2rem solid var(--p-black);
+  border-radius: 0.5rem;
 
   &:hover {
     border-color: var(--p-teal);

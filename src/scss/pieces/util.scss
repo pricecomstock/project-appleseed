@@ -25,3 +25,21 @@
 .on-top {
   z-index: 10;
 }
+
+.flex-level {
+  display: flex;
+  align-items: center;
+  align-content: stretch;
+  justify-content: space-between;
+
+  &.bottom {
+    align-items: flex-end;
+  }
+  &.top {
+    align-items: flex-start;
+  }
+
+  * {
+    flex-grow: 1;
+  }
+}

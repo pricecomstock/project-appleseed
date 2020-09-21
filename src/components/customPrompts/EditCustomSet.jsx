@@ -59,20 +59,20 @@ export default class EditCustomSet extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="custom-prompts-form">
         {this.state.prompts.length === 0 && (
-          <div
-            className="field has-addons is-grouped-centered"
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                this.loadCustomSet();
-              }
-            }}
-          >
-            <div className="control is-expanded">
+          <div className="flex-level bottom">
+            <div
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  this.loadCustomSet();
+                }
+              }}
+            >
+              <p>Enter a code to load a prompt set</p>
               <input
-                className="input is-large is-uppercase"
                 type="text"
+                className="custom-prompt-code-entry"
                 placeholder="AAAA-AAAA-AAAA-AAAA"
                 value={this.state.enteredCode}
                 onChange={(e) => {
@@ -82,14 +82,9 @@ export default class EditCustomSet extends Component {
                 }}
               />
             </div>
-            <div className="control">
-              <button
-                className="button is-large is-primary"
-                onClick={this.loadCustomSet}
-              >
-                Load Custom Set
-              </button>
-            </div>
+            <button className="game-button teal" onClick={this.loadCustomSet}>
+              Load Custom Set
+            </button>
           </div>
         )}
         {this.state.prompts.length > 0 && (
