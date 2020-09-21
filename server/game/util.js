@@ -146,6 +146,15 @@ class Counter {
   }
 }
 
+function bindMethods(functionsObject, thisToBind) {
+  for (const [key, value] of Object.entries(functionsObject)) {
+    if (thisToBind[key]) {
+      throw Error("Property already exists on binding object!");
+    }
+    thisToBind[key] = value.bind(thisToBind);
+  }
+}
+
 module.exports = {
   generateBase64Id,
   adminRoom,
@@ -160,6 +169,7 @@ module.exports = {
   mapToObject,
   DeckRandomizer,
   Counter,
+  bindMethods,
 };
 
 // function speedTest(name, fn) {

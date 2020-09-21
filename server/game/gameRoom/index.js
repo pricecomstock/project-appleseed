@@ -1,4 +1,4 @@
-const { generateBase64Id, adminRoom } = require("../util");
+const { generateBase64Id, adminRoom, bindMethods } = require("../util");
 const StateMachine = require("javascript-state-machine");
 const { PromptRound } = require("../prompts/prompt");
 const { PromptPicker } = require("../prompts/promptPicker");
@@ -66,7 +66,7 @@ class GameRoom {
     this._fsm();
 
     // Import methods from other files
-    this.newTheme = themeMethods.newTheme.bind(this);
+    bindMethods(themeMethods, this);
   }
 
   static async CreateAsync(code, io) {
@@ -590,8 +590,6 @@ class GameRoom {
     });
     return scoreboardData;
   }
-
-  newTheme = "x";
 
   resetInactiveTimer() {
     clearTimeout(this._inactiveTimeout);
