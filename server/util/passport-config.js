@@ -1,5 +1,4 @@
 require("dotenv").config();
-const passport = require("passport");
 const passportLocal = require("passport-local");
 const passportJwt = require("passport-jwt");
 const bcrypt = require("bcrypt");
