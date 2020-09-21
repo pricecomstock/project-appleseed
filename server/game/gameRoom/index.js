@@ -17,7 +17,8 @@ const {
 const stateMachineSpec = require("./stateMachineSpec");
 const stateMachineMethods = require("./stateMachineMethods");
 
-const themeMethods = require("./theme");
+const themeMethods = require("./methods/theme");
+const optionsMethods = require("./methods/options");
 
 class GameRoom {
   constructor(code, io, preResolvedPromptPicker) {
@@ -67,6 +68,7 @@ class GameRoom {
 
     // Import methods from other files
     bindMethods(themeMethods, this);
+    bindMethods(optionsMethods, this);
   }
 
   static async CreateAsync(code, io) {
@@ -359,6 +361,15 @@ class GameRoom {
         } catch (error) {
           console.error("Custom set doesn't exist");
         }
+      }
+    });
+
+    adminSocket.on("updateOptions", (data) => {
+      const { name } = data;
+      // FIXME literals ugh
+      if (["DEFAULT", "QUICKWITS", "TRITWITS", "ALL_IN"].includes(name)) {
+        const newOptions = options[name];
+        this.updateOptions(newOptions);
       }
     });
 

@@ -74,6 +74,12 @@ export default class HostView extends Component {
     });
   };
 
+  updateOptionSet = (name) => {
+    this.state.socket.emit("updateOptions", {
+      name,
+    });
+  };
+
   componentDidMount() {
     sharedOnMountInit(this);
     // this.state.socket.on("connection", () => console.log("Connected!"));
@@ -222,6 +228,7 @@ export default class HostView extends Component {
                 <Options
                   loadCustomPromptSet={this.loadCustomPromptSet}
                   loadedCustomSetData={this.state.customSetData}
+                  updateOptionSet={this.updateOptionSet}
                 ></Options>
               </div>
             </>

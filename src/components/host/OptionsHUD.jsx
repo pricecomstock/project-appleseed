@@ -11,17 +11,21 @@ export default class OptionsHUD extends Component {
       answerString =
         currentRoundOptions.answersPerPrompt ===
         C.ANSWERS_PER_PROMPT_OPTIONS.ALL
-          ? "all answer one"
+          ? "all answer each"
           : currentRoundOptions.answersPerPrompt + " answer each";
     }
 
     return (
       <div className="game-panel flex-center-text options-hud">
         <p>
-          Round {this.props.currentRoundIndex + 1}, x
+          Round {this.props.currentRoundIndex + 1}/
+          {this.props.options.rounds && this.props.options.rounds.length}, x
           {currentRoundOptions && currentRoundOptions.pointMultiplier} pt
         </p>
-        <p>{answerString}</p>
+        <p>
+          {currentRoundOptions && currentRoundOptions.promptsPerPlayer}Q,{" "}
+          {answerString}
+        </p>
       </div>
     );
   }

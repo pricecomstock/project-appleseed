@@ -149,6 +149,7 @@ const allInOptions = {
   roundDelay: 12,
 };
 
+// TODO split the functions into a different file from the option sets
 module.exports = {
   calculatePromptTimeForRound,
   calculateVotingTimeLimitForAnswers,

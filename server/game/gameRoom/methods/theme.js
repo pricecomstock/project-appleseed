@@ -1,4 +1,4 @@
-const { getRandomTheme } = require("../flavor/themes");
+const { getRandomTheme } = require("../../flavor/themes");
 
 module.exports = {
   newTheme: function () {
