@@ -3,6 +3,7 @@ const StateMachine = require("javascript-state-machine");
 const { PromptRound } = require("../prompts/prompt");
 const { PromptPicker } = require("../prompts/promptPicker");
 const { getRandomTheme } = require("../flavor/themes");
+const { generateRandomAnswer } = require("../flavor/answerForMe");
 const options = require("../options");
 const PointTracker = require("../pointTracker");
 const Timer = require("../timer");
@@ -162,10 +163,14 @@ class GameRoom {
     // Submit an answer to a prompt
     playerSocket.on("answerprompt", (data, ack) => {
       // console.log(`Received answer to ${data.promptId}: ${data.answer}`);
+      let { answer, answerForMe, promptId } = data;
+      if (answerForMe || !answer) {
+        answer = generateRandomAnswer();
+      }
       this._prompts.answer(
         playerSocket.playerData.playerId,
-        data.promptId,
-        data.answer.substring(0, C.MAX_ANSWER_CHARS)
+        promptId,
+        answer.substring(0, C.MAX_ANSWER_CHARS)
       );
 
       ack();

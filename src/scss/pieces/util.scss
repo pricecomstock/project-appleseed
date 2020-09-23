@@ -39,7 +39,11 @@
     align-items: flex-start;
   }
 
-  * {
+  &.grow > * {
     flex-grow: 1;
+  }
+
+  &.shrink > * {
+    flex-shrink: 1;
   }
 }

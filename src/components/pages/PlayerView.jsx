@@ -67,6 +67,19 @@ export default class PlayerView extends Component {
     );
   };
 
+  answerForMe = (promptId) => {
+    this.state.socket.emit(
+      "answerprompt",
+      {
+        promptId,
+        answerForMe: true,
+      },
+      () => {
+        this.setState({ promptIndex: this.state.promptIndex + 1 });
+      }
+    );
+  };
+
   submitVote = (index) => {
     this.state.socket.emit(
       "vote",
@@ -199,6 +212,7 @@ export default class PlayerView extends Component {
               <Prompt
                 prompt={this.state.prompts[this.state.promptIndex]}
                 submitAnswer={this.submitAnswer}
+                answerForMe={this.answerForMe}
                 promptIndex={this.state.promptIndex}
                 totalPrompts={this.state.prompts.length}
               ></Prompt>

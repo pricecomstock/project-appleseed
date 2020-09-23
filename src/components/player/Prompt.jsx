@@ -13,6 +13,11 @@ export default function Prompt(props) {
     }
   };
 
+  let answerForMe = () => {
+    props.answerForMe(props.prompt.id);
+    setAnswer("");
+  };
+
   return (
     <div className="game-panel player-interactive-panel">
       <div>
@@ -36,12 +41,19 @@ export default function Prompt(props) {
           />
         </div>
       </div>
-      <button className="game-button green" onClick={submit}>
-        Submit
-      </button>
-      <span className="inline-info">
-        prompt {props.promptIndex + 1} of {props.totalPrompts}
-      </span>
+      <div className="flex-level shrink">
+        <div>
+          <button className="game-button green" onClick={submit}>
+            Submit
+          </button>
+          <span className="inline-info">
+            prompt {props.promptIndex + 1} of {props.totalPrompts}
+          </span>
+        </div>
+        <button className="mini-button yellow" onClick={answerForMe}>
+          idk lol
+        </button>
+      </div>
     </div>
   );
 }
