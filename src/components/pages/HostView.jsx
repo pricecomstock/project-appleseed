@@ -75,6 +75,10 @@ export default class HostView extends Component {
     });
   };
 
+  unloadCustomPromptSet = () => {
+    this.state.socket.emit("unloadcustomset");
+  };
+
   updateOptionSet = (name) => {
     this.state.socket.emit("updateOptions", {
       name,
@@ -235,6 +239,7 @@ export default class HostView extends Component {
               <div className="host-lower">
                 <Options
                   loadCustomPromptSet={this.loadCustomPromptSet}
+                  unloadCustomPromptSet={this.unloadCustomPromptSet}
                   loadedCustomSetData={this.state.customSetData}
                   currentOptionSet={this.state.gameOptions}
                   optionSets={this.state.optionSets}

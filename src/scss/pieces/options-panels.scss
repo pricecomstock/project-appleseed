@@ -1,0 +1,11 @@
+.options-panels-row {
+  display: flex;
+
+  > .game-panel {
+    flex: 1 0;
+  }
+}
+
+.custom-prompt-code-input-block {
+  margin-right: 1rem;
+}

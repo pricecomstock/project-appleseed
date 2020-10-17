@@ -36,6 +36,14 @@
   align-content: stretch;
   justify-content: space-between;
 
+  &.left {
+    justify-content: flex-start;
+  }
+
+  &.right {
+    justify-content: flex-end;
+  }
+
   &.bottom {
     align-items: flex-end;
   }

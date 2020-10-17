@@ -40,11 +40,13 @@ class GameRoom {
     this._adminSockets = [];
 
     if (preResolvedPromptPicker) {
-      this._promptPicker = preResolvedPromptPicker;
+      this._defaultPromptPicker = preResolvedPromptPicker;
+      this._promptPicker = this._defaultPromptPicker;
     } else {
       PromptPicker.CreateDefaultOnly()
         .then((promptPicker) => {
-          this._promptPicker = promptPicker;
+          this._defaultPromptPicker = promptPicker;
+          this._promptPicker = this._defaultPromptPicker;
         })
         .catch((err) => {
           console.error("Prompt Picker Error");
@@ -365,6 +367,17 @@ class GameRoom {
           });
         } catch (error) {
           console.error("Custom set doesn't exist");
+        }
+      }
+    });
+
+    adminSocket.on("unloadcustomset", () => {
+      if (this.state === STATES.LOBBY) {
+        try {
+          this._promptPicker = this._defaultPromptPicker;
+          this.sendCustomPromptStatus();
+        } catch (error) {
+          console.error(error);
         }
       }
     });

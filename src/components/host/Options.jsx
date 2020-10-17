@@ -11,6 +11,10 @@ export default class Options extends Component {
     this.props.loadCustomPromptSet(this.state.customPromptSetCode);
   };
 
+  unloadCustomPromptSet = () => {
+    this.props.unloadCustomPromptSet();
+  };
+
   updateOptions = () => {
     this.props.updateOptions();
   };
@@ -31,73 +35,87 @@ export default class Options extends Component {
 
   render() {
     return (
-      <div className="container">
-        {/* Game Rule Sets */}
-        <div className="game-panel">
-          <h2>Game Rule Set</h2>
-          <div>
-            {this.props.optionSets.map((optionSet, index) => {
-              return (
-                <button
-                  className={classNames(
-                    "color-transition",
-                    "game-button",
-                    this.getButtonColorFromCycle(index),
-                    {
-                      "perma-hovered":
-                        optionSet.name === this.props.currentOptionSet.name,
-                    }
-                  )}
-                  key={index}
-                  onClick={() => this.props.updateOptionSet(optionSet.name)}
-                >
-                  {optionSet.name}
-                </button>
-              );
-            })}
-          </div>
-          <p>
-            <strong>{this.props.currentOptionSet.name}</strong> -{" "}
-            {this.props.currentOptionSet.description}
-          </p>
-        </div>
-        {/* Custom Prompts */}
-        <div className="game-panel flex-level">
-          <div>
-            <input
-              type="text"
-              value={this.state.customPromptSetCode}
-              placeholder="AAAA-AAAA-AAAA-AAAA"
-              onChange={(e) =>
-                this.setState({
-                  customPromptSetCode: e.target.value.toUpperCase(),
-                })
-              }
-            ></input>
-            <button
-              className="game-button blue"
-              onClick={this.loadCustomPromptSet}
-            >
-              Load Custom Prompt Set
-            </button>
-          </div>
-          {this.props.loadedCustomSetData && (
+      <div className="options-panels">
+        <div className="options-panels-row">
+          {/* Game Rule Sets */}
+          <div className="game-panel">
+            <h2>Game Rule Set</h2>
             <div>
-              <div>
-                Code:{" "}
-                {prettyCustomPromptSetId(this.props.loadedCustomSetData.code)}
-              </div>
-              <div>{this.props.loadedCustomSetData.name}</div>
-              <div>{this.props.loadedCustomSetData.description}</div>
-              <div>
-                Unused Prompts: {this.props.loadedCustomSetData.numRemaining}
-              </div>
+              {this.props.optionSets.map((optionSet, index) => {
+                return (
+                  <button
+                    className={classNames(
+                      "color-transition",
+                      "game-button",
+                      this.getButtonColorFromCycle(index),
+                      {
+                        "perma-hovered":
+                          optionSet.name === this.props.currentOptionSet.name,
+                      }
+                    )}
+                    key={index}
+                    onClick={() => this.props.updateOptionSet(optionSet.name)}
+                  >
+                    {optionSet.name}
+                  </button>
+                );
+              })}
             </div>
-          )}
+            <p>
+              <strong>{this.props.currentOptionSet.name}</strong> -{" "}
+              {this.props.currentOptionSet.description}
+            </p>
+          </div>
+          {/* Custom Prompts */}
+          <div className="game-panel flex-level">
+            {!this.props.loadedCustomSetData.code && (
+              <div className="custom-prompt-code-input-block">
+                <div>
+                  <input
+                    type="text"
+                    value={this.state.customPromptSetCode}
+                    placeholder="AAAA-AAAA-AAAA-AAAA"
+                    onChange={(e) =>
+                      this.setState({
+                        customPromptSetCode: e.target.value.toUpperCase(),
+                      })
+                    }
+                  ></input>
+                </div>
+                <button
+                  className="game-button blue"
+                  onClick={this.loadCustomPromptSet}
+                >
+                  Load Custom Prompt Set
+                </button>
+              </div>
+            )}
+            {this.props.loadedCustomSetData.code && (
+              <div>
+                <h2>{this.props.loadedCustomSetData.name}</h2>
+                <div>{this.props.loadedCustomSetData.description}</div>
+                <div>
+                  Code:{" "}
+                  {prettyCustomPromptSetId(this.props.loadedCustomSetData.code)}
+                </div>
+                <div>
+                  Unused Prompts: {this.props.loadedCustomSetData.numRemaining}
+                </div>
+              </div>
+            )}
+            {this.props.loadedCustomSetData.code && (
+              <button
+                className="mini-button red"
+                onClick={this.unloadCustomPromptSet}
+              >
+                Unload custom set
+              </button>
+            )}
+          </div>
+          {/* <button className="button" onClick={this.updateOptions}>
+              Update Options
+            </button> */}
         </div>
-        {/* <button className="button" onClick={this.updateOptions}>
-            Update Options
-          </button> */}
       </div>
     );
   }
