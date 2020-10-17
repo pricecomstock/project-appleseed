@@ -238,6 +238,7 @@ export default class HostView extends Component {
               </div>
               <div className="host-lower">
                 <Options
+                  playerCount={this.state.players.length}
                   loadCustomPromptSet={this.loadCustomPromptSet}
                   unloadCustomPromptSet={this.unloadCustomPromptSet}
                   loadedCustomSetData={this.state.customSetData}

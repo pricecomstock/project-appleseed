@@ -38,21 +38,21 @@ export default class Options extends Component {
       <div className="options-panels">
         <div className="options-panels-row">
           {/* Game Rule Sets */}
-          <div className="game-panel">
+          <div className="game-panel rules-panel">
             <h2>Game Rule Set</h2>
             <div>
               {this.props.optionSets.map((optionSet, index) => {
+                const isChosen =
+                  optionSet.name === this.props.currentOptionSet.name;
+                const isAvailable =
+                  this.props.playerCount <= optionSet.maxPlayers;
                 return (
                   <button
-                    className={classNames(
-                      "color-transition",
-                      "game-button",
-                      this.getButtonColorFromCycle(index),
-                      {
-                        "perma-hovered":
-                          optionSet.name === this.props.currentOptionSet.name,
-                      }
-                    )}
+                    className={classNames("color-transition", "game-button", {
+                      "perma-hovered": isChosen,
+                      disabled: !isAvailable,
+                      [this.getButtonColorFromCycle(index)]: isAvailable,
+                    })}
                     key={index}
                     onClick={() => this.props.updateOptionSet(optionSet.name)}
                   >
