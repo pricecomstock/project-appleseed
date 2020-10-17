@@ -23,7 +23,11 @@ const optionsMethods = require("./methods/options");
 
 class GameRoom {
   constructor(code, io, preResolvedPromptPicker) {
-    //TODO: Add game options
+    // Import methods from other files
+    bindMethods(themeMethods, this);
+    bindMethods(optionsMethods, this);
+
+    // State
     this._code = code;
     this.createdTime = Date.now();
     this.isActive = true;
@@ -54,7 +58,7 @@ class GameRoom {
     this._currentVotingResults = {};
     this._currentScoringDetails = {};
 
-    this._options = options.DEFAULT;
+    this._options = options.defaultOptions;
     this._currentRoundIndex = 0;
 
     this._pointTracker = null;
@@ -66,10 +70,6 @@ class GameRoom {
     this.resetInactiveTimer();
     // Game state
     this._fsm();
-
-    // Import methods from other files
-    bindMethods(themeMethods, this);
-    bindMethods(optionsMethods, this);
   }
 
   static async CreateAsync(code, io) {
@@ -371,11 +371,7 @@ class GameRoom {
 
     adminSocket.on("updateOptions", (data) => {
       const { name } = data;
-      // FIXME literals ugh
-      if (["DEFAULT", "QUICKWITS", "TRITWITS", "ALL_IN"].includes(name)) {
-        const newOptions = options[name];
-        this.updateOptions(newOptions);
-      }
+      this.updateOptions(name);
     });
 
     adminSocket.on("kickplayer", (data) => {
@@ -403,6 +399,7 @@ class GameRoom {
 
   giveAdminCurrentInfo(adminSocket) {
     // For reconnects
+    this.sendOptionSetsToAdmins();
     this.sendOptionsToIndividual(adminSocket);
     this.sendThemeToIndividual(adminSocket);
 

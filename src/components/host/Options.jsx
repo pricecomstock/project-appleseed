@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import classNames from "classnames";
 import { prettyCustomPromptSetId } from "../../util/stringFilter";
 
 export default class Options extends Component {
@@ -14,9 +15,51 @@ export default class Options extends Component {
     this.props.updateOptions();
   };
 
+  buttonColorClasses = [
+    "red",
+    "orange",
+    "green",
+    "blue",
+    "yellow",
+    "teal",
+    "violet",
+  ];
+
+  getButtonColorFromCycle(index) {
+    return this.buttonColorClasses[index % this.buttonColorClasses.length];
+  }
+
   render() {
     return (
       <div className="container">
+        <div>
+          <h2>Game Rule Set</h2>
+          <div>
+            {this.props.optionSets.map((optionSet, index) => {
+              return (
+                <button
+                  className={classNames(
+                    "color-transition",
+                    "game-button",
+                    this.getButtonColorFromCycle(index),
+                    {
+                      "perma-hovered":
+                        optionSet.name === this.props.currentOptionSet.name,
+                    }
+                  )}
+                  key={index}
+                  onClick={() => this.props.updateOptionSet(optionSet.name)}
+                >
+                  {optionSet.name}
+                </button>
+              );
+            })}
+          </div>
+          <p>
+            <strong>{this.props.currentOptionSet.name}</strong> -{" "}
+            {this.props.currentOptionSet.description}
+          </p>
+        </div>
         <div className="flex-level">
           <div className="field has-addons">
             <div className="control">
@@ -57,33 +100,6 @@ export default class Options extends Component {
         {/* <button className="button" onClick={this.updateOptions}>
             Update Options
           </button> */}
-        <div>
-          <h2>Game Rule Set</h2>
-          <button
-            className="game-button red"
-            onClick={() => this.props.updateOptionSet("DEFAULT")}
-          >
-            DEFAULT
-          </button>
-          <button
-            className="game-button orange"
-            onClick={() => this.props.updateOptionSet("QUICKWITS")}
-          >
-            QUICKWITS
-          </button>
-          <button
-            className="game-button green"
-            onClick={() => this.props.updateOptionSet("TRITWITS")}
-          >
-            TRITWITS
-          </button>
-          <button
-            className="game-button blue"
-            onClick={() => this.props.updateOptionSet("ALL_IN")}
-          >
-            ALL IN
-          </button>
-        </div>
       </div>
     );
   }

@@ -38,6 +38,4 @@ function genAndPrint(template, count) {
   console.log(generated.join("\n"));
 }
 
-genAndPrint("{{random.word}} {{random.word}}", 5);
-
 module.exports = { generateRandomAnswer };

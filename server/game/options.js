@@ -18,6 +18,10 @@ function calculateVotingTimeLimitForAnswers(options, numAnswers) {
 }
 
 const defaultOptions = {
+  name: "Classic",
+  description:
+    "Two rounds of players answering 2 questions each, followed by a final question that everyone answers.",
+
   maxPlayers: 16,
 
   pointsPerPrompt: 6000,
@@ -54,6 +58,10 @@ const defaultOptions = {
 };
 
 const quickWitsOptions = {
+  name: "Quickwits",
+  description:
+    "A faster game. Only two rounds with shorter time limits for answering and voting.",
+
   maxPlayers: 16,
 
   pointsPerPrompt: 6000,
@@ -84,6 +92,8 @@ const quickWitsOptions = {
 };
 
 const tritWitsOptions = {
+  name: "Tritwits",
+  description: "Three players answer each question.",
   maxPlayers: 12,
 
   pointsPerPrompt: 6000,
@@ -120,6 +130,8 @@ const tritWitsOptions = {
 };
 
 const allInOptions = {
+  name: "All In",
+  description: "Every player answers every question!",
   maxPlayers: 16,
 
   pointsPerPrompt: 12000,
@@ -153,8 +165,6 @@ const allInOptions = {
 module.exports = {
   calculatePromptTimeForRound,
   calculateVotingTimeLimitForAnswers,
-  DEFAULT: defaultOptions,
-  QUICKWITS: quickWitsOptions,
-  TRITWITS: tritWitsOptions,
-  ALL_IN: allInOptions,
+  defaultOptions,
+  optionSets: [defaultOptions, quickWitsOptions, tritWitsOptions, allInOptions],
 };

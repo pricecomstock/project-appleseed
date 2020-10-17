@@ -74,7 +74,7 @@ export default class Home extends Component {
             <img src="logo.svg" alt="Bitwits!" />
           </div>
           <div className="game-panel home-form">
-            <h1>Enter a room code to join!</h1>
+            <h2>Enter a room code to join!</h2>
             <input
               onKeyPress={(e) => {
                 if (e.key === "Enter") {

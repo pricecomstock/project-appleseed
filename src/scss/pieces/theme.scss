@@ -74,6 +74,12 @@ div.fun-bg {
     top: 3px;
     left: 3px;
   }
+
+  &.perma-hovered {
+    box-shadow: 0px 0px 0px var(--p-black);
+    top: 2px;
+    left: 2px;
+  }
 }
 
 .cartoon-3d-mini-hoverable {
@@ -81,6 +87,13 @@ div.fun-bg {
   box-shadow: 2px 2px 0px var(--p-black);
 
   &:hover {
+    box-shadow: 0px 0px 0px var(--p-black);
+    top: 2px;
+    left: 2px;
+  }
+
+  &.perma-hovered {
+    box-shadow: 0px 0px 0px var(--p-black);
     top: 2px;
     left: 2px;
   }
@@ -140,7 +153,7 @@ div.fun-bg {
   font-size: 0.8rem;
 }
 
-* input {
+input {
   color: var(--black-ter);
   border: 0.2rem solid var(--p-black);
   border-radius: 0.5rem;
@@ -153,4 +166,21 @@ div.fun-bg {
 .help-tip {
   font-size: 0.65em;
   // padding: 0.3rem 0rem;
+}
+
+h1,
+h2 {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 1.6em;
+}
+
+h2 {
+  font-size: 1.3em;
+}
+
+h3 {
+  font-size: 1.2em;
 }

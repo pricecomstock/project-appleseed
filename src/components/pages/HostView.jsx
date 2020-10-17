@@ -32,6 +32,7 @@ export default class HostView extends Component {
     players: [],
     adminKey: localStorage.getItem(`${this.props.match.params.code}_adminKey`),
 
+    optionSets: [],
     customSetData: {},
 
     yetToAnswer: [],
@@ -128,6 +129,12 @@ export default class HostView extends Component {
       console.log("Custom Prompt Status", data);
       this.setState({
         customSetData: data,
+      });
+    });
+
+    this.state.socket.on("optionsets", (optionSets) => {
+      this.setState({
+        optionSets,
       });
     });
 
@@ -228,6 +235,8 @@ export default class HostView extends Component {
                 <Options
                   loadCustomPromptSet={this.loadCustomPromptSet}
                   loadedCustomSetData={this.state.customSetData}
+                  currentOptionSet={this.state.gameOptions}
+                  optionSets={this.state.optionSets}
                   updateOptionSet={this.updateOptionSet}
                 ></Options>
               </div>

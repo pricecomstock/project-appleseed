@@ -26,6 +26,10 @@
   z-index: 10;
 }
 
+.color-transition {
+  transition: background-color 0.2s, color 0.2s;
+}
+
 .flex-level {
   display: flex;
   align-items: center;
