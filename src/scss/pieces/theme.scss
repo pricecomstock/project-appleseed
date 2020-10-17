@@ -157,6 +157,8 @@ input {
   color: var(--black-ter);
   border: 0.2rem solid var(--p-black);
   border-radius: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
 
   &:hover {
     border-color: var(--p-teal);

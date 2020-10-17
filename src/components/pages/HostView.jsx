@@ -231,7 +231,7 @@ export default class HostView extends Component {
                   kickfn={this.kickPlayer}
                 ></PlayerList>
               </div>
-              <div className="host-lower game-panel">
+              <div className="host-lower">
                 <Options
                   loadCustomPromptSet={this.loadCustomPromptSet}
                   loadedCustomSetData={this.state.customSetData}

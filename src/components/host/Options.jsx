@@ -32,7 +32,8 @@ export default class Options extends Component {
   render() {
     return (
       <div className="container">
-        <div>
+        {/* Game Rule Sets */}
+        <div className="game-panel">
           <h2>Game Rule Set</h2>
           <div>
             {this.props.optionSets.map((optionSet, index) => {
@@ -60,42 +61,39 @@ export default class Options extends Component {
             {this.props.currentOptionSet.description}
           </p>
         </div>
-        <div className="flex-level">
-          <div className="field has-addons">
-            <div className="control">
-              <input
-                type="text"
-                className="input"
-                value={this.state.customPromptSetCode}
-                placeholder="AAAA-AAAA-AAAA-AAAA"
-                onChange={(e) =>
-                  this.setState({
-                    customPromptSetCode: e.target.value.toUpperCase(),
-                  })
-                }
-              ></input>
+        {/* Custom Prompts */}
+        <div className="game-panel flex-level">
+          <div>
+            <input
+              type="text"
+              value={this.state.customPromptSetCode}
+              placeholder="AAAA-AAAA-AAAA-AAAA"
+              onChange={(e) =>
+                this.setState({
+                  customPromptSetCode: e.target.value.toUpperCase(),
+                })
+              }
+            ></input>
+            <button
+              className="game-button blue"
+              onClick={this.loadCustomPromptSet}
+            >
+              Load Custom Prompt Set
+            </button>
+          </div>
+          {this.props.loadedCustomSetData && (
+            <div>
+              <div>
+                Code:{" "}
+                {prettyCustomPromptSetId(this.props.loadedCustomSetData.code)}
+              </div>
+              <div>{this.props.loadedCustomSetData.name}</div>
+              <div>{this.props.loadedCustomSetData.description}</div>
+              <div>
+                Unused Prompts: {this.props.loadedCustomSetData.numRemaining}
+              </div>
             </div>
-            <div className="control">
-              <button
-                className="button is-info"
-                onClick={this.loadCustomPromptSet}
-              >
-                Load Custom Prompt Set
-              </button>
-            </div>
-          </div>
-          <div className="level-item">
-            Code: {prettyCustomPromptSetId(this.props.loadedCustomSetData.code)}
-          </div>
-          <div className="level-item">
-            {this.props.loadedCustomSetData.name}
-          </div>
-          <div className="level-item">
-            {this.props.loadedCustomSetData.description}
-          </div>
-          <div className="level-item">
-            Unused Prompts: {this.props.loadedCustomSetData.numRemaining}
-          </div>
+          )}
         </div>
         {/* <button className="button" onClick={this.updateOptions}>
             Update Options
