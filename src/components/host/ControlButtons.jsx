@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import classNames from "classnames";
 import C from "../../constants";
 
 const {
@@ -59,7 +60,15 @@ export default class ControlButtons extends Component {
           </button>
         )}
         {this.props.currentState === STATES.LOBBY && (
-          <button className="game-button teal" onClick={this.startGame}>
+          <button
+            className={classNames("game-button", {
+              teal: this.props.startable,
+              disabled: !this.props.startable,
+            })}
+            onClick={() => {
+              if (this.props.startable) this.startGame();
+            }}
+          >
             Start Game
           </button>
         )}

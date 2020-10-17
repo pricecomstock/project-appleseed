@@ -184,6 +184,7 @@ export default class HostView extends Component {
             {/* Right */}
             <div className="inline-flex">
               <ControlButtons
+                startable={this.state.players.length >= 3}
                 currentState={this.state.currentState}
                 socket={this.state.socket}
               ></ControlButtons>
