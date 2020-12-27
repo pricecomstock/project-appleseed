@@ -53,8 +53,8 @@ const defaultOptions = {
   promptBonusTimePerPrompt: 20,
   votingTimeLimitBase: 19,
   votingBonusTimePerAnswer: 3,
-  promptResultDelay: 7,
-  roundDelay: 12,
+  promptResultDelay: 6,
+  roundDelay: 10,
 };
 
 const quickWitsOptions = {
@@ -87,8 +87,8 @@ const quickWitsOptions = {
   promptBonusTimePerPrompt: 18,
   votingTimeLimitBase: 15,
   votingBonusTimePerAnswer: 4,
-  promptResultDelay: 7,
-  roundDelay: 12,
+  promptResultDelay: 6,
+  roundDelay: 10,
 };
 
 const tritWitsOptions = {
@@ -125,8 +125,8 @@ const tritWitsOptions = {
   promptBonusTimePerPrompt: 20,
   votingTimeLimitBase: 19,
   votingBonusTimePerAnswer: 3,
-  promptResultDelay: 7,
-  roundDelay: 12,
+  promptResultDelay: 6,
+  roundDelay: 10,
 };
 
 const allInOptions = {
